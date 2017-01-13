@@ -3,6 +3,7 @@ package com.lypeer.zybuluo.impl;
 
 import com.lypeer.zybuluo.model.bean.CreateShareLinkResponse;
 import com.lypeer.zybuluo.model.bean.UploadResponse;
+import com.lypeer.zybuluo.model.bean.VideoDetailResponse;
 import com.lypeer.zybuluo.model.bean.VideoResponse;
 import com.lypeer.zybuluo.utils.Constants;
 
@@ -32,6 +33,11 @@ public interface ApiService {
             @Query(Constants.RequestParam.K_TYPE) int videosType
     );
 
+    @GET("/video/{id}/")
+    Call<VideoDetailResponse> getVideoDetail(
+            @Path(Constants.RequestParam.K_PAGE) int videoId
+    );
+
     @GET("videos/")
     Call<VideoResponse> search(
             @Query(Constants.RequestParam.K_SEARCH) String searchContent
@@ -45,7 +51,7 @@ public interface ApiService {
     Call<CreateShareLinkResponse> createShareLink(
             @Field(Constants.RequestParam.K_URL) String url,
             @Field(Constants.RequestParam.K_UID) String uid,
-            @Field(Constants.RequestParam.K_VID) String vid,
+            @Field(Constants.RequestParam.K_VID) int vid,
             @Field(Constants.RequestParam.K_TOKEN) String token
     );
 }

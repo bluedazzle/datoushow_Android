@@ -1,5 +1,6 @@
 package com.lypeer.zybuluo.model.bean;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -92,7 +93,7 @@ public class VideoResponse {
         public static class PageObjBean {
         }
 
-        public static class VideoListBean {
+        public static class VideoListBean implements Serializable{
             /**
              * classification : 1
              * thumb_nail : http://oda176fz0.bkt.clouddn.com/WeChatSight2.mp4?vframe/jpg/offset/1/w/200/h/200/

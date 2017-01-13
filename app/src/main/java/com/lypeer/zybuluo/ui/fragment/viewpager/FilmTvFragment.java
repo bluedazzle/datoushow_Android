@@ -1,5 +1,6 @@
 package com.lypeer.zybuluo.ui.fragment.viewpager;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.view.ViewCompat;
@@ -14,12 +15,16 @@ import com.aspsine.swipetoloadlayout.OnLoadMoreListener;
 import com.aspsine.swipetoloadlayout.OnRefreshListener;
 import com.aspsine.swipetoloadlayout.SwipeToLoadLayout;
 import com.lypeer.zybuluo.R;
+import com.lypeer.zybuluo.impl.OnItemClickListener;
+import com.lypeer.zybuluo.mixture.activity.MainActivity;
+import com.lypeer.zybuluo.mixture.core.MixtureKeys;
 import com.lypeer.zybuluo.model.bean.VideoResponse;
 import com.lypeer.zybuluo.presenter.viewpager.FilmTvPresenter;
 import com.lypeer.zybuluo.ui.adapter.FilmTvAdapter;
 import com.lypeer.zybuluo.ui.adapter.HotAdapter;
 import com.lypeer.zybuluo.ui.base.BaseFragment;
 import com.lypeer.zybuluo.ui.custom.google.GoogleCircleProgressView;
+import com.lypeer.zybuluo.utils.ApiSignUtil;
 
 import java.util.List;
 
@@ -82,16 +87,29 @@ public class FilmTvFragment extends BaseFragment<FilmTvPresenter> implements OnR
             }
         });
 
-        mSwipeTarget.setOnClickListener(new View.OnClickListener() {
+        mAdapter.setOnClickListener(new OnItemClickListener<VideoResponse.BodyBean.VideoListBean>() {
             @Override
-            public void onClick(View view) {
-                switch (view.getId()) {
+            public void onItemClick(VideoResponse.BodyBean.VideoListBean itemValue, int viewID, int position) {
+                switch (viewID) {
                     case R.id.lly_container:
-                        //@todo 点击事件
+                        gotoMakeVideo(itemValue);
                         break;
                 }
             }
         });
+    }
+
+    private void gotoMakeVideo(VideoResponse.BodyBean.VideoListBean target) {
+        String timeStamp = String.valueOf(System.currentTimeMillis()).substring(0, 10);
+        String sign = ApiSignUtil.getSign(timeStamp);
+
+        String dataUrl = "http://datoushow.com/api/v1/video/" + target.getId() + "?&timestamp=" + timeStamp + "&sign=" + sign;
+
+        Intent intent = new Intent(getActivity(), MainActivity.class);
+        intent.putExtra(MixtureKeys.KEY_VIDEO_PATH, target.getUrl());
+        intent.putExtra(MixtureKeys.KEY_DATA_PATH, dataUrl);
+        intent.putExtra(MixtureKeys.KEY_VIDEO , target);
+        startActivity(intent);
     }
 
     @Override

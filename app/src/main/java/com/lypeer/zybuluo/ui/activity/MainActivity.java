@@ -18,10 +18,6 @@ import com.lypeer.zybuluo.ui.fragment.AddFragment;
 import com.lypeer.zybuluo.ui.fragment.MyFragment;
 import com.lypeer.zybuluo.utils.ActivityController;
 import com.lypeer.zybuluo.utils.Constants;
-import com.umeng.socialize.UMAuthListener;
-import com.umeng.socialize.UMShareAPI;
-import com.umeng.socialize.bean.SHARE_MEDIA;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -34,6 +30,7 @@ import fm.jiecao.jcvideoplayer_lib.JCVideoPlayer;
 
 public class MainActivity extends BaseCustomActivity {
 
+    public static String TAG = "MainActivity";
 
     @BindView(R.id.fl_container)
     FrameLayout mFlContainer;
@@ -161,44 +158,5 @@ public class MainActivity extends BaseCustomActivity {
     protected void onPause() {
         super.onPause();
         JCVideoPlayer.releaseAllVideos();
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        UMShareAPI.get(this).onActivityResult(requestCode, resultCode, data);
-    }
-
-    @Override
-    protected void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        UMShareAPI.get(this).onSaveInstanceState(outState);
-    }
-
-    @Override
-    protected void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        UMShareAPI.get(this).fetchAuthResultWithBundle(this, savedInstanceState, new UMAuthListener() {
-            @Override
-            public void onComplete(SHARE_MEDIA platform, int action, Map<String, String> data) {
-
-            }
-
-            @Override
-            public void onError(SHARE_MEDIA platform, int action, Throwable t) {
-
-            }
-
-            @Override
-            public void onCancel(SHARE_MEDIA platform, int action) {
-
-            }
-        });
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        UMShareAPI.get(this).release();
     }
 }

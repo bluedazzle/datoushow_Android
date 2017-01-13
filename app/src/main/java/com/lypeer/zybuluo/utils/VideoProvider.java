@@ -3,12 +3,15 @@ package com.lypeer.zybuluo.utils;
 import android.content.Context;
 import android.database.Cursor;
 import android.os.AsyncTask;
+import android.os.Environment;
 import android.os.Handler;
 import android.provider.MediaStore;
 
+import com.lypeer.zybuluo.App;
 import com.lypeer.zybuluo.R;
 import com.lypeer.zybuluo.model.bean.Video;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -31,41 +34,21 @@ public class VideoProvider {
             protected List<Video> doInBackground(Void... voids) {
                 try {
                     if (context != null) {
-                        Cursor cursor = context.getContentResolver().query(
-                                MediaStore.Video.Media.EXTERNAL_CONTENT_URI, null, null,
-                                null, null);
-                        if (cursor != null) {
-                            while (cursor.moveToNext()) {
-                                int id = cursor.getInt(cursor
-                                        .getColumnIndexOrThrow(MediaStore.Video.Media._ID));
-                                String title = cursor
-                                        .getString(cursor
-                                                .getColumnIndexOrThrow(MediaStore.Video.Media.TITLE));
-                                String album = cursor
-                                        .getString(cursor
-                                                .getColumnIndexOrThrow(MediaStore.Video.Media.ALBUM));
-                                String artist = cursor
-                                        .getString(cursor
-                                                .getColumnIndexOrThrow(MediaStore.Video.Media.ARTIST));
-                                String displayName = cursor
-                                        .getString(cursor
-                                                .getColumnIndexOrThrow(MediaStore.Video.Media.DISPLAY_NAME));
-                                String mimeType = cursor
-                                        .getString(cursor
-                                                .getColumnIndexOrThrow(MediaStore.Video.Media.MIME_TYPE));
-                                String path = cursor
-                                        .getString(cursor
-                                                .getColumnIndexOrThrow(MediaStore.Video.Media.DATA));
-                                long duration = cursor
-                                        .getInt(cursor
-                                                .getColumnIndexOrThrow(MediaStore.Video.Media.DURATION));
-                                long size = cursor
-                                        .getLong(cursor
-                                                .getColumnIndexOrThrow(MediaStore.Video.Media.SIZE));
-                                Video video = new Video(id, title, album, artist, displayName, mimeType, path, size, duration);
-                                list.add(video);
+                        File file = new File(FileUtil.getStorageDir());
+                        File[] files = file.listFiles();
+
+                        for (File fileX : files) {
+
+                            String[] data = fileX.getName().split("_");
+                            if (data.length <= 4 || !data[0].equals(App.getAppContext().getString(R.string.datouxiu))) {
+                                continue;
                             }
-                            cursor.close();
+                            try {
+                                Video video = new Video(Integer.valueOf(data[1]), data[2], data[3], fileX.getPath());
+                                list.add(video);
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
                         }
                     }
                     return list;

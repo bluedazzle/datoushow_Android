@@ -32,7 +32,8 @@ public class Constants {
                 V_SECRET = "eKxzhDfGkvcv9MaLQdeWgSlqnX4CosiIkR17Z0oAPmNUjBOw6nlHcTfupzbFhupy",
                 V_WECHAT = "a80d2b79afff7ddc298ecd4d01cfc183",
                 V_WEIBO = "d39dbb40fd1a75e4c5972089a0078ebd",
-                V_QQ = "zGuM3I5lrFMBLxDZ";
+                V_QQ = "zGuM3I5lrFMBLxDZ",
+                V_MEIPAI = "1089867494";
     }
 
     public interface RequestParam {
@@ -44,7 +45,8 @@ public class Constants {
                 K_URL = "url",
                 K_UID = "uid",
                 K_VID = "vid",
-                K_TOKEN = "token";
+                K_TOKEN = "token",
+                K_ID = "id";
     }
 
     public interface VideosType {

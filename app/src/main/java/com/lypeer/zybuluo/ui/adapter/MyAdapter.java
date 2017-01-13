@@ -17,4 +17,16 @@ public class MyAdapter extends BaseAdapter<Video>{
     protected BaseViewHolder createViewHolder(Context context, ViewGroup parent) {
         return new MyVH(context , parent);
     }
+
+    public void removeData(int position) {
+        mValueList.remove(position);
+
+        if (isHasHeader()) {
+            notifyItemRemoved(position + 1);
+            notifyItemRangeChanged(1, mValueList.size() + 1);
+        } else {
+            notifyItemRemoved(position);
+            notifyItemRangeChanged(0, mValueList.size());
+        }
+    }
 }

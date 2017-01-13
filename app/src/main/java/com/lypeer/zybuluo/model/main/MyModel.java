@@ -28,6 +28,7 @@ import com.squareup.picasso.Picasso;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -169,7 +170,7 @@ public class MyModel extends BaseModel<MyPresenter> {
         }
     }
 
-    private void createLink(Video target, String url) {
+    private void createLink(final Video target, final String url) {
         DeviceUuidFactory factory = new DeviceUuidFactory(App.getAppContext());
         String uuid = factory.getDeviceUuid().toString();
 
@@ -181,7 +182,7 @@ public class MyModel extends BaseModel<MyPresenter> {
         String token = ApiSignUtil.md5(uuid.concat(String.valueOf(target.getId())));
 
         RetrofitClient.buildService(ApiService.class)
-                .createShareLink(url, uuid, "473", token)
+                .createShareLink(url, uuid, target.getId(), token)
                 .enqueue(new Callback<CreateShareLinkResponse>() {
                     @Override
                     public void onResponse(Call<CreateShareLinkResponse> call, Response<CreateShareLinkResponse> response) {
@@ -193,7 +194,7 @@ public class MyModel extends BaseModel<MyPresenter> {
                         CreateShareLinkResponse shareLinkResponse = response.body();
 
                         if (shareLinkResponse.getStatus() == Constants.StatusCode.STATUS_SUCCESS) {
-                            getPresenter().shareSuccess(shareLinkResponse);
+                            getPresenter().shareSuccess(shareLinkResponse , target.getPath());
                         } else {
                             getPresenter().shareFail(App.getRes().getStringArray(R.array.status_error)[shareLinkResponse.getStatus()]);
                         }
@@ -205,5 +206,18 @@ public class MyModel extends BaseModel<MyPresenter> {
                         getPresenter().shareFail(t.getMessage());
                     }
                 });
+    }
+
+    public void delete(Video itemValue, int position) {
+        File file = new File(itemValue.getPath());
+        if (file.exists()) {
+            if (file.delete()) {
+                getPresenter().deleteSuccess(position);
+            } else {
+                getPresenter().deleteFail(App.getAppContext().getString(R.string.error_delete_fail));
+            }
+        } else {
+            getPresenter().deleteFail(App.getAppContext().getString(R.string.error_not_exist));
+        }
     }
 }

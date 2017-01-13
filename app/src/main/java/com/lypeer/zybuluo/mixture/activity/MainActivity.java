@@ -1,5 +1,8 @@
 package com.lypeer.zybuluo.mixture.activity;
 
+import android.app.ProgressDialog;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
@@ -18,8 +21,10 @@ import android.media.MediaPlayer;
 import android.opengl.GLSurfaceView;
 import android.os.CountDownTimer;
 import android.os.Environment;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Surface;
@@ -36,7 +41,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 
+import com.lypeer.zybuluo.App;
 import com.lypeer.zybuluo.R;
+import com.lypeer.zybuluo.impl.ApiService;
+import com.lypeer.zybuluo.impl.OnProgressChangedListener;
 import com.lypeer.zybuluo.mixture.core.HeadInfo;
 import com.lypeer.zybuluo.mixture.core.HeadInfoManager;
 import com.lypeer.zybuluo.mixture.core.MediaEditor;
@@ -49,6 +57,26 @@ import com.lypeer.zybuluo.mixture.util.FilePipelineHelper;
 import com.lypeer.zybuluo.mixture.util.GLESUtil;
 import com.lypeer.zybuluo.mixture.view.CircleProgressView;
 import com.lypeer.zybuluo.mixture.view.WaveView;
+import com.lypeer.zybuluo.model.bean.CreateShareLinkResponse;
+import com.lypeer.zybuluo.model.bean.UploadResponse;
+import com.lypeer.zybuluo.model.bean.Video;
+import com.lypeer.zybuluo.model.bean.VideoResponse;
+import com.lypeer.zybuluo.utils.ApiSignUtil;
+import com.lypeer.zybuluo.utils.Constants;
+import com.lypeer.zybuluo.utils.DeviceUuidFactory;
+import com.lypeer.zybuluo.utils.FileUtil;
+import com.lypeer.zybuluo.utils.RetrofitClient;
+import com.lypeer.zybuluo.utils.meipai.MeiPai;
+import com.qiniu.android.common.Zone;
+import com.qiniu.android.http.ResponseInfo;
+import com.qiniu.android.storage.Configuration;
+import com.qiniu.android.storage.UpCompletionHandler;
+import com.qiniu.android.storage.UpProgressHandler;
+import com.qiniu.android.storage.UploadManager;
+import com.qiniu.android.storage.UploadOptions;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -65,14 +93,20 @@ import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
 
+import cn.sharesdk.framework.Platform;
+import cn.sharesdk.onekeyshare.OnekeyShare;
+import cn.sharesdk.onekeyshare.ShareContentCustomizeCallback;
+import cn.sharesdk.sina.weibo.SinaWeibo;
 import jp.co.cyberagent.android.gpuimage.GPUImageNativeLibrary;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener, GLSurfaceView.Renderer, MediaPlayer.OnCompletionListener, SurfaceTexture.OnFrameAvailableListener, VideoLoader.VideoDownloadCallback, MediaEditorTask.MediaEditorTaskCallback, Camera.PreviewCallback {
     private final static String TAG = MainActivity.class.getSimpleName();
     private final static boolean TEST = true;
-    private final static String DOWNLOADED_VIDEO_PATH = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).getAbsolutePath() + "/bigbang.mp4";
-    private final static String TEMP_VIDEO_PATH = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).toString() + "/~bigbang.mp4";
-    private String OUTPUT_DIR = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).toString();
+    private final static String DOWNLOADED_VIDEO_PATH = FileUtil.getStorageDir() + "/bigbang.mp4";
+    private final static String TEMP_VIDEO_PATH = FileUtil.getStorageDir() + "/~bigbang.mp4";
     private final static int MAGIC_TEXTURE_ID = 10;
 
     private enum MixtureStage {Init, Training, RecordPrepare, RecordStart, RecordComplete, Preview}
@@ -145,6 +179,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private int mCurrentFrame = 0;
 
+    private VideoResponse.BodyBean.VideoListBean mVideoBean;
+    private ProgressDialog mProgressDialog;
+    private String mFinalPath = null;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -191,9 +229,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mFirstFramePaint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.DST_OVER));
         mBigheadPaint = new Paint();
         mSurfaceTextureFromCamera = new SurfaceTexture(MAGIC_TEXTURE_ID);
+
         Intent intent = getIntent();
         String videoHttpUrl = intent.getStringExtra(MixtureKeys.KEY_VIDEO_PATH);
         String dataHttpUrl = intent.getStringExtra(MixtureKeys.KEY_DATA_PATH);
+        mVideoBean = (VideoResponse.BodyBean.VideoListBean) intent.getSerializableExtra(MixtureKeys.KEY_VIDEO);
         mMixtureResult = new MixtureResult();
         if (TEST) {
             if (videoHttpUrl != null && !videoHttpUrl.isEmpty() && dataHttpUrl != null && !dataHttpUrl.isEmpty()) {
@@ -218,6 +258,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
 
         mCurrentStage = MixtureStage.Init;
+        mProgressDialog = new ProgressDialog(this);
+        mProgressDialog.setCancelable(false);
     }
 
     @Override
@@ -365,14 +407,24 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 return;
             } else if (v == mRedoButton) {
                 gotoStageTraining();
+                mFinalPath = null;
             } else if (v == mSaveButton) {
-                String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+                String timeStamp = String.valueOf(System.currentTimeMillis()).substring(0, 10);
                 File file = new File(TEMP_VIDEO_PATH);
-                String newFilePath = OUTPUT_DIR + "/bigbang_" + timeStamp + ".mp4";
+                String newFilePath = FileUtil.getStorageDir() + "/" +
+                        App.getAppContext().getString(R.string.datouxiu) + "_" +
+                        mVideoBean.getId() + "_" +
+                        mVideoBean.getTitle() + "_" +
+                        mVideoBean.getAuthor() + "_" +
+                        timeStamp + ".mp4";
                 file.renameTo(new File(newFilePath));
                 mMixtureResult.state = MixtureResult.MixtureState.SUCCESS;
                 mMixtureResult.videoUrl = newFilePath;
-                backToNavActivity();
+
+                if (mFinalPath == null)
+                    mFinalPath = newFilePath;
+
+                showSaveDialog(mFinalPath, mVideoBean.getId());
                 return;
             } else if (v == mGLSurfaceView) {
                 if (mCurrentStage == MixtureStage.Training) {
@@ -386,6 +438,171 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 }
             }
         }
+    }
+
+    private void showSaveDialog(final String path, final int id) {
+        new AlertDialog.Builder(this)
+                .setTitle(R.string.title_prompt)
+                .setMessage(R.string.message_save_success)
+                .setPositiveButton(R.string.prompt_share, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        share(path, id);
+                    }
+                })
+                .setNegativeButton(R.string.prompt_no, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        dialogInterface.dismiss();
+                    }
+                })
+                .show();
+    }
+
+    public void share(final String path, final int id) {
+        mMediaPlayer.pause();
+        mProgressDialog.show();
+        mProgressDialog.setMessage(App.getAppContext().getString(R.string.prompt_sharing));
+        RetrofitClient.buildService(ApiService.class)
+                .upload()
+                .enqueue(new Callback<UploadResponse>() {
+                    @Override
+                    public void onResponse(Call<UploadResponse> call, Response<UploadResponse> response) {
+                        if (response == null ||
+                                response.body() == null ||
+                                response.body().getStatus() != Constants.StatusCode.STATUS_SUCCESS) {
+                            mProgressDialog.dismiss();
+                            Toast.makeText(MainActivity.this, App.getAppContext().getString(R.string.error_share_fail), Toast.LENGTH_SHORT).show();
+                            return;
+                        }
+
+                        upload(path, response.body().getBody().getToken(), id);
+                    }
+
+                    @Override
+                    public void onFailure(Call<UploadResponse> call, Throwable t) {
+                        mProgressDialog.dismiss();
+                        Toast.makeText(MainActivity.this, t.getMessage(), Toast.LENGTH_SHORT).show();
+                    }
+                });
+    }
+
+    private void upload(final String path, String uptoken, final int id) {
+        Configuration config = new Configuration.Builder().zone(Zone.httpAutoZone).build();
+        UploadManager uploadManager = new UploadManager(config);
+        try {
+
+            uploadManager.put(path, null, uptoken, new UpCompletionHandler() {
+                @Override
+                public void complete(String key, ResponseInfo info, JSONObject response) {
+                    if (info == null) {
+                        mProgressDialog.dismiss();
+                        Toast.makeText(MainActivity.this, App.getAppContext().getString(R.string.error_some_problem), Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+
+                    if (info.isOK()) {
+                        try {
+                            createLink(path, id, "static.fibar.cn/".concat(response.getString("key")));
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    } else {
+                        mProgressDialog.dismiss();
+                        Toast.makeText(MainActivity.this, info.error, Toast.LENGTH_SHORT).show();
+                    }
+                }
+
+            }, new UploadOptions(null, null, false,
+                    new UpProgressHandler() {
+                        public void progress(String key, double percent) {
+                            mProgressDialog.setMessage("上传中，当前进度为：" + (int) (percent * 100) + "%");
+                        }
+                    }, null));
+        } catch (Exception e) {
+            e.printStackTrace();
+            mProgressDialog.dismiss();
+            Toast.makeText(MainActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private void createLink(final String path, int id, final String url) {
+        DeviceUuidFactory factory = new DeviceUuidFactory(App.getAppContext());
+        String uuid = factory.getDeviceUuid().toString();
+
+        if (TextUtils.isEmpty(uuid)) {
+            mProgressDialog.dismiss();
+            Toast.makeText(MainActivity.this, App.getAppContext().getString(R.string.error_uuid_null), Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        String token = ApiSignUtil.md5(uuid.concat(path));
+
+        RetrofitClient.buildService(ApiService.class)
+                .createShareLink(url, uuid, id, token)
+                .enqueue(new Callback<CreateShareLinkResponse>() {
+                    @Override
+                    public void onResponse(Call<CreateShareLinkResponse> call, Response<CreateShareLinkResponse> response) {
+                        if (response == null || response.body() == null) {
+                            mProgressDialog.dismiss();
+                            Toast.makeText(MainActivity.this, App.getAppContext().getString(R.string.error_share_fail), Toast.LENGTH_SHORT).show();
+                            return;
+                        }
+
+                        CreateShareLinkResponse shareLinkResponse = response.body();
+
+                        if (shareLinkResponse.getStatus() == Constants.StatusCode.STATUS_SUCCESS) {
+                            shareSuccess(shareLinkResponse, path);
+                        } else {
+                            mProgressDialog.dismiss();
+                            Toast.makeText(MainActivity.this, App.getRes().getStringArray(R.array.status_error)[shareLinkResponse.getStatus()], Toast.LENGTH_SHORT).show();
+                        }
+
+                    }
+
+                    @Override
+                    public void onFailure(Call<CreateShareLinkResponse> call, Throwable t) {
+                        mProgressDialog.dismiss();
+                        Toast.makeText(MainActivity.this, t.getMessage(), Toast.LENGTH_SHORT).show();
+                    }
+                });
+    }
+
+    private void shareSuccess(CreateShareLinkResponse shareLinkResponse, String path) {
+        mProgressDialog.dismiss();
+        showSharePanel(shareLinkResponse, path);
+    }
+
+    private void showSharePanel(final CreateShareLinkResponse response, final String videoUrl) {
+        mMediaPlayer.pause();
+        final OnekeyShare oks = new OnekeyShare();
+
+        oks.setTitle(response.getBody().getWeibo_title());
+        oks.setText(response.getBody().getWeibo_title());
+        oks.setImageUrl(response.getBody().getThumb_nail());
+        oks.setUrl(response.getBody().getUrl());
+
+        Bitmap enableLogo = BitmapFactory.decodeResource(App.getAppContext().getResources(), R.drawable.ic_meipai);
+        String label = "美拍";
+        View.OnClickListener listener = new View.OnClickListener() {
+            public void onClick(View v) {
+                MeiPai meiPai = new MeiPai(MainActivity.this);
+                meiPai.share(videoUrl);
+            }
+        };
+        oks.setCustomerLogo(enableLogo, label, listener);
+
+        oks.setShareContentCustomizeCallback(new ShareContentCustomizeCallback() {
+            @Override
+            public void onShare(Platform platform, Platform.ShareParams paramsToShare) {
+                if (platform.getName().equals(SinaWeibo.NAME)) {
+                    oks.setTitle(response.getBody().getWeibo_title() + "\t\t" + "大头秀－分享-" + response.getBody().getUrl());
+                    oks.setText(response.getBody().getWeibo_title() + "\t\t" + "大头秀－分享-" + response.getBody().getUrl());
+                }
+            }
+        });
+
+        oks.show(MainActivity.this);
     }
 
     @Override
@@ -671,12 +888,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private void backToNavActivity() {
         finish();
 
-        Intent intent = new Intent();
+        /*Intent intent = new Intent();
         intent.putExtra(MixtureKeys.KEY_MIXTURE_STATE, mMixtureResult.state);
         intent.putExtra(MixtureKeys.KEY_MIXTURE_MESSAGE, mMixtureResult.message);
         intent.putExtra(MixtureKeys.KEY_MIXTURE_VIDEO_PATH, mMixtureResult.videoUrl);
         intent.setClass(MainActivity.this, NavigatorActivity.class);
-        startActivity(intent);
+        startActivity(intent);*/
     }
 
     protected class RecordStartCountDownTimer extends CountDownTimer {

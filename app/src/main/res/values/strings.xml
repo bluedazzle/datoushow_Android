@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Zybuluo</string>
+    <string name="app_name">大头秀</string>
     <string name="error_presenter_must_be_inited">Presenter must be initted !</string>
     <string name="dialog_waiting">请稍候</string>
     <string name="prompt_add">制作</string>
@@ -23,6 +23,17 @@
     <string name="prompt_delete">删除</string>
     <string name="error_share_fail">分享失败，请稍后重试</string>
     <string name="error_uuid_null">无法生成用户唯一标识码</string>
+    <string name="meipai">美拍</string>
+    <string name="datouxiu">datouxiu</string>
+    <string name="error_not_exist">删除失败，文件不存在</string>
+    <string name="error_delete_fail">删除失败，请重试</string>
+    <string name="prompt_deleting">正在删除，请稍候…</string>
+    <string name="prompt_sharing">正在为分享进行一些必要的初始化，请稍候…</string>
+    <string name="prompt_save_success">保存成功！</string>
+    <string name="error_save_fail">保存失败，请稍后重试</string>
+    <string name="title_prompt">提示</string>
+    <string name="message_save_success">保存成功！快分享给你的小伙伴让他们一起看看吧！</string>
+    <string name="prompt_no">取消</string>
 
     <string-array name="status_error">
         <item>未知错误</item>

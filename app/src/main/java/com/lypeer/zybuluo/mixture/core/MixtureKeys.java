@@ -6,6 +6,7 @@ package com.lypeer.zybuluo.mixture.core;
 
 public class MixtureKeys {
     public final static String KEY_VIDEO_PATH = "video_path";
+    public final static String KEY_VIDEO = "video_data";
     public final static String KEY_DATA_PATH = "data_path";
 
     public final static String KEY_MIXTURE_STATE = "mixture_state";

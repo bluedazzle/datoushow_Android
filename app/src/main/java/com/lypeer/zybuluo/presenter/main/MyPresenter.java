@@ -80,10 +80,31 @@ public class MyPresenter extends BasePresenter<MyFragment , MyModel> {
         getView().shareFail(errorMessage);
     }
 
-    public void shareSuccess(CreateShareLinkResponse shareLinkResponse) {
+    public void shareSuccess(CreateShareLinkResponse shareLinkResponse , String videoUrl) {
         if(!isViewAttached()){
             return;
         }
-        getView().shareSuccess(shareLinkResponse);
+        getView().shareSuccess(shareLinkResponse , videoUrl);
+    }
+
+    public void delete(Video itemValue , int position) {
+        if(!isViewAttached()){
+            return;
+        }
+        getModel().delete(itemValue , position);
+    }
+
+    public void deleteSuccess(int position) {
+        if(!isViewAttached()){
+            return;
+        }
+        getView().deleteSuccess(position);
+    }
+
+    public void deleteFail(String errorMessage) {
+        if(!isViewAttached()){
+            return;
+        }
+        getView().deleteFail(errorMessage);
     }
 }

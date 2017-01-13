@@ -6,9 +6,10 @@ import android.content.Context;
 import android.content.res.Resources;
 
 import com.lypeer.zybuluo.utils.Constants;
-import com.umeng.socialize.Config;
-import com.umeng.socialize.PlatformConfig;
-import com.umeng.socialize.UMShareAPI;
+import com.lypeer.zybuluo.utils.meipai.MeiPaiFactory;
+
+import cn.sharesdk.framework.ShareSDK;
+
 
 /**
  * Created by lypeer on 2017/1/4.
@@ -16,11 +17,6 @@ import com.umeng.socialize.UMShareAPI;
 
 public class App extends Application {
 
-    {
-        PlatformConfig.setWeixin(Constants.ApiSign.K_WECHAT, Constants.ApiSign.V_WECHAT);
-        PlatformConfig.setSinaWeibo(Constants.ApiSign.K_WEIBO, Constants.ApiSign.V_WEIBO);
-        PlatformConfig.setQQZone(Constants.ApiSign.K_QQ, Constants.ApiSign.V_QQ);
-    }
 
     @SuppressLint("StaticFieldLeak")
     private static Context mContext;
@@ -29,12 +25,8 @@ public class App extends Application {
     public void onCreate() {
         super.onCreate();
         mContext = getApplicationContext();
-
-        Config.isUmengSina = true;
-        UMShareAPI.get(this);
-        Config.isJumptoAppStore = true;
-        Config.DEBUG = true;
-        Config.REDIRECT_URL = "http://datoushow.com";
+        ShareSDK.initSDK(this);
+        MeiPaiFactory.init(getAppContext(), Constants.ApiSign.V_MEIPAI);
     }
 
     public static Context getAppContext() {
