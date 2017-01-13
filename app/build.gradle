@@ -1,5 +1,6 @@
 apply plugin: 'com.android.application'
 apply plugin: 'android-apt'
+apply plugin: 'com.growingio.android'
 
 android {
     compileSdkVersion 24
@@ -7,14 +8,18 @@ android {
     defaultConfig {
         applicationId "com.lypeer.zybuluo"
         minSdkVersion 18
-        targetSdkVersion 18
+        targetSdkVersion 21
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        resValue("string", "growingio_project_id", "8bac030e5dd1152a")
+        resValue("string", "growingio_url_scheme", "growing.423cc1c3feca305e")
     }
     buildTypes {
         release {
-            minifyEnabled false
+            minifyEnabled true
+            zipAlignEnabled true
+            shrinkResources true
             signingConfig signingConfigs.debug
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
@@ -56,6 +61,7 @@ dependencies {
     compile 'com.lsjwzh:materialloadingprogressbar:0.5.8-RELEASE'
     compile 'com.qiniu:qiniu-android-sdk:7.3.+'
     compile 'jp.co.cyberagent.android.gpuimage:gpuimage-library:1.4.1'
+    compile 'com.growingio.android:vds-android-agent:0.9.101@aar'
 
     testCompile 'junit:junit:4.12'
     apt 'com.jakewharton:butterknife-compiler:8.2.1'

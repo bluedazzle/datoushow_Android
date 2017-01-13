@@ -5,6 +5,8 @@ import android.app.Application;
 import android.content.Context;
 import android.content.res.Resources;
 
+import com.growingio.android.sdk.collection.Configuration;
+import com.growingio.android.sdk.collection.GrowingIO;
 import com.lypeer.zybuluo.utils.Constants;
 import com.lypeer.zybuluo.utils.meipai.MeiPaiFactory;
 
@@ -27,6 +29,10 @@ public class App extends Application {
         mContext = getApplicationContext();
         ShareSDK.initSDK(this);
         MeiPaiFactory.init(getAppContext(), Constants.ApiSign.V_MEIPAI);
+        GrowingIO.startWithConfiguration(this, new Configuration()
+                .useID()
+                .trackAllFragments()
+                .setChannel("XXX应用商店"));
     }
 
     public static Context getAppContext() {
