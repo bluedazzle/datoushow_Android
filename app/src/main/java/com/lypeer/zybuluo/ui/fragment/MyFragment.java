@@ -136,7 +136,7 @@ public class MyFragment extends BaseFragment<MyPresenter> implements OnRefreshLi
 
     private void delete(Video itemValue, int position) {
         //setProgressMessage(App.getAppContext().getString(R.string.prompt_deleting));
-        showProgressBar();
+        //showProgressBar();
         getPresenter().delete(itemValue, position);
     }
 
