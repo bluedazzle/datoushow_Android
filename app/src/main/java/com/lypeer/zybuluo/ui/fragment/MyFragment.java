@@ -31,6 +31,8 @@ import com.lypeer.zybuluo.ui.custom.google.GoogleCircleProgressView;
 import com.lypeer.zybuluo.utils.FileUtil;
 import com.lypeer.zybuluo.utils.meipai.MeiPai;
 
+import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
@@ -164,6 +166,7 @@ public class MyFragment extends BaseFragment<MyPresenter> implements OnRefreshLi
     }
 
     public void refreshVideosSuccess(List<Video> videoList) {
+        Collections.reverse(videoList);
         mSwipeToLoadLayout.setRefreshing(false);
         mAdapter.refreshData(videoList);
     }

@@ -156,6 +156,9 @@
 -keep class com.sina.**{*;}
 -keep class **.R$* {*;}
 -keep class **.R{*;}
+
+-keep class com.mob.**{*;}
+-dontwarn com.mob.**
 -dontwarn cn.sharesdk.**
 -dontwarn **.R$*
 -keep class m.framework.**{*;}
@@ -188,3 +191,27 @@
     public void onResume();
     public void onPause();
 }
+
+# retrofit
+-dontwarn retrofit2.**
+-keep class retrofit2.** { *; }
+-keepattributes Signature
+-keepattributes Exceptions
+
+# JieCaoVideoPlayer
+-keep class tv.danmaku.ijk.** { *; }
+-dontwarn tv.danmaku.ijk.**
+
+# gpuimage
+-dontwarn jp.co.cyberagent.android.**
+-keep class jp.co.cyberagent.android.** { *; }
+
+# gson
+-keep class sun.misc.Unsafe { *; }
+-keep class com.google.gson.stream.** { *; }
+-keep class com.lypeer.zybuluo.model.bean.** { *; }
+
+# okhttp3
+-dontwarn com.squareup.okhttp3.**
+-keep class com.squareup.okhttp3.** { *;}
+-dontwarn okio.**

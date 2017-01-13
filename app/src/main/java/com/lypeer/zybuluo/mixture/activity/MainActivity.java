@@ -1,7 +1,6 @@
 package com.lypeer.zybuluo.mixture.activity;
 
 import android.app.ProgressDialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -19,11 +18,11 @@ import android.hardware.Camera;
 import android.media.MediaMetadataRetriever;
 import android.media.MediaPlayer;
 import android.opengl.GLSurfaceView;
+import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Environment;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -40,11 +39,9 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-
 import com.lypeer.zybuluo.App;
 import com.lypeer.zybuluo.R;
 import com.lypeer.zybuluo.impl.ApiService;
-import com.lypeer.zybuluo.impl.OnProgressChangedListener;
 import com.lypeer.zybuluo.mixture.core.HeadInfo;
 import com.lypeer.zybuluo.mixture.core.HeadInfoManager;
 import com.lypeer.zybuluo.mixture.core.MediaEditor;
@@ -59,7 +56,6 @@ import com.lypeer.zybuluo.mixture.view.CircleProgressView;
 import com.lypeer.zybuluo.mixture.view.WaveView;
 import com.lypeer.zybuluo.model.bean.CreateShareLinkResponse;
 import com.lypeer.zybuluo.model.bean.UploadResponse;
-import com.lypeer.zybuluo.model.bean.Video;
 import com.lypeer.zybuluo.model.bean.VideoResponse;
 import com.lypeer.zybuluo.utils.ApiSignUtil;
 import com.lypeer.zybuluo.utils.Constants;
@@ -80,18 +76,14 @@ import org.json.JSONObject;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.IntBuffer;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
 
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
-
 
 import cn.sharesdk.framework.Platform;
 import cn.sharesdk.onekeyshare.OnekeyShare;
@@ -887,13 +879,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private void backToNavActivity() {
         finish();
-
-        /*Intent intent = new Intent();
-        intent.putExtra(MixtureKeys.KEY_MIXTURE_STATE, mMixtureResult.state);
-        intent.putExtra(MixtureKeys.KEY_MIXTURE_MESSAGE, mMixtureResult.message);
-        intent.putExtra(MixtureKeys.KEY_MIXTURE_VIDEO_PATH, mMixtureResult.videoUrl);
-        intent.setClass(MainActivity.this, NavigatorActivity.class);
-        startActivity(intent);*/
     }
 
     protected class RecordStartCountDownTimer extends CountDownTimer {
