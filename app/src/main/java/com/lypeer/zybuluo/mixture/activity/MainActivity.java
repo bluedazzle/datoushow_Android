@@ -215,7 +215,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mBigheadBuffer = ByteBuffer.allocate(mBigHeadMask.getWidth() * mBigHeadMask.getHeight() * 4);
 
         mPaint = new Paint();
-        //mPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+        mPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         mPaint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.DST_IN));//叠加重复的部分，显示下面的
         mFirstFramePaint = new Paint();
         mFirstFramePaint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.DST_OVER));
@@ -280,7 +280,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         for (int i = 0; i < preSize.size(); i++) {
             int tmpWidth = preSize.get(i).width;
             int tmpHeight = preSize.get(i).height;
-            if (tmpWidth >= mBigHeadMask.getHeight() && tmpHeight >= mBigHeadMask.getWidth()) {
+            if (tmpWidth >= mBigHeadMask.getHeight() * 1.5 && tmpHeight >= mBigHeadMask.getWidth() * 1.5) {
                 if (tmpHeight < mPreviewWidth || tmpWidth < mPreviewHeight) {
                     mPreviewWidth = tmpWidth;
                     mPreviewHeight = tmpHeight;
@@ -677,6 +677,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     public void onSurfaceChanged(GL10 gl, int width, int height) {
         gl.glViewport(0, 0, width, height);
+        mRender.onOutputSizeChanged(width, height);
     }
 
     @Override

@@ -29,7 +29,6 @@ import android.view.Surface;
 
 import com.lypeer.zybuluo.mixture.util.GLESUtil;
 
-
 /**
  * Holds state associated with a Surface used for MediaCodec decoder output.
  * <p>
@@ -95,7 +94,7 @@ class OutputSurface implements SurfaceTexture.OnFrameAvailableListener {
         // at the Java level, so if we don't either then the object can get GCed, which
         // causes the native finalizer to run.
         if (VERBOSE) Log.d(TAG, "textureID=" + mTextureRender.getTextureId());
-            mSurfaceTexture = new SurfaceTexture(mTextureRender.getTextureId());
+        mSurfaceTexture = new SurfaceTexture(mTextureRender.getTextureId());
 
         // This doesn't work if OutputSurface is created on the thread that CTS started for
         // these test cases.
@@ -265,6 +264,7 @@ class OutputSurface implements SurfaceTexture.OnFrameAvailableListener {
         }
     }
 
+
     /**
      * Checks for EGL errors.
      */
@@ -274,4 +274,6 @@ class OutputSurface implements SurfaceTexture.OnFrameAvailableListener {
             throw new RuntimeException(msg + ": EGL error: 0x" + Integer.toHexString(error));
         }
     }
+
+    public TextureRender getRender() {return mTextureRender;}
 }

@@ -167,6 +167,8 @@ public class MediaEditor {
 
         // Create a MediaCodec for the decoder, based on the extractor's format.
         mVideoDecoderOutputSurface = new OutputSurface();
+        mVideoDecoderOutputSurface.getRender().onOutputSizeChanged(mVideoEncoderinputSurface.getWidth(), mVideoEncoderinputSurface.getHeight());
+        Log.v(TAG, "surface size: " + mVideoEncoderinputSurface.getWidth() + ", " + mVideoEncoderinputSurface.getHeight());
         mVideoDecoder = MediaEditorUtil.createVideoDecoder(mInputVideoFormat, mVideoDecoderOutputSurface.getSurface());
         Log.v(TAG, "decoder created");
 
