@@ -172,7 +172,8 @@ public class TextureRender {
             "     gaussianWeightTotal += gaussianWeight;\n" +
             "     sum += sampleColor * gaussianWeight;\n" +
             "     lowp vec4 beauty = sum / gaussianWeightTotal;\n" +
-
+            "     beauty = sum / gaussianWeightTotal;\n" +
+            "     beauty = vec4((beauty.rgb + vec3(0.2)), beauty.w);\n" +
             "   //lowp vec4 textureColor2 = texture2D(inputImageTexture2, textureCoordinate2);\n" +
             "   lowp vec4 textureColor1 = texture2D(inputImageTexture1, textureCoordinate1);\n" +
             "   \n" +
