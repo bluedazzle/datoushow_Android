@@ -80,8 +80,9 @@
             android:id="@+id/tv_terms"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
+            android:background="?attr/selectableItemBackground"
             android:clickable="true"
+            android:padding="8dp"
             android:text="@string/prompt_terms"
             android:textColor="@color/colorRed"/>
 
