@@ -432,6 +432,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 if (mFinalPath == null)
                     mFinalPath = newFilePath;
 
+                FileUtil.saveToGallery(mFinalPath);
                 share(mFinalPath, mVideoBean.getId());
                 return;
             } else if (v == mGLSurfaceView) {

@@ -11,12 +11,15 @@ package cn.sharesdk.onekeyshare.themes.classic;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
 import android.view.animation.Animation;
 import android.view.animation.TranslateAnimation;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import cn.sharesdk.framework.CustomPlatform;
@@ -27,6 +30,8 @@ import cn.sharesdk.onekeyshare.CustomerLogo;
 import cn.sharesdk.onekeyshare.OnekeySharePage;
 import cn.sharesdk.onekeyshare.OnekeyShareThemeImpl;
 
+import com.lypeer.zybuluo.App;
+import com.lypeer.zybuluo.R;
 import com.mob.tools.gui.MobViewPager;
 import com.mob.tools.utils.ResHelper;
 
@@ -87,6 +92,28 @@ public abstract class PlatformPage extends OnekeySharePage {
 		vInd.onScreenChange(0, 0);
 		adapter.setIndicator(vInd);
 		mvp.setAdapter(adapter);
+
+		lp = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,150);
+		lp.setMargins(0,0,0,0);
+		LinearLayout buttonLayout2 = new LinearLayout(activity);
+		buttonLayout2.setBackgroundColor(Color.WHITE);
+
+		LinearLayout.LayoutParams lp22 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,110);
+		lp22.setMargins(20, 20, 20, 20);
+		Button button2 = new Button(activity);
+		button2.setText("完成");
+		button2.setTextColor(Color.WHITE);
+		button2.setTextSize(14);
+		button2.setBackgroundColor(App.getRes().getColor(R.color.colorRed));
+		button2.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				finish();
+			}
+		});
+		buttonLayout2.addView(button2,lp22);
+		llPanel.addView(buttonLayout2,lp);
 	}
 
 	protected abstract PlatformPageAdapter newAdapter(ArrayList<Object> cells);
