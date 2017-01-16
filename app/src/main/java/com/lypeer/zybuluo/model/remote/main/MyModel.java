@@ -149,11 +149,15 @@ public class MyModel extends BaseModel<MyPresenter> {
     }
 
     private void upload(final Video target, String uptoken, final OnProgressChangedListener listener) {
+        DeviceUuidFactory factory = new DeviceUuidFactory(App.getAppContext());
+        String uuid = factory.getDeviceUuid().toString();
+        String time = String.valueOf(System.currentTimeMillis());
+
         Configuration config = new Configuration.Builder().zone(Zone.httpAutoZone).build();
         UploadManager uploadManager = new UploadManager(config);
         try {
 
-            uploadManager.put(target.getPath(), null, uptoken, new UpCompletionHandler() {
+            uploadManager.put(target.getPath(), ApiSignUtil.md5(uuid + time) + ".mp4", uptoken, new UpCompletionHandler() {
                 @Override
                 public void complete(String key, ResponseInfo info, JSONObject response) {
                     if (info == null) {

@@ -500,11 +500,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void upload(final String path, String uptoken, final int id) {
+        DeviceUuidFactory factory = new DeviceUuidFactory(App.getAppContext());
+        String uuid = factory.getDeviceUuid().toString();
+        String time = String.valueOf(System.currentTimeMillis());
+
         Configuration config = new Configuration.Builder().zone(Zone.httpAutoZone).build();
         UploadManager uploadManager = new UploadManager(config);
         try {
 
-            uploadManager.put(path, null, uptoken, new UpCompletionHandler() {
+            uploadManager.put(path,  ApiSignUtil.md5(uuid + time) + ".mp4", uptoken, new UpCompletionHandler() {
                 @Override
                 public void complete(String key, ResponseInfo info, JSONObject response) {
                     if (info == null) {
