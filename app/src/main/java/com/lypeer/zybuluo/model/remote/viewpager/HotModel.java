@@ -1,11 +1,11 @@
-package com.lypeer.zybuluo.model.viewpager;
+package com.lypeer.zybuluo.model.remote.viewpager;
 
 import com.lypeer.zybuluo.App;
 import com.lypeer.zybuluo.R;
 import com.lypeer.zybuluo.impl.ApiService;
 import com.lypeer.zybuluo.model.base.BaseModel;
 import com.lypeer.zybuluo.model.bean.VideoResponse;
-import com.lypeer.zybuluo.presenter.viewpager.MvPresenter;
+import com.lypeer.zybuluo.presenter.viewpager.HotPresenter;
 import com.lypeer.zybuluo.utils.Constants;
 import com.lypeer.zybuluo.utils.RetrofitClient;
 
@@ -17,20 +17,19 @@ import retrofit2.Response;
  * Created by lypeer on 2017/1/4.
  */
 
-public class MvModel extends BaseModel<MvPresenter> {
-    public MvModel(MvPresenter mvPresenter) {
-        super(mvPresenter);
+public class HotModel extends BaseModel<HotPresenter> {
+    public HotModel(HotPresenter hotPresenter) {
+        super(hotPresenter);
     }
 
     @Override
-    protected MvPresenter createPresenter() {
-        return new MvPresenter();
+    protected HotPresenter createPresenter() {
+        return new HotPresenter();
     }
-
 
     public void refreshVideos(int currentPage) {
         RetrofitClient.buildService(ApiService.class)
-                .getTypeVideos(currentPage, Constants.VideosType.TYPE_MV)
+                .getHotVideos(currentPage, 1)
                 .enqueue(new Callback<VideoResponse>() {
                     @Override
                     public void onResponse(Call<VideoResponse> call, Response<VideoResponse> response) {
@@ -57,7 +56,7 @@ public class MvModel extends BaseModel<MvPresenter> {
 
     public void loadMoreVideos(int currentPage) {
         RetrofitClient.buildService(ApiService.class)
-                .getTypeVideos(currentPage + 1, Constants.VideosType.TYPE_MV)
+                .getHotVideos(currentPage + 1, 1)
                 .enqueue(new Callback<VideoResponse>() {
                     @Override
                     public void onResponse(Call<VideoResponse> call, Response<VideoResponse> response) {

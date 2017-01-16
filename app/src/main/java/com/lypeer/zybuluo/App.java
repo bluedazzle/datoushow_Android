@@ -11,6 +11,8 @@ import com.lypeer.zybuluo.utils.Constants;
 import com.lypeer.zybuluo.utils.meipai.MeiPaiFactory;
 
 import cn.sharesdk.framework.ShareSDK;
+import io.realm.Realm;
+import io.realm.RealmConfiguration;
 
 
 /**
@@ -33,6 +35,9 @@ public class App extends Application {
                 .useID()
                 .trackAllFragments()
                 .setChannel("XXX应用商店"));
+        Realm.init(this);
+        RealmConfiguration realmConfiguration = new RealmConfiguration.Builder().build();
+        Realm.setDefaultConfiguration(realmConfiguration);
     }
 
     public static Context getAppContext() {

@@ -1,6 +1,7 @@
 apply plugin: 'com.android.application'
 apply plugin: 'android-apt'
 apply plugin: 'com.growingio.android'
+apply plugin: 'realm-android'
 
 android {
     compileSdkVersion 24
@@ -11,7 +12,6 @@ android {
         targetSdkVersion 21
         versionCode 1
         versionName "1.0"
-        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         resValue("string", "growingio_project_id", "8bac030e5dd1152a")
         resValue("string", "growingio_url_scheme", "growing.423cc1c3feca305e")
     }
@@ -63,6 +63,5 @@ dependencies {
     compile 'jp.co.cyberagent.android.gpuimage:gpuimage-library:1.4.1'
     compile 'com.growingio.android:vds-android-agent:0.9.101@aar'
 
-    testCompile 'junit:junit:4.12'
     apt 'com.jakewharton:butterknife-compiler:8.2.1'
 }

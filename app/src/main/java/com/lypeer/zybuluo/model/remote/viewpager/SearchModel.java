@@ -1,4 +1,4 @@
-package com.lypeer.zybuluo.model.viewpager;
+package com.lypeer.zybuluo.model.remote.viewpager;
 
 import com.lypeer.zybuluo.App;
 import com.lypeer.zybuluo.R;

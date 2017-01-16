@@ -54,6 +54,7 @@ import com.lypeer.zybuluo.mixture.util.FilePipelineHelper;
 import com.lypeer.zybuluo.mixture.util.GLESUtil;
 import com.lypeer.zybuluo.mixture.view.CircleProgressView;
 import com.lypeer.zybuluo.mixture.view.WaveView;
+import com.lypeer.zybuluo.model.bean.BodyBean;
 import com.lypeer.zybuluo.model.bean.CreateShareLinkResponse;
 import com.lypeer.zybuluo.model.bean.UploadResponse;
 import com.lypeer.zybuluo.model.bean.VideoResponse;
@@ -89,6 +90,7 @@ import cn.sharesdk.framework.Platform;
 import cn.sharesdk.onekeyshare.OnekeyShare;
 import cn.sharesdk.onekeyshare.ShareContentCustomizeCallback;
 import cn.sharesdk.sina.weibo.SinaWeibo;
+import io.realm.Realm;
 import jp.co.cyberagent.android.gpuimage.GPUImageNativeLibrary;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -581,7 +583,19 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private void shareSuccess(CreateShareLinkResponse shareLinkResponse, String path) {
         mProgressDialog.dismiss();
+        shareLinkResponse.getBody().setPath(path);
+        insert(new BodyBean(shareLinkResponse.getBody()));
         showSharePanel(shareLinkResponse, path);
+    }
+
+    public void insert(final BodyBean bodyBean) {
+        Realm realm = Realm.getDefaultInstance();
+        realm.executeTransactionAsync(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+                realm.copyToRealm(bodyBean);
+            }
+        });
     }
 
     private void showSharePanel(final CreateShareLinkResponse response, final String videoUrl) {

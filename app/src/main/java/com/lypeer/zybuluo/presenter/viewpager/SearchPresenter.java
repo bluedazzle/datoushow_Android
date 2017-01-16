@@ -1,7 +1,7 @@
 package com.lypeer.zybuluo.presenter.viewpager;
 
 import com.lypeer.zybuluo.model.bean.VideoResponse;
-import com.lypeer.zybuluo.model.viewpager.SearchModel;
+import com.lypeer.zybuluo.model.remote.viewpager.SearchModel;
 import com.lypeer.zybuluo.presenter.base.BasePresenter;
 import com.lypeer.zybuluo.ui.fragment.viewpager.SearchFragment;
 

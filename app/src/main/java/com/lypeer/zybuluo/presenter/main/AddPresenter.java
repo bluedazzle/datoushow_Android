@@ -1,6 +1,6 @@
 package com.lypeer.zybuluo.presenter.main;
 
-import com.lypeer.zybuluo.model.main.AddModel;
+import com.lypeer.zybuluo.model.remote.main.AddModel;
 import com.lypeer.zybuluo.presenter.base.BasePresenter;
 import com.lypeer.zybuluo.ui.fragment.AddFragment;
 

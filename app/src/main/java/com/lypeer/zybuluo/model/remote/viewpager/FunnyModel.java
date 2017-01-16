@@ -1,11 +1,11 @@
-package com.lypeer.zybuluo.model.viewpager;
+package com.lypeer.zybuluo.model.remote.viewpager;
 
 import com.lypeer.zybuluo.App;
 import com.lypeer.zybuluo.R;
 import com.lypeer.zybuluo.impl.ApiService;
 import com.lypeer.zybuluo.model.base.BaseModel;
 import com.lypeer.zybuluo.model.bean.VideoResponse;
-import com.lypeer.zybuluo.presenter.viewpager.VarietyPresenter;
+import com.lypeer.zybuluo.presenter.viewpager.FunnyPresenter;
 import com.lypeer.zybuluo.utils.Constants;
 import com.lypeer.zybuluo.utils.RetrofitClient;
 
@@ -17,20 +17,20 @@ import retrofit2.Response;
  * Created by lypeer on 2017/1/4.
  */
 
-public class VarietyModel extends BaseModel<VarietyPresenter> {
-    public VarietyModel(VarietyPresenter varietyPresenter) {
-        super(varietyPresenter);
+public class FunnyModel extends BaseModel<FunnyPresenter> {
+    public FunnyModel(FunnyPresenter funnyPresenter) {
+        super(funnyPresenter);
     }
 
     @Override
-    protected VarietyPresenter createPresenter() {
-        return new VarietyPresenter();
+    protected FunnyPresenter createPresenter() {
+        return new FunnyPresenter();
     }
 
 
     public void refreshVideos(int currentPage) {
         RetrofitClient.buildService(ApiService.class)
-                .getTypeVideos(currentPage, Constants.VideosType.TYPE_VARIETY)
+                .getTypeVideos(currentPage, Constants.VideosType.TYPE_FUNNY)
                 .enqueue(new Callback<VideoResponse>() {
                     @Override
                     public void onResponse(Call<VideoResponse> call, Response<VideoResponse> response) {
@@ -57,7 +57,7 @@ public class VarietyModel extends BaseModel<VarietyPresenter> {
 
     public void loadMoreVideos(int currentPage) {
         RetrofitClient.buildService(ApiService.class)
-                .getTypeVideos(currentPage + 1, Constants.VideosType.TYPE_VARIETY)
+                .getTypeVideos(currentPage + 1, Constants.VideosType.TYPE_FUNNY)
                 .enqueue(new Callback<VideoResponse>() {
                     @Override
                     public void onResponse(Call<VideoResponse> call, Response<VideoResponse> response) {
@@ -82,4 +82,3 @@ public class VarietyModel extends BaseModel<VarietyPresenter> {
                 });
     }
 }
-

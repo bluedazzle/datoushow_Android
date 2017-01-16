@@ -1,4 +1,4 @@
-package com.lypeer.zybuluo.model.main;
+package com.lypeer.zybuluo.model.remote.main;
 
 import android.text.TextUtils;
 
@@ -7,9 +7,11 @@ import com.lypeer.zybuluo.R;
 import com.lypeer.zybuluo.impl.ApiService;
 import com.lypeer.zybuluo.impl.OnProgressChangedListener;
 import com.lypeer.zybuluo.model.base.BaseModel;
+import com.lypeer.zybuluo.model.bean.BodyBean;
 import com.lypeer.zybuluo.model.bean.CreateShareLinkResponse;
 import com.lypeer.zybuluo.model.bean.UploadResponse;
 import com.lypeer.zybuluo.model.bean.Video;
+import com.lypeer.zybuluo.model.local.main.MyModelLocal;
 import com.lypeer.zybuluo.presenter.main.MyPresenter;
 import com.lypeer.zybuluo.utils.ApiSignUtil;
 import com.lypeer.zybuluo.utils.Constants;
@@ -32,6 +34,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+import io.realm.Realm;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -41,8 +44,12 @@ import retrofit2.Response;
  */
 
 public class MyModel extends BaseModel<MyPresenter> {
+
+    private MyModelLocal mModelLocal;
+
     public MyModel(MyPresenter myPresenter) {
         super(myPresenter);
+        mModelLocal = new MyModelLocal();
     }
 
     @Override
@@ -112,6 +119,13 @@ public class MyModel extends BaseModel<MyPresenter> {
     }
 
     public void share(final Video target, final OnProgressChangedListener listener) {
+        BodyBean bodyBean = mModelLocal.get(target.getPath());
+        if (bodyBean != null && bodyBean.isValid()) {
+            CreateShareLinkResponse response = bodyBean.getCreateShareLinkResponse();
+            getPresenter().shareSuccess(response, target.getPath());
+            return;
+        }
+
         RetrofitClient.buildService(ApiService.class)
                 .upload()
                 .enqueue(new Callback<UploadResponse>() {
@@ -194,7 +208,9 @@ public class MyModel extends BaseModel<MyPresenter> {
                         CreateShareLinkResponse shareLinkResponse = response.body();
 
                         if (shareLinkResponse.getStatus() == Constants.StatusCode.STATUS_SUCCESS) {
-                            getPresenter().shareSuccess(shareLinkResponse , target.getPath());
+                            getPresenter().shareSuccess(shareLinkResponse, target.getPath());
+                            shareLinkResponse.getBody().setPath(target.getPath());
+                            mModelLocal.insert(new BodyBean(shareLinkResponse.getBody()));
                         } else {
                             getPresenter().shareFail(App.getRes().getStringArray(R.array.status_error)[shareLinkResponse.getStatus()]);
                         }
@@ -212,6 +228,7 @@ public class MyModel extends BaseModel<MyPresenter> {
         File file = new File(itemValue.getPath());
         if (file.exists()) {
             if (file.delete()) {
+                mModelLocal.delete(itemValue.getPath());
                 getPresenter().deleteSuccess(position);
             } else {
                 getPresenter().deleteFail(App.getAppContext().getString(R.string.error_delete_fail));
