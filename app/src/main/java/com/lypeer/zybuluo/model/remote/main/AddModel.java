@@ -1,4 +1,4 @@
-package com.lypeer.zybuluo.model.main;
+package com.lypeer.zybuluo.model.remote.main;
 
 import com.lypeer.zybuluo.model.base.BaseModel;
 import com.lypeer.zybuluo.presenter.main.AddPresenter;

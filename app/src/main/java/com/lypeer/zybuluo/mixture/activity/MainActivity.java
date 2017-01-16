@@ -54,6 +54,7 @@ import com.lypeer.zybuluo.mixture.util.FilePipelineHelper;
 import com.lypeer.zybuluo.mixture.util.GLESUtil;
 import com.lypeer.zybuluo.mixture.view.CircleProgressView;
 import com.lypeer.zybuluo.mixture.view.WaveView;
+import com.lypeer.zybuluo.model.bean.BodyBean;
 import com.lypeer.zybuluo.model.bean.CreateShareLinkResponse;
 import com.lypeer.zybuluo.model.bean.UploadResponse;
 import com.lypeer.zybuluo.model.bean.VideoResponse;
@@ -89,6 +90,7 @@ import cn.sharesdk.framework.Platform;
 import cn.sharesdk.onekeyshare.OnekeyShare;
 import cn.sharesdk.onekeyshare.ShareContentCustomizeCallback;
 import cn.sharesdk.sina.weibo.SinaWeibo;
+import io.realm.Realm;
 import jp.co.cyberagent.android.gpuimage.GPUImageNativeLibrary;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -293,7 +295,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         parameters.setPreviewSize(mPreviewWidth, mPreviewHeight);
         Log.v(TAG, "max zoom size: " + parameters.getMaxZoom() + ", " + parameters.getZoom());
         if (parameters.isZoomSupported()) {
-            parameters.setZoom((int)(parameters.getMaxZoom() * 0.08));
+            parameters.setZoom((int) (parameters.getMaxZoom() * 0.08));
         }
         Log.v(TAG, "max zoom size: " + parameters.getMaxZoom());
         //parameters.setPreviewFpsRange(15, 30);
@@ -430,7 +432,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 if (mFinalPath == null)
                     mFinalPath = newFilePath;
 
-                showSaveDialog(mFinalPath, mVideoBean.getId());
+                share(mFinalPath, mVideoBean.getId());
                 return;
             } else if (v == mGLSurfaceView) {
                 if (mCurrentStage == MixtureStage.Training) {
@@ -446,6 +448,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
+    /**
+     * 此方法已废弃，分享逻辑改为不提示直接先上传
+     */
+    @Deprecated
     private void showSaveDialog(final String path, final int id) {
         new AlertDialog.Builder(this)
                 .setTitle(R.string.title_prompt)
@@ -468,7 +474,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void share(final String path, final int id) {
         mMediaPlayer.pause();
         mProgressDialog.show();
-        mProgressDialog.setMessage(App.getAppContext().getString(R.string.prompt_sharing));
+        mProgressDialog.setMessage(App.getAppContext().getString(R.string.prompt_saving));
         RetrofitClient.buildService(ApiService.class)
                 .upload()
                 .enqueue(new Callback<UploadResponse>() {
@@ -494,11 +500,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void upload(final String path, String uptoken, final int id) {
+        DeviceUuidFactory factory = new DeviceUuidFactory(App.getAppContext());
+        String uuid = factory.getDeviceUuid().toString();
+        String time = String.valueOf(System.currentTimeMillis());
+
         Configuration config = new Configuration.Builder().zone(Zone.httpAutoZone).build();
         UploadManager uploadManager = new UploadManager(config);
         try {
 
-            uploadManager.put(path, null, uptoken, new UpCompletionHandler() {
+            uploadManager.put(path,  ApiSignUtil.md5(uuid + time) + ".mp4", uptoken, new UpCompletionHandler() {
                 @Override
                 public void complete(String key, ResponseInfo info, JSONObject response) {
                     if (info == null) {
@@ -509,6 +519,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
                     if (info.isOK()) {
                         try {
+                            Toast.makeText(MainActivity.this, App.getAppContext().getString(R.string.prompt_save_success), Toast.LENGTH_SHORT).show();
                             createLink(path, id, "static.fibar.cn/".concat(response.getString("key")));
                         } catch (JSONException e) {
                             e.printStackTrace();
@@ -522,7 +533,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             }, new UploadOptions(null, null, false,
                     new UpProgressHandler() {
                         public void progress(String key, double percent) {
-                            mProgressDialog.setMessage("上传中，当前进度为：" + (int) (percent * 100) + "%");
+                            mProgressDialog.setMessage("保存中，当前进度为：" + (int) (percent * 100) + "%");
                         }
                     }, null));
         } catch (Exception e) {
@@ -576,7 +587,19 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private void shareSuccess(CreateShareLinkResponse shareLinkResponse, String path) {
         mProgressDialog.dismiss();
+        shareLinkResponse.getBody().setPath(path);
+        insert(new BodyBean(shareLinkResponse.getBody()));
         showSharePanel(shareLinkResponse, path);
+    }
+
+    public void insert(final BodyBean bodyBean) {
+        Realm realm = Realm.getDefaultInstance();
+        realm.executeTransactionAsync(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+                realm.copyToRealm(bodyBean);
+            }
+        });
     }
 
     private void showSharePanel(final CreateShareLinkResponse response, final String videoUrl) {
@@ -751,7 +774,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 } else {
                     mFilterBitmap.eraseColor(Color.TRANSPARENT);
                 }
-            }else {
+            } else {
                 mFilterBitmap.eraseColor(Color.TRANSPARENT);
             }
             mRender.drawFrame(mSurfaceTextureFromVideo, mFilterBitmap);

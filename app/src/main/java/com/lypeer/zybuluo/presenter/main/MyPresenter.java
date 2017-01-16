@@ -1,12 +1,9 @@
 package com.lypeer.zybuluo.presenter.main;
 
-import android.preference.Preference;
-
 import com.lypeer.zybuluo.impl.OnProgressChangedListener;
 import com.lypeer.zybuluo.model.bean.CreateShareLinkResponse;
 import com.lypeer.zybuluo.model.bean.Video;
-import com.lypeer.zybuluo.model.bean.VideoResponse;
-import com.lypeer.zybuluo.model.main.MyModel;
+import com.lypeer.zybuluo.model.remote.main.MyModel;
 import com.lypeer.zybuluo.presenter.base.BasePresenter;
 import com.lypeer.zybuluo.ui.fragment.MyFragment;
 

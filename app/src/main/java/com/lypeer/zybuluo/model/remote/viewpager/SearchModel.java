@@ -1,4 +1,4 @@
-package com.lypeer.zybuluo.model.viewpager;
+package com.lypeer.zybuluo.model.remote.viewpager;
 
 import com.lypeer.zybuluo.App;
 import com.lypeer.zybuluo.R;
@@ -49,7 +49,7 @@ public class SearchModel extends BaseModel<SearchPresenter> {
 
                     @Override
                     public void onFailure(Call<VideoResponse> call, Throwable t) {
-                        getPresenter().searchFail(App.getAppContext().getString(R.string.error_netword));
+                        getPresenter().searchFail(App.getAppContext().getString(R.string.error_network));
                     }
                 });
     }

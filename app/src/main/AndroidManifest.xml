@@ -9,7 +9,6 @@
     <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
     <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS"/>
-    <uses-permission android:name="android.permission.CALL_PHONE"/>
     <uses-permission android:name="android.permission.WRITE_SETTINGS"/>
     <uses-permission android:name="android.permission.GET_TASKS"/>
     <uses-permission android:name="android.permission.CHANGE_WIFI_STATE"/>
@@ -52,7 +51,12 @@
                 <category android:name="android.intent.category.BROWSABLE"/>
             </intent-filter>
         </activity>
-        <activity android:name=".ui.activity.setting.SettingActivity">
+        <activity android:name=".ui.activity.setting.SettingActivity"
+                  android:screenOrientation="portrait">
+
+        </activity>
+        <activity android:name=".ui.activity.setting.TermsActivity"
+                  android:screenOrientation="portrait">
 
         </activity>
         <activity

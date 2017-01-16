@@ -1,7 +1,7 @@
 package com.lypeer.zybuluo.presenter.viewpager;
 
 import com.lypeer.zybuluo.model.bean.VideoResponse;
-import com.lypeer.zybuluo.model.viewpager.HotModel;
+import com.lypeer.zybuluo.model.remote.viewpager.HotModel;
 import com.lypeer.zybuluo.presenter.base.BasePresenter;
 import com.lypeer.zybuluo.ui.fragment.viewpager.HotFragment;
 

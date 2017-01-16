@@ -1,13 +1,11 @@
-package com.lypeer.zybuluo.model.viewpager;
-
-import android.util.Log;
+package com.lypeer.zybuluo.model.remote.viewpager;
 
 import com.lypeer.zybuluo.App;
 import com.lypeer.zybuluo.R;
 import com.lypeer.zybuluo.impl.ApiService;
 import com.lypeer.zybuluo.model.base.BaseModel;
 import com.lypeer.zybuluo.model.bean.VideoResponse;
-import com.lypeer.zybuluo.presenter.viewpager.HotPresenter;
+import com.lypeer.zybuluo.presenter.viewpager.MvPresenter;
 import com.lypeer.zybuluo.utils.Constants;
 import com.lypeer.zybuluo.utils.RetrofitClient;
 
@@ -19,19 +17,20 @@ import retrofit2.Response;
  * Created by lypeer on 2017/1/4.
  */
 
-public class HotModel extends BaseModel<HotPresenter> {
-    public HotModel(HotPresenter hotPresenter) {
-        super(hotPresenter);
+public class MvModel extends BaseModel<MvPresenter> {
+    public MvModel(MvPresenter mvPresenter) {
+        super(mvPresenter);
     }
 
     @Override
-    protected HotPresenter createPresenter() {
-        return new HotPresenter();
+    protected MvPresenter createPresenter() {
+        return new MvPresenter();
     }
+
 
     public void refreshVideos(int currentPage) {
         RetrofitClient.buildService(ApiService.class)
-                .getHotVideos(currentPage, 1)
+                .getTypeVideos(currentPage, Constants.VideosType.TYPE_MV)
                 .enqueue(new Callback<VideoResponse>() {
                     @Override
                     public void onResponse(Call<VideoResponse> call, Response<VideoResponse> response) {
@@ -51,14 +50,14 @@ public class HotModel extends BaseModel<HotPresenter> {
 
                     @Override
                     public void onFailure(Call<VideoResponse> call, Throwable t) {
-                        getPresenter().refreshVideosFail(App.getAppContext().getString(R.string.error_netword));
+                        getPresenter().refreshVideosFail(App.getAppContext().getString(R.string.error_network));
                     }
                 });
     }
 
     public void loadMoreVideos(int currentPage) {
         RetrofitClient.buildService(ApiService.class)
-                .getHotVideos(currentPage + 1, 1)
+                .getTypeVideos(currentPage + 1, Constants.VideosType.TYPE_MV)
                 .enqueue(new Callback<VideoResponse>() {
                     @Override
                     public void onResponse(Call<VideoResponse> call, Response<VideoResponse> response) {
@@ -78,7 +77,7 @@ public class HotModel extends BaseModel<HotPresenter> {
 
                     @Override
                     public void onFailure(Call<VideoResponse> call, Throwable t) {
-                        getPresenter().loadMoreVideosFail(App.getAppContext().getString(R.string.error_netword));
+                        getPresenter().loadMoreVideosFail(App.getAppContext().getString(R.string.error_network));
                     }
                 });
     }

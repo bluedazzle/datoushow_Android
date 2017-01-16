@@ -1,5 +1,6 @@
 package com.lypeer.zybuluo.ui.activity.setting;
 
+import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
@@ -60,6 +61,7 @@ public class SettingActivity extends BaseCustomActivity {
 
     @OnClick(R.id.tv_terms)
     public void onTermsClick() {
-        //@todo 点击事件
+        Intent intent = new Intent(this , TermsActivity.class);
+        startActivity(intent);
     }
 }

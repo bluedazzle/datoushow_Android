@@ -46,7 +46,7 @@ public class CreateShareLinkResponse {
         this.msg = msg;
     }
 
-    public static class BodyBean {
+    public class BodyBean {
         /**
          * url : xxxx
          * thumb_nail : xxxx
@@ -60,6 +60,18 @@ public class CreateShareLinkResponse {
         private String weibo_title;
         private String wechat_title;
         private String wechat_sub_title;
+        private String path;
+
+        public String getPath() {
+            if (path == null) {
+                return "";
+            }
+            return path;
+        }
+
+        public void setPath(String path) {
+            this.path = path;
+        }
 
         public String getUrl() {
             if (url == null) {
