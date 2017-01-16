@@ -29,6 +29,7 @@ import android.util.Log;
 import android.view.Surface;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.view.animation.AnimationSet;
@@ -142,6 +143,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private Bitmap mFilterBitmap = null;
     private Bitmap mPreviewBitmap = null;
     private Bitmap mBigHeadMask = null;
+    private Bitmap mWatermark = null;
     private Bitmap mBigHead;
     private Bitmap mFirstFrame = null;
     public Paint mPaint;
@@ -183,6 +185,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.mixture_layout);
 
+        this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+
         mGLSurfaceView = (GLSurfaceView) findViewById(R.id.gl_mixture_surface);
         mGLSurfaceView.setEGLContextClientVersion(2);
         mGLSurfaceView.setRenderer(this);
@@ -216,6 +220,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mBigHeadMask = BitmapFactory.decodeResource(getResources(), R.raw.bigheadmask, opts);
         mBigHead = Bitmap.createBitmap(mBigHeadMask.getWidth(), mBigHeadMask.getHeight(), Bitmap.Config.ARGB_8888);
         mBigheadBuffer = ByteBuffer.allocate(mBigHeadMask.getWidth() * mBigHeadMask.getHeight() * 4);
+        mWatermark = BitmapFactory.decodeResource(getResources(), R.raw.watermark, opts);
 
         mPaint = new Paint();
         mPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
@@ -725,7 +730,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         if (mFilterBitmap != null && mCurrentFrame > 0) {
             if (mCurrentStage == MixtureStage.Training
                     || mCurrentStage == MixtureStage.RecordStart
-                    || mCurrentStage == MixtureStage.RecordComplete
                     || mCurrentStage == MixtureStage.RecordPrepare) {
                 HeadInfo headInfo = mHeadInfoManager.getHeadInfoByFrame(mCurrentFrame);
                 if (headInfo != null && headInfo.size >= 5) {
@@ -750,31 +754,31 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     if (mHeadInfoManager.rotationOnTop) {
                         matrix.postRotate((float) headInfo.rotation, (float) headInfo.x + (float) headInfo.size / 2, (float) headInfo.y);
                     } else {
-                        matrix.postRotate((float) headInfo.rotation, (float) headInfo.x + (float) mBigHead.getWidth() / 2, (float) headInfo.y + (float) (headInfo.size * 1.33));
+                        matrix.postRotate((float) headInfo.rotation, (float) headInfo.x + (float)  headInfo.size / 2, (float) headInfo.y + (float) (headInfo.size * 1.33));
                     }
-                    synchronized (mBigHead) {
-                        mFilterBitmap.eraseColor(Color.TRANSPARENT);
-                        if (mFirstTimeTraining) {
-                            long interval = System.currentTimeMillis() - mCameraPreviewTime;
-                            if (interval > 500 && interval <= 1000) {
-                                mBigheadPaint.setAlpha((int) ((interval - 500) * 255 / 500));
-                            } else if (interval > 1000) {
-                                mFirstTimeTraining = false;
-                                mBigheadPaint.setAlpha(255);
-                            } else {
-                                mBigheadPaint.setAlpha(0);
-                            }
-                        } else {
+                    mFilterBitmap.eraseColor(Color.TRANSPARENT);
+                    if (mFirstTimeTraining) {
+                        long interval = System.currentTimeMillis() - mCameraPreviewTime;
+                        if (interval > 500 && interval <= 1000) {
+                            mBigheadPaint.setAlpha((int) ((interval - 500) * 255 / 500));
+                        } else if (interval > 1000) {
+                            mFirstTimeTraining = false;
                             mBigheadPaint.setAlpha(255);
+                        } else {
+                            mBigheadPaint.setAlpha(0);
                         }
-                        canvas.drawBitmap(mBigHead, matrix, mBigheadPaint);
-                        if (mCurrentStage == MixtureStage.RecordPrepare) {
-                            canvas.drawBitmap(mFirstFrame, new Matrix(), mFirstFramePaint);
-                        }
+                    } else {
+                        mBigheadPaint.setAlpha(255);
+                    }
+                    canvas.drawBitmap(mBigHead, matrix, mBigheadPaint);
+                    if (mCurrentStage == MixtureStage.RecordPrepare) {
+                        canvas.drawBitmap(mFirstFrame, new Matrix(), mFirstFramePaint);
                     }
                 } else {
                     mFilterBitmap.eraseColor(Color.TRANSPARENT);
                 }
+            } else if (mCurrentStage == MixtureStage.RecordComplete) {
+
             } else {
                 mFilterBitmap.eraseColor(Color.TRANSPARENT);
             }
@@ -835,7 +839,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         //mMediaPlayer.seekTo(HeadInfoManager.getPreparedTime());
         mTrainingTextView.setVisibility(View.INVISIBLE);
         mStartButton.setText("取消");
-        mCloseImageView.setVisibility(View.INVISIBLE);
+        mCloseImageView.setVisibility(View.GONE);
         mStartButton.setBackgroundResource(R.drawable.bt_cancel_bk);
         mRecordStartCountDownTimer = new RecordStartCountDownTimer();
         mRecordStartCountDownTimer.start();
@@ -853,6 +857,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         editor.setOutputPath(TEMP_VIDEO_PATH);
         editor.setPipeLineInput(mPipeLineInput);
         editor.setVideoDuration(mVideoDuration);
+        editor.setWatermark(mWatermark);
         mEditTask = new MediaEditorTask(editor, mProgressBar);
         mEditTask.setCallback(this);
         mEditTask.execute();
@@ -954,8 +959,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 }
             } else {
                 if (mCurrentStage == MixtureStage.RecordPrepare && mRecordCancelled == false && mPaused != true) {
+                    //mPrepareTextView.bringToFront();
                     mPrepareTextView.setText((millisUntilFinished - 1000) / 1000 + "");
-                    final ScaleAnimation scaleAnimation = new ScaleAnimation(1f, 5f, 1f, 5f,
+                    final ScaleAnimation scaleAnimation = new ScaleAnimation(0.1f, 0.5f, 0.1f, 0.5f,
                             Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
                     scaleAnimation.setDuration(800);
                     final AlphaAnimation alphaAnimation = new AlphaAnimation(1, 0);
@@ -978,7 +984,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private class CaptureThread extends Thread {
         public boolean run = true;
-        private static final int INTERVAL = 67;
+        private static final int INTERVAL = 40;
 
         public void run() {
             while (run) {
