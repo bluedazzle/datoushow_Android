@@ -293,7 +293,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         parameters.setPreviewSize(mPreviewWidth, mPreviewHeight);
         Log.v(TAG, "max zoom size: " + parameters.getMaxZoom() + ", " + parameters.getZoom());
         if (parameters.isZoomSupported()) {
-            parameters.setZoom((int)(parameters.getMaxZoom() * 0.08));
+            parameters.setZoom((int) (parameters.getMaxZoom() * 0.08));
         }
         Log.v(TAG, "max zoom size: " + parameters.getMaxZoom());
         //parameters.setPreviewFpsRange(15, 30);
@@ -430,7 +430,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 if (mFinalPath == null)
                     mFinalPath = newFilePath;
 
-                showSaveDialog(mFinalPath, mVideoBean.getId());
+                share(mFinalPath, mVideoBean.getId());
                 return;
             } else if (v == mGLSurfaceView) {
                 if (mCurrentStage == MixtureStage.Training) {
@@ -446,6 +446,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
+    /**
+     * 此方法已废弃，分享逻辑改为不提示直接先上传
+     */
+    @Deprecated
     private void showSaveDialog(final String path, final int id) {
         new AlertDialog.Builder(this)
                 .setTitle(R.string.title_prompt)
@@ -468,7 +472,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void share(final String path, final int id) {
         mMediaPlayer.pause();
         mProgressDialog.show();
-        mProgressDialog.setMessage(App.getAppContext().getString(R.string.prompt_sharing));
+        mProgressDialog.setMessage(App.getAppContext().getString(R.string.prompt_saving));
         RetrofitClient.buildService(ApiService.class)
                 .upload()
                 .enqueue(new Callback<UploadResponse>() {
@@ -509,6 +513,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
                     if (info.isOK()) {
                         try {
+                            Toast.makeText(MainActivity.this, App.getAppContext().getString(R.string.prompt_save_success), Toast.LENGTH_SHORT).show();
                             createLink(path, id, "static.fibar.cn/".concat(response.getString("key")));
                         } catch (JSONException e) {
                             e.printStackTrace();
@@ -522,7 +527,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             }, new UploadOptions(null, null, false,
                     new UpProgressHandler() {
                         public void progress(String key, double percent) {
-                            mProgressDialog.setMessage("上传中，当前进度为：" + (int) (percent * 100) + "%");
+                            mProgressDialog.setMessage("保存中，当前进度为：" + (int) (percent * 100) + "%");
                         }
                     }, null));
         } catch (Exception e) {
@@ -751,7 +756,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 } else {
                     mFilterBitmap.eraseColor(Color.TRANSPARENT);
                 }
-            }else {
+            } else {
                 mFilterBitmap.eraseColor(Color.TRANSPARENT);
             }
             mRender.drawFrame(mSurfaceTextureFromVideo, mFilterBitmap);

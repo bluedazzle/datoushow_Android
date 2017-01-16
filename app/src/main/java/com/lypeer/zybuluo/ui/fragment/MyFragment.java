@@ -31,15 +31,12 @@ import com.lypeer.zybuluo.ui.custom.google.GoogleCircleProgressView;
 import com.lypeer.zybuluo.utils.FileUtil;
 import com.lypeer.zybuluo.utils.meipai.MeiPai;
 
-import java.util.Collection;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.OnClick;
 import cn.sharesdk.framework.Platform;
-import cn.sharesdk.framework.PlatformActionListener;
 import cn.sharesdk.onekeyshare.OnekeyShare;
 import cn.sharesdk.onekeyshare.ShareContentCustomizeCallback;
 import cn.sharesdk.sina.weibo.SinaWeibo;
@@ -77,6 +74,7 @@ public class MyFragment extends BaseFragment<MyPresenter> implements OnRefreshLi
     protected void initView(@Nullable Bundle savedInstanceState) {
         getProgressDialog().setCancelable(false);
         initList();
+
         mSwipeToLoadLayout.post(new Runnable() {
             @Override
             public void run() {
@@ -84,7 +82,6 @@ public class MyFragment extends BaseFragment<MyPresenter> implements OnRefreshLi
                 onRefresh();
             }
         });
-
     }
 
     private void initList() {
@@ -129,7 +126,7 @@ public class MyFragment extends BaseFragment<MyPresenter> implements OnRefreshLi
         showProgressBar();
         if (FileUtil.saveToGallery(itemValue.getPath())) {
             hideProgressBar();
-            showMessage(R.string.prompt_save_success);
+            showMessage(R.string.prompt_save_to_gallery_success);
         } else {
             hideProgressBar();
             showMessage(R.string.error_save_fail);
@@ -249,5 +246,21 @@ public class MyFragment extends BaseFragment<MyPresenter> implements OnRefreshLi
     public void deleteFail(String errorMessage) {
         //hideProgressBar();
         showMessage(errorMessage);
+    }
+
+    @Override
+    public void onHiddenChanged(boolean hidden) {
+        super.onHiddenChanged(hidden);
+        if (!hidden && mSwipeToLoadLayout != null && mSwipeTarget != null && mAdapter != null)
+            mSwipeToLoadLayout.post(new Runnable() {
+                @Override
+                public void run() {
+                    if (mAdapter.getItemCount() > 0) {
+                        mSwipeTarget.smoothScrollToPosition(0);
+                    }
+                    mSwipeToLoadLayout.setRefreshing(true);
+                    onRefresh();
+                }
+            });
     }
 }

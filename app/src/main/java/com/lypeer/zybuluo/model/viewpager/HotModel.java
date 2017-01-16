@@ -1,7 +1,5 @@
 package com.lypeer.zybuluo.model.viewpager;
 
-import android.util.Log;
-
 import com.lypeer.zybuluo.App;
 import com.lypeer.zybuluo.R;
 import com.lypeer.zybuluo.impl.ApiService;
@@ -51,7 +49,7 @@ public class HotModel extends BaseModel<HotPresenter> {
 
                     @Override
                     public void onFailure(Call<VideoResponse> call, Throwable t) {
-                        getPresenter().refreshVideosFail(App.getAppContext().getString(R.string.error_netword));
+                        getPresenter().refreshVideosFail(App.getAppContext().getString(R.string.error_network));
                     }
                 });
     }
@@ -78,7 +76,7 @@ public class HotModel extends BaseModel<HotPresenter> {
 
                     @Override
                     public void onFailure(Call<VideoResponse> call, Throwable t) {
-                        getPresenter().loadMoreVideosFail(App.getAppContext().getString(R.string.error_netword));
+                        getPresenter().loadMoreVideosFail(App.getAppContext().getString(R.string.error_network));
                     }
                 });
     }

@@ -50,7 +50,7 @@ public class FilmTvModel extends BaseModel<FilmTvPresenter> {
 
                     @Override
                     public void onFailure(Call<VideoResponse> call, Throwable t) {
-                        getPresenter().refreshVideosFail(App.getAppContext().getString(R.string.error_netword));
+                        getPresenter().refreshVideosFail(App.getAppContext().getString(R.string.error_network));
                     }
                 });
     }
@@ -77,7 +77,7 @@ public class FilmTvModel extends BaseModel<FilmTvPresenter> {
 
                     @Override
                     public void onFailure(Call<VideoResponse> call, Throwable t) {
-                        getPresenter().loadMoreVideosFail(App.getAppContext().getString(R.string.error_netword));
+                        getPresenter().loadMoreVideosFail(App.getAppContext().getString(R.string.error_network));
                     }
                 });
     }
