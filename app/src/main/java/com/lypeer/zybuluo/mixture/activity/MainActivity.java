@@ -99,6 +99,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private final static boolean TEST = true;
     private final static String DOWNLOADED_VIDEO_PATH = FileUtil.getStorageDir() + "/bigbang.mp4";
     private final static String TEMP_VIDEO_PATH = FileUtil.getStorageDir() + "/~bigbang.mp4";
+    private final static String PIPE_LINE_FILE_PATH = FileUtil.getStorageDir() +  "bigbang.pipe";
     private final static int MAGIC_TEXTURE_ID = 10;
 
     private enum MixtureStage {Init, Training, RecordPrepare, RecordStart, RecordComplete, Preview}
@@ -375,6 +376,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        File file = new File(DOWNLOADED_VIDEO_PATH);
+        if (file.exists()) {
+            file.delete();
+        }
         if (mMediaPlayer != null) {
             mMediaPlayer.stop();
             mMediaPlayer.release();
@@ -403,6 +408,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 backToNavActivity();
                 return;
             } else if (v == mRedoButton) {
+                File file = new File(TEMP_VIDEO_PATH);
+                if (file.exists()) {
+                    file.delete();
+                }
                 gotoStageTraining();
                 mFinalPath = null;
             } else if (v == mSaveButton) {
@@ -853,9 +862,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private void openPipeLine() {
         try {
-            String dir = Environment.getExternalStoragePublicDirectory(
-                    Environment.DIRECTORY_DOWNLOADS).toString();
-            File file = new File(dir + "/~bigbang.tmp");
+            File file = new File(PIPE_LINE_FILE_PATH);
             if (file.exists()) {
                 file.delete();
             }
@@ -876,6 +883,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             if (mPipeLineOutput != null) {
                 mPipeLineOutput.close();
                 mPipeLineOutput = null;
+            }
+            File file = new File(PIPE_LINE_FILE_PATH);
+            if (file.exists()) {
+                file.delete();
             }
         } catch (IOException e) {
             Log.v(TAG, e.getMessage());
