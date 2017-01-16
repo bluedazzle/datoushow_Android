@@ -280,7 +280,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         for (int i = 0; i < preSize.size(); i++) {
             int tmpWidth = preSize.get(i).width;
             int tmpHeight = preSize.get(i).height;
-            if (tmpWidth >= mBigHeadMask.getHeight() * 1.5 && tmpHeight >= mBigHeadMask.getWidth() * 1.5) {
+            if (tmpWidth >= mBigHeadMask.getHeight() && tmpHeight >= mBigHeadMask.getWidth()) {
                 if (tmpHeight < mPreviewWidth || tmpWidth < mPreviewHeight) {
                     mPreviewWidth = tmpWidth;
                     mPreviewHeight = tmpHeight;
@@ -290,6 +290,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mPreviewBitmap = Bitmap.createBitmap(mPreviewWidth, mPreviewHeight, Bitmap.Config.ARGB_8888);
         Log.v("MainActivity", "preview size" + mPreviewWidth + ", " + mPreviewHeight);
         parameters.setPreviewSize(mPreviewWidth, mPreviewHeight);
+        Log.v(TAG, "max zoom size: " + parameters.getMaxZoom() + ", " + parameters.getZoom());
+        if (parameters.isZoomSupported()) {
+            parameters.setZoom(parameters.getZoom() + 12);
+        }
+        Log.v(TAG, "max zoom size: " + parameters.getMaxZoom());
         //parameters.setPreviewFpsRange(15, 30);
         mCamera.setParameters(parameters);
         int bufferSize = mPreviewWidth * mPreviewHeight;
