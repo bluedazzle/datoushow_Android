@@ -99,7 +99,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private final static boolean TEST = true;
     private final static String DOWNLOADED_VIDEO_PATH = FileUtil.getStorageDir() + "/bigbang.mp4";
     private final static String TEMP_VIDEO_PATH = FileUtil.getStorageDir() + "/~bigbang.mp4";
-    private final static String PIPE_LINE_FILE_PATH = FileUtil.getStorageDir() +  "bigbang.pipe";
+    private final static String PIPE_LINE_FILE_PATH = FileUtil.getStorageDir() + "bigbang.pipe";
     private final static int MAGIC_TEXTURE_ID = 10;
 
     private enum MixtureStage {Init, Training, RecordPrepare, RecordStart, RecordComplete, Preview}
@@ -184,8 +184,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mGLSurfaceView = (GLSurfaceView) findViewById(R.id.gl_mixture_surface);
         mGLSurfaceView.setEGLContextClientVersion(2);
         mGLSurfaceView.setRenderer(this);
-        mGLSurfaceView.setRenderMode(GLSurfaceView.RENDERMODE_CONTINUOUSLY);
-
+        //mGLSurfaceView.setRenderMode(GLSurfaceView.RENDERMODE_CONTINUOUSLY);
+        mGLSurfaceView.setRenderMode(GLSurfaceView.RENDERMODE_WHEN_DIRTY);
         mStartButton = (Button) findViewById(R.id.btn_mixture_start);
         mSaveAndRedoLayout = (RelativeLayout) findViewById(R.id.rv_mixture_save_and_redo);
         mTrainingTextView = (TextView) findViewById(R.id.tv_mixture_training);
@@ -293,7 +293,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         parameters.setPreviewSize(mPreviewWidth, mPreviewHeight);
         Log.v(TAG, "max zoom size: " + parameters.getMaxZoom() + ", " + parameters.getZoom());
         if (parameters.isZoomSupported()) {
-            parameters.setZoom(parameters.getZoom() + 12);
+            parameters.setZoom((int)(parameters.getMaxZoom() * 0.08));
         }
         Log.v(TAG, "max zoom size: " + parameters.getMaxZoom());
         //parameters.setPreviewFpsRange(15, 30);
@@ -676,6 +676,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     mGLRgbBuffer.array());
         }
         camera.addCallbackBuffer(data);
+        mGLSurfaceView.requestRender();
     }
 
     ////////////////////////////// GLSurfaceView callback ////////////////////////////////////////
@@ -704,8 +705,21 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     || mCurrentStage == MixtureStage.RecordPrepare) {
                 HeadInfo headInfo = mHeadInfoManager.getHeadInfoByFrame(mCurrentFrame);
                 if (headInfo != null && headInfo.size >= 5) {
-                    Canvas canvas = new Canvas(mFilterBitmap);
+                    synchronized (mGLRgbBuffer) {
+                        mGLRgbBuffer.position(0);
+                        mPreviewBitmap.copyPixelsFromBuffer(mGLRgbBuffer);
+                    }
                     Matrix matrix = new Matrix();
+                    matrix.postTranslate((mBigHead.getWidth() - mPreviewBitmap.getWidth()) / 2, (mBigHead.getHeight() - mPreviewBitmap.getHeight()) / 2);
+                    matrix.postRotate(270, mBigHead.getWidth() / 2, mBigHead.getHeight() / 2);
+                    matrix.postScale(-1, 1, mBigHead.getWidth() / 2, mBigHead.getHeight() / 2);
+                    Canvas canvas = new Canvas(mBigHead);
+                    synchronized (mBigHead) {
+                        canvas.drawBitmap(mPreviewBitmap, matrix, null);
+                        canvas.drawBitmap(mBigHeadMask, 0, 0, mPaint);
+                    }
+                    canvas = new Canvas(mFilterBitmap);
+                    matrix = new Matrix();
                     float scale = (float) headInfo.size / mBigHead.getWidth();
                     matrix.postScale(scale, scale);
                     matrix.postTranslate((float) headInfo.x, (float) headInfo.y);
@@ -737,9 +751,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 } else {
                     mFilterBitmap.eraseColor(Color.TRANSPARENT);
                 }
-            } else if (mCurrentStage == MixtureStage.RecordPrepare) {
-                //TODO...
-            } else {
+            }else {
                 mFilterBitmap.eraseColor(Color.TRANSPARENT);
             }
             mRender.drawFrame(mSurfaceTextureFromVideo, mFilterBitmap);
@@ -956,26 +968,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     // 需要头像
                     if (headInfo != null && headInfo.size > 5) {
                         // create bithead
-                        synchronized (mGLRgbBuffer) {
-                            mGLRgbBuffer.position(0);
-                            mPreviewBitmap.copyPixelsFromBuffer(mGLRgbBuffer);
-                        }
-                        Matrix matrix = new Matrix();
-                        matrix.postTranslate((mBigHead.getWidth() - mPreviewBitmap.getWidth()) / 2, (mBigHead.getHeight() - mPreviewBitmap.getHeight()) / 2);
-                        matrix.postRotate(270, mBigHead.getWidth() / 2, mBigHead.getHeight() / 2);
-                        matrix.postScale(-1, 1, mBigHead.getWidth() / 2, mBigHead.getHeight() / 2);
-                        Canvas canvas = new Canvas(mBigHead);
-                        synchronized (mBigHead) {
-                            canvas.drawBitmap(mPreviewBitmap, matrix, null);
-                            canvas.drawBitmap(mBigHeadMask, 0, 0, mPaint);
-                        }
+
                         // write data to pipe if record start
                         synchronized (this) {
                             if (mCurrentStage == MixtureStage.RecordStart) {
                                 try {
                                     FilePipelineHelper.writeLong(mPipeLineOutput, mHeadInfoManager.getTimeByFrame(mCurrentFrame) * 1000000);
                                     mBigheadBuffer.position(0);
-                                    mBigHead.copyPixelsToBuffer(mBigheadBuffer);
+                                    synchronized (mBigHead) {
+                                        mBigHead.copyPixelsToBuffer(mBigheadBuffer);
+                                    }
                                     FilePipelineHelper.writeBytes(mPipeLineOutput, mBigheadBuffer.array(), mBigheadBuffer.array().length);
                                 } catch (Exception e) {
                                     Log.v(TAG, e.getMessage());
