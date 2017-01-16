@@ -106,6 +106,8 @@ public class MediaEditor {
 
     private long mVideoDuration;
 
+    private Bitmap mWatermark;
+
     public MediaEditor(Context context, String videoPath) {
         mContext = context;
         mInputVideoPath = videoPath;
@@ -181,7 +183,7 @@ public class MediaEditor {
         MediaFormat outputAudioFormat = MediaFormat.createAudioFormat(mAudioMimeType,
                 mInputAudioFormat.getInteger(MediaFormat.KEY_SAMPLE_RATE), mInputAudioFormat.getInteger(MediaFormat.KEY_CHANNEL_COUNT));
         outputAudioFormat.setInteger(MediaFormat.KEY_BIT_RATE, mAudioBitRate);
-        outputAudioFormat.setInteger(MediaFormat.KEY_AAC_PROFILE, mAudioProfile);
+        outputAudioFormat.setInteger(MediaFormat.KEY_AAC_PROFILE, mInputAudioFormat.getInteger(MediaFormat.KEY_AAC_PROFILE));
 
         // Create a MediaCodec for the desired codec, then configure it as an encoder with
         // our desired properties. Request a Surface to use for input.
@@ -411,6 +413,8 @@ public class MediaEditor {
                     HeadInfo headInfo = mHeadInfoManager.getTrackInfoByTime(currentTimeStamp);
                     if (headInfo.size <= 5) {
                         mFilterBitmap.eraseColor(Color.TRANSPARENT);
+                        Canvas canvas = new Canvas(mFilterBitmap);
+                        canvas.drawBitmap(mWatermark, 10, 10, null);
                     } else {
                         if (mTimeStamp < currentTimeStamp) {
                             while (mTimeStamp < currentTimeStamp) {
@@ -447,6 +451,7 @@ public class MediaEditor {
                         }
                         mFilterBitmap.eraseColor(Color.TRANSPARENT);
                         canvas.drawBitmap(mBigheadBitmap, matrix, null);
+                        canvas.drawBitmap(mWatermark, 10, 10, null);
                     }
                     mVideoDecoderOutputSurface.drawImage(mFilterBitmap);
                     mVideoEncoderinputSurface.setPresentationTime(
@@ -868,5 +873,9 @@ public class MediaEditor {
 
     public void setVideoDuration(long videoDuration) {
         mVideoDuration = videoDuration;
+    }
+
+    public void setWatermark(Bitmap watermark) {
+        mWatermark = watermark;
     }
 }
