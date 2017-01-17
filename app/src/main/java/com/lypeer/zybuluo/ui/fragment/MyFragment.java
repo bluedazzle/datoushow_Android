@@ -214,6 +214,9 @@ public class MyFragment extends BaseFragment<MyPresenter> implements OnRefreshLi
         oks.setText(response.getBody().getWeibo_title());
         oks.setImageUrl(response.getBody().getThumb_nail());
         oks.setUrl(response.getBody().getUrl());
+        oks.setTitleUrl(response.getBody().getUrl());
+        oks.setSite(App.getAppContext().getString(R.string.app_name));
+        oks.setSiteUrl(response.getBody().getUrl());
 
         Bitmap enableLogo = BitmapFactory.decodeResource(App.getAppContext().getResources(), R.drawable.ic_meipai);
         String label = "美拍";
@@ -229,8 +232,8 @@ public class MyFragment extends BaseFragment<MyPresenter> implements OnRefreshLi
             @Override
             public void onShare(Platform platform, Platform.ShareParams paramsToShare) {
                 if (platform.getName().equals(SinaWeibo.NAME)) {
-                    oks.setTitle(response.getBody().getWeibo_title() + "\t\t" + "大头秀－分享-" + response.getBody().getUrl());
-                    oks.setText(response.getBody().getWeibo_title() + "\t\t" + "大头秀－分享-" + response.getBody().getUrl());
+                    paramsToShare.setTitle(response.getBody().getWeibo_title() + "\t\t" + "大头秀－分享-" + response.getBody().getUrl());
+                    paramsToShare.setText(response.getBody().getWeibo_title() + "\t\t" + "大头秀－分享-" + response.getBody().getUrl());
                 }
             }
         });
