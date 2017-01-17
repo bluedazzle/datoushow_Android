@@ -59,6 +59,7 @@ import com.lypeer.zybuluo.model.bean.BodyBean;
 import com.lypeer.zybuluo.model.bean.CreateShareLinkResponse;
 import com.lypeer.zybuluo.model.bean.UploadResponse;
 import com.lypeer.zybuluo.model.bean.VideoResponse;
+import com.lypeer.zybuluo.ui.activity.share.ShareActivity;
 import com.lypeer.zybuluo.utils.ApiSignUtil;
 import com.lypeer.zybuluo.utils.Constants;
 import com.lypeer.zybuluo.utils.DeviceUuidFactory;
@@ -438,6 +439,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     mFinalPath = newFilePath;
 
                 FileUtil.saveToGallery(mFinalPath);
+
                 share(mFinalPath, mVideoBean.getId());
                 return;
             } else if (v == mGLSurfaceView) {
@@ -478,7 +480,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     public void share(final String path, final int id) {
-        mMediaPlayer.pause();
+        Intent intent = new Intent(MainActivity.this, ShareActivity.class);
+        intent.putExtra(ShareActivity.SHARE_KEY_PATH, path);
+        intent.putExtra(ShareActivity.SHARE_KEY_ID, id);
+        startActivity(intent);
+
+        /*mMediaPlayer.pause();
         mProgressDialog.show();
         mProgressDialog.setMessage(App.getAppContext().getString(R.string.prompt_saving));
         RetrofitClient.buildService(ApiService.class)
@@ -502,9 +509,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         mProgressDialog.dismiss();
                         Toast.makeText(MainActivity.this, t.getMessage(), Toast.LENGTH_SHORT).show();
                     }
-                });
+                });*/
     }
 
+    /**
+     * v2.0 改版，已弃用，改为在单独页面进行分享
+     */
+    @Deprecated
     private void upload(final String path, String uptoken, final int id) {
         DeviceUuidFactory factory = new DeviceUuidFactory(App.getAppContext());
         String uuid = factory.getDeviceUuid().toString();
@@ -514,7 +525,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         UploadManager uploadManager = new UploadManager(config);
         try {
 
-            uploadManager.put(path,  ApiSignUtil.md5(uuid + time) + ".mp4", uptoken, new UpCompletionHandler() {
+            uploadManager.put(path, ApiSignUtil.md5(uuid + time) + ".mp4", uptoken, new UpCompletionHandler() {
                 @Override
                 public void complete(String key, ResponseInfo info, JSONObject response) {
                     if (info == null) {
@@ -549,6 +560,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
+    /**
+     * v2.0 改版，已弃用，改为在单独页面进行分享
+     */
+    @Deprecated
     private void createLink(final String path, int id, final String url) {
         DeviceUuidFactory factory = new DeviceUuidFactory(App.getAppContext());
         String uuid = factory.getDeviceUuid().toString();
@@ -591,6 +606,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 });
     }
 
+    /**
+     * v2.0 改版，已弃用，改为在单独页面进行分享
+     */
+    @Deprecated
     private void shareSuccess(CreateShareLinkResponse shareLinkResponse, String path) {
         mProgressDialog.dismiss();
         shareLinkResponse.getBody().setPath(path);
@@ -598,6 +617,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         showSharePanel(shareLinkResponse, path);
     }
 
+    /**
+     * v2.0 改版，已弃用，改为在单独页面进行分享
+     */
+    @Deprecated
     public void insert(final BodyBean bodyBean) {
         Realm realm = Realm.getDefaultInstance();
         realm.executeTransactionAsync(new Realm.Transaction() {
@@ -608,6 +631,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         });
     }
 
+    /**
+     * v2.0 改版，已弃用，改为在单独页面进行分享
+     */
+    @Deprecated
     private void showSharePanel(final CreateShareLinkResponse response, final String videoUrl) {
         mMediaPlayer.pause();
         final OnekeyShare oks = new OnekeyShare();
@@ -754,7 +781,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     if (mHeadInfoManager.rotationOnTop) {
                         matrix.postRotate((float) headInfo.rotation, (float) headInfo.x + (float) headInfo.size / 2, (float) headInfo.y);
                     } else {
-                        matrix.postRotate((float) headInfo.rotation, (float) headInfo.x + (float)  headInfo.size / 2, (float) headInfo.y + (float) (headInfo.size * 1.33));
+                        matrix.postRotate((float) headInfo.rotation, (float) headInfo.x + (float) headInfo.size / 2, (float) headInfo.y + (float) (headInfo.size * 1.33));
                     }
                     mFilterBitmap.eraseColor(Color.TRANSPARENT);
                     if (mFirstTimeTraining) {

@@ -25,7 +25,6 @@ import com.qiniu.android.storage.UpCompletionHandler;
 import com.qiniu.android.storage.UpProgressHandler;
 import com.qiniu.android.storage.UploadManager;
 import com.qiniu.android.storage.UploadOptions;
-import com.squareup.picasso.Picasso;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -34,7 +33,6 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-import io.realm.Realm;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -197,7 +195,7 @@ public class MyModel extends BaseModel<MyPresenter> {
             return;
         }
 
-        String token = ApiSignUtil.md5(uuid.concat(String.valueOf(target.getId())));
+        String token = ApiSignUtil.md5(uuid.concat(target.getPath()));
 
         RetrofitClient.buildService(ApiService.class)
                 .createShareLink(url, uuid, target.getId(), token)
