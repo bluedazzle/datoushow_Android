@@ -18,9 +18,11 @@ import com.lypeer.zybuluo.R;
 import com.lypeer.zybuluo.impl.OnItemClickListener;
 import com.lypeer.zybuluo.mixture.activity.MainActivity;
 import com.lypeer.zybuluo.mixture.core.MixtureKeys;
+import com.lypeer.zybuluo.model.bean.BannerResponse;
 import com.lypeer.zybuluo.model.bean.VideoResponse;
 import com.lypeer.zybuluo.presenter.viewpager.HotPresenter;
 import com.lypeer.zybuluo.ui.adapter.HotAdapter;
+import com.lypeer.zybuluo.ui.adapter.viewholder.HotBannerVH;
 import com.lypeer.zybuluo.ui.base.BaseFragment;
 import com.lypeer.zybuluo.ui.custom.google.GoogleCircleProgressView;
 import com.lypeer.zybuluo.utils.ApiSignUtil;
@@ -72,6 +74,9 @@ public class HotFragment extends BaseFragment<HotPresenter> implements OnRefresh
 
     private void initList() {
         mAdapter = new HotAdapter();
+        mAdapter.hasHeader(true);
+        mAdapter.setHeaderVH(new HotBannerVH(getActivity() , mAdapter.getParent()));
+
         mSwipeTarget.setItemAnimator(new DefaultItemAnimator());
         mSwipeTarget.setLayoutManager(new LinearLayoutManager(getActivity()));
         mSwipeTarget.setAdapter(mAdapter);
@@ -123,6 +128,7 @@ public class HotFragment extends BaseFragment<HotPresenter> implements OnRefresh
     public void onRefresh() {
         mCurrentPage = 1;
         getPresenter().refreshVideos(mCurrentPage);
+        getPresenter().refreshBanner();
     }
 
     public void refreshVideosSuccess(VideoResponse body) {
@@ -151,5 +157,13 @@ public class HotFragment extends BaseFragment<HotPresenter> implements OnRefresh
     public void loadMoreVideosFail(String errorMessage) {
         mSwipeToLoadLayout.setLoadingMore(false);
         showMessage(errorMessage);
+    }
+
+    public void refreshBannerFail(String errorMessage) {
+        showMessage(errorMessage);
+    }
+
+    public void refreshBannerSuccess(BannerResponse bannerResponse) {
+        mAdapter.setHeaderValue(bannerResponse);
     }
 }

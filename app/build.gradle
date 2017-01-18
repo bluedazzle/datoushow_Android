@@ -63,6 +63,7 @@ dependencies {
     compile 'com.qiniu:qiniu-android-sdk:7.3.+'
     compile 'jp.co.cyberagent.android.gpuimage:gpuimage-library:1.4.1'
     compile 'com.growingio.android:vds-android-agent:0.9.101@aar'
+    compile 'com.bigkoo:convenientbanner:2.0.5'
 
     apt 'com.jakewharton:butterknife-compiler:8.2.1'
 }

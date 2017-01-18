@@ -1,5 +1,6 @@
 package com.lypeer.zybuluo.presenter.viewpager;
 
+import com.lypeer.zybuluo.model.bean.BannerResponse;
 import com.lypeer.zybuluo.model.bean.VideoResponse;
 import com.lypeer.zybuluo.model.remote.viewpager.HotModel;
 import com.lypeer.zybuluo.presenter.base.BasePresenter;
@@ -57,5 +58,26 @@ public class HotPresenter extends BasePresenter<HotFragment , HotModel> {
             return;
         }
         getView().loadMoreVideosFail(errorMessage);
+    }
+
+    public void refreshBanner() {
+        if(!isViewAttached()){
+            return;
+        }
+        getModel().refreshBanner();
+    }
+
+    public void refreshBannerFail(String errorMessage) {
+        if(!isViewAttached()){
+            return;
+        }
+        getView().refreshBannerFail(errorMessage);
+    }
+
+    public void refreshBannerSuccess(BannerResponse bannerResponse) {
+        if(!isViewAttached()){
+            return;
+        }
+        getView().refreshBannerSuccess(bannerResponse);
     }
 }
