@@ -78,6 +78,7 @@
     <string name="prompt_copy_link">复制链接</string>
     <string name="prompt_cancel">取消</string>
     <string name="prompt_copy_success">复制成功！快去和你的小伙伴一起分享吧！</string>
+    <string name="title_practise">练习模式</string>
 
     <string-array name="status_error">
         <item>未知错误</item>

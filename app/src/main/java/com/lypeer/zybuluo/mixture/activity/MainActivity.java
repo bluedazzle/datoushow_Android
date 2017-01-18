@@ -186,8 +186,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.mixture_layout);
 
-        this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
-
         mGLSurfaceView = (GLSurfaceView) findViewById(R.id.gl_mixture_surface);
         mGLSurfaceView.setEGLContextClientVersion(2);
         mGLSurfaceView.setRenderer(this);
@@ -203,6 +201,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mWaveView = (WaveView) findViewById(R.id.wv_mixture_wave);
         mProgressBar = (CircleProgressView) findViewById(R.id.lv_mixture_progress);
         mFrontLayout = (RelativeLayout) findViewById(R.id.rl_mixture_front);
+
+        mWaveView.bringToFront();
 
         mStartButton.setOnClickListener(this);
         mRedoButton.setOnClickListener(this);

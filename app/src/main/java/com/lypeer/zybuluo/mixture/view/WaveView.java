@@ -107,9 +107,9 @@ public class WaveView extends View {
 
             int current = 0;
             for (int i = 0; i < pcms.size(); i++) {
-                for (int j = 0; j < pcms.get(i).length; j ++) {
+                for (int j = 0; j < pcms.get(i).length; j++) {
                     mWave[current * WAVE_COUNT / total] += pcms.get(i)[j];
-                   current++;
+                    current++;
                 }
             }
             Log.v("WaveView", "loadWaveFromFile sample count" + current);
@@ -132,7 +132,8 @@ public class WaveView extends View {
         return 0;
     }
 
-    @Override
+    // 为了最快的实现设计图效果，就直接改了这里的代码了，兄弟别见怪啊。。。
+    /*@Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
         int width = getWidth();
@@ -151,7 +152,31 @@ public class WaveView extends View {
             }
             canvas.drawLine(x, sy, x, ey, mPaint);
         }
+    }*/
+
+    @Override
+    protected void onDraw(Canvas canvas) {
+        super.onDraw(canvas);
+        int width = getWidth();
+        int height = getHeight();
+        mPaint.setStrokeWidth(width / WAVE_COUNT);
+        for (int i = 0; i < WAVE_COUNT; i++) {
+            int x = i * width / WAVE_COUNT;
+            int sy = height / 2 - 5;
+            int ey = height / 2 + 5;
+            if (sy < 0) sy = 0;
+            if (ey > height) ey = height;
+            if (i <= mPosition) {
+                mPaint.setColor(mPlayedColor);
+            } else {
+                mPaint.setColor(mNotPlayedColor);
+            }
+            for (int j = 0; j < 5; j++) {
+                canvas.drawLine(x + j, sy, x + j, ey, mPaint);
+            }
+        }
     }
+
 
     public void setPosition(int position) {
         mPosition = position;
