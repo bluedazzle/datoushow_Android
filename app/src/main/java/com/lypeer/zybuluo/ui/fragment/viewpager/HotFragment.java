@@ -1,5 +1,7 @@
 package com.lypeer.zybuluo.ui.fragment.viewpager;
 
+import android.content.ClipboardManager;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
@@ -8,6 +10,7 @@ import android.support.v4.view.ViewCompat;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,6 +23,7 @@ import android.widget.TextView;
 import com.aspsine.swipetoloadlayout.OnLoadMoreListener;
 import com.aspsine.swipetoloadlayout.OnRefreshListener;
 import com.aspsine.swipetoloadlayout.SwipeToLoadLayout;
+import com.lypeer.zybuluo.App;
 import com.lypeer.zybuluo.R;
 import com.lypeer.zybuluo.event.BannerEvent;
 import com.lypeer.zybuluo.event.EmptyEvent;
@@ -44,6 +48,11 @@ import java.util.Objects;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import cn.sharesdk.framework.Platform;
+import cn.sharesdk.framework.ShareSDK;
+import cn.sharesdk.tencent.qq.QQ;
+import cn.sharesdk.wechat.friends.Wechat;
+import cn.sharesdk.wechat.moments.WechatMoments;
 import okhttp3.HttpUrl;
 import okhttp3.Request;
 
@@ -210,10 +219,19 @@ public class HotFragment extends BaseBusFragment<HotPresenter> implements OnRefr
         ivLogo.bringToFront();
         ivLogo.requestLayout();
 
-        LinearLayout llyWechatComment = (LinearLayout) view.findViewById(R.id.lly_wechat_comment);
-        LinearLayout llyWechat = (LinearLayout) view.findViewById(R.id.lly_wechat);
-        LinearLayout llyQq = (LinearLayout) view.findViewById(R.id.lly_qq);
-        LinearLayout llyCopyLink = (LinearLayout) view.findViewById(R.id.lly_copy_link);
+        View.OnClickListener listener = new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                handlerClick(view.getId());
+                mPopupWindow.dismiss();
+                mPopupWindow = null;
+            }
+        };
+        view.findViewById(R.id.lly_wechat_comment).setOnClickListener(listener);
+        view.findViewById(R.id.lly_wechat).setOnClickListener(listener);
+        view.findViewById(R.id.lly_qq).setOnClickListener(listener);
+        view.findViewById(R.id.lly_copy_link).setOnClickListener(listener);
+
 
         TextView tvCancel = (TextView) view.findViewById(R.id.tv_cancel);
         tvCancel.setOnClickListener(new View.OnClickListener() {
@@ -223,5 +241,56 @@ public class HotFragment extends BaseBusFragment<HotPresenter> implements OnRefr
                 mPopupWindow = null;
             }
         });
+    }
+
+    private void handlerClick(int id) {
+        if (id == R.id.lly_copy_link) {
+            onCopyLinkClick();
+        } else {
+            onInviteClick(id);
+        }
+    }
+
+    private void onInviteClick(int id) {
+        Platform.ShareParams sp = new Platform.ShareParams();
+
+        sp.setUrl(Constants.InviteData.URL);
+        sp.setImageUrl(Constants.InviteData.URL);
+        sp.setTitleUrl(Constants.InviteData.URL);
+        sp.setSiteUrl(Constants.InviteData.URL);
+
+        sp.setSite(App.getAppContext().getString(R.string.app_name));
+        sp.setTitle(Constants.InviteData.TITLE);
+        sp.setText(Constants.InviteData.TEXT);
+
+        String shareType = "";
+        switch (id) {
+            case R.id.lly_wechat:
+                shareType = Wechat.NAME;
+                break;
+            case R.id.lly_wechat_comment:
+                shareType = WechatMoments.NAME;
+                break;
+            case R.id.lly_qq:
+                shareType = QQ.NAME;
+                break;
+        }
+
+        if (TextUtils.isEmpty(shareType)) {
+            showMessage(R.string.error_data_wrong);
+            return;
+        }
+        if (shareType.equals(Wechat.NAME) || shareType.equals(WechatMoments.NAME)) {
+            sp.setShareType(Platform.SHARE_WEBPAGE);
+        }
+
+        Platform platform = ShareSDK.getPlatform(shareType);
+        platform.share(sp);
+    }
+
+    public void onCopyLinkClick() {
+        ClipboardManager cmb = (ClipboardManager) getActivity().getSystemService(Context.CLIPBOARD_SERVICE);
+        cmb.setText(Constants.InviteData.COPY_LINK);
+        showMessage(R.string.prompt_copy_success);
     }
 }

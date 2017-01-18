@@ -233,3 +233,7 @@
 -dontwarn io.bugtags.**
 -dontwarn org.apache.http.**
 -dontwarn android.net.http.AndroidHttpClient
+
+# LeakCanary
+-keep class org.eclipse.mat.** { *; }
+-keep class com.squareup.leakcanary.** { *; }

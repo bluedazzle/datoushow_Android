@@ -209,7 +209,7 @@
                 android:layout_centerVertical="true"
                 android:layout_marginLeft="8dp"
                 android:layout_toRightOf="@+id/iv_copy_link"
-                android:text="@string/prompt_invite_wechat"/>
+                android:text="@string/prompt_copy_link"/>
 
             <ImageView
                 android:layout_width="wrap_content"

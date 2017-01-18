@@ -12,6 +12,8 @@ import com.growingio.android.sdk.collection.GrowingIO;
 import com.lypeer.zybuluo.utils.Constants;
 import com.lypeer.zybuluo.utils.SharePreferencesUtil;
 import com.lypeer.zybuluo.utils.meipai.MeiPaiFactory;
+import com.squareup.leakcanary.LeakCanary;
+
 import cn.sharesdk.framework.ShareSDK;
 import io.realm.Realm;
 import io.realm.RealmConfiguration;
@@ -49,6 +51,9 @@ public class App extends Application {
                 build();
 
         Bugtags.start("a7899237a27d3215dbdd5f90d4d43e86", this, Bugtags.BTGInvocationEventNone);
+
+        //@todo 引入了LeakCanary来检测内存泄漏，记得上线之前把它移掉
+        LeakCanary.install(this);
     }
 
     public static Context getAppContext() {
