@@ -59,9 +59,10 @@ public class Guide1Fragment extends BaseCustomFragment {
     }
 
     private void initVideo(String path) {
+        mVideoPlayer.coverImageView.setVisibility(View.INVISIBLE);
         mVideoPlayer.setUp(path
                 , JCVideoPlayerStandard.SCREEN_LAYOUT_NORMAL, "");
-        mVideoPlayer.coverImageView.setVisibility(View.INVISIBLE);
+        mVideoPlayer.looping = true;
     }
 
     @Override
