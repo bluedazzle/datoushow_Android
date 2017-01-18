@@ -11,11 +11,16 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.lypeer.zybuluo.R;
+import com.lypeer.zybuluo.event.BannerEvent;
+import com.lypeer.zybuluo.event.EmptyEvent;
 import com.lypeer.zybuluo.model.bean.ViewPagerDb;
 import com.lypeer.zybuluo.presenter.main.AddPresenter;
 import com.lypeer.zybuluo.ui.adapter.ViewPagerAdapter;
+import com.lypeer.zybuluo.ui.base.BaseBusFragment;
 import com.lypeer.zybuluo.ui.base.BaseFragment;
 import com.lypeer.zybuluo.utils.DataFormatter;
+
+import org.greenrobot.eventbus.Subscribe;
 
 import butterknife.BindView;
 
@@ -23,7 +28,7 @@ import butterknife.BindView;
  * Created by lypeer on 2017/1/4.
  */
 
-public class AddFragment extends BaseFragment<AddPresenter> {
+public class AddFragment extends BaseBusFragment<AddPresenter> {
     @BindView(R.id.tl_main)
     TabLayout mTlMain;
     @BindView(R.id.vp_main)
@@ -114,5 +119,19 @@ public class AddFragment extends BaseFragment<AddPresenter> {
         }
 
         return view;
+    }
+
+    @Subscribe
+    @Override
+    public void onEvent(EmptyEvent event) {
+        if (event == null) {
+            return;
+        }
+        if (event instanceof BannerEvent) {
+            BannerEvent bannerEvent = (BannerEvent) event;
+            if (bannerEvent.getNav() == 0) {
+                mVpMain.setCurrentItem(1);
+            }
+        }
     }
 }

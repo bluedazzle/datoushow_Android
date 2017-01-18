@@ -67,6 +67,13 @@ public class ShareActivity extends BaseActivity<SharePresenter> {
     @Override
     protected void initView(@Nullable Bundle savedInstanceState) {
 
+        mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onBackPressed();
+            }
+        });
+
         Intent intent = getIntent();
 
         try {

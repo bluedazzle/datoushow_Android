@@ -9,10 +9,13 @@ import com.bigkoo.convenientbanner.ConvenientBanner;
 import com.bigkoo.convenientbanner.holder.CBViewHolderCreator;
 import com.bigkoo.convenientbanner.holder.Holder;
 import com.lypeer.zybuluo.R;
+import com.lypeer.zybuluo.event.BannerEvent;
 import com.lypeer.zybuluo.impl.OnItemClickListener;
 import com.lypeer.zybuluo.model.bean.BannerResponse;
 import com.lypeer.zybuluo.ui.base.BaseViewHolder;
 import com.squareup.picasso.Picasso;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,6 +30,8 @@ public class HotBannerVH extends BaseViewHolder<BannerResponse> {
     @BindView(R.id.cb_banner)
     ConvenientBanner mCbBanner;
 
+    private ArrayList<String> picData = null;
+
     public HotBannerVH(Context context, ViewGroup root) {
         super(context, root, R.layout.item_hot_banner);
     }
@@ -40,10 +45,12 @@ public class HotBannerVH extends BaseViewHolder<BannerResponse> {
             mCbBanner.setVisibility(View.VISIBLE);
         }
 
-        mCbBanner.startTurning(2500);
-        mCbBanner.setCanLoop(true);
+        if (picData == null) {
+            mCbBanner.startTurning(2500);
+            mCbBanner.setCanLoop(true);
+        }
 
-        List<String> picData = new ArrayList<>();
+        picData = new ArrayList<>();
         final List<BannerResponse.BodyBean.BannerListBean> bannerListBeen = itemValue.getBody().getBanner_list();
         for (BannerResponse.BodyBean.BannerListBean bannerItem : bannerListBeen) {
             picData.add(bannerItem.getPicture());
@@ -60,7 +67,7 @@ public class HotBannerVH extends BaseViewHolder<BannerResponse> {
         mCbBanner.setOnItemClickListener(new com.bigkoo.convenientbanner.listener.OnItemClickListener() {
             @Override
             public void onItemClick(int position) {
-                listener.onItemClick(bannerListBeen.get(position), mCbBanner.getId(), position);
+                EventBus.getDefault().post(new BannerEvent(itemValue.getBody().getBanner_list().get(position).getNav()));
             }
         });
     }

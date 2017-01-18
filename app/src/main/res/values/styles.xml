@@ -24,4 +24,8 @@
 
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar"/>
 
+    <style name="anim_menu_bottombar">
+        <item name="android:windowEnterAnimation">@anim/progressbar_enter</item>
+        <item name="android:windowExitAnimation">@anim/progress_out</item>
+    </style>
 </resources>

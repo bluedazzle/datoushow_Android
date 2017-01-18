@@ -15,6 +15,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@color/colorPrimary"
+            app:navigationIcon="@drawable/ic_arrow_back_white_24dp"
             app:title="">
 
             <TextView
@@ -22,7 +23,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:text="@string/title_share"
-                android:textColor="@color/colorLightGray"
+                android:textColor="@color/colorWhite"
                 android:textSize="16sp"/>
         </android.support.v7.widget.Toolbar>
     </android.support.design.widget.AppBarLayout>
@@ -72,7 +73,7 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="match_parent"
                                 android:scaleType="centerInside"
-                                android:src="@drawable/ic_meipai"/>
+                                android:src="@drawable/ic_meipai_big"/>
                         </com.lypeer.zybuluo.ui.custom.RatioLayout>
 
                         <TextView
@@ -115,7 +116,7 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="match_parent"
                                 android:scaleType="centerInside"
-                                android:src="@drawable/ssdk_oks_classic_sinaweibo"/>
+                                android:src="@drawable/ic_sinaweibo"/>
                         </com.lypeer.zybuluo.ui.custom.RatioLayout>
 
                         <TextView
@@ -152,12 +153,14 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             app:ratio="1">
-
                             <ImageView
-                                android:layout_width="match_parent"
+                                android:layout_width="0dp"
                                 android:layout_height="match_parent"
                                 android:scaleType="centerInside"
-                                android:src="@drawable/ssdk_oks_classic_wechat"/>
+                                android:src="@drawable/ic_wechat"
+                                android:id="@+id/imageView3"
+                                android:layout_weight="1"/>
+
                         </com.lypeer.zybuluo.ui.custom.RatioLayout>
 
                         <TextView
@@ -168,6 +171,7 @@
 
 
                 </com.lypeer.zybuluo.ui.custom.RatioLayout>
+
 
             </LinearLayout>
 
@@ -206,7 +210,7 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="match_parent"
                                 android:scaleType="centerInside"
-                                android:src="@drawable/ssdk_oks_classic_wechatmoments"/>
+                                android:src="@drawable/ic_wechat_comment"/>
                         </com.lypeer.zybuluo.ui.custom.RatioLayout>
 
                         <TextView
@@ -248,7 +252,7 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="match_parent"
                                 android:scaleType="centerInside"
-                                android:src="@drawable/ssdk_oks_classic_qq"/>
+                                android:src="@drawable/ic_qq"/>
                         </com.lypeer.zybuluo.ui.custom.RatioLayout>
 
                         <TextView

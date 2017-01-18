@@ -91,4 +91,10 @@ public class SettingActivity extends BaseCustomActivity {
         Intent intent = new Intent(this, FeedbackActivity.class);
         startActivity(intent);
     }
+
+    @OnClick(R.id.rl_invite_friends)
+    public void onInviteFriendClick() {
+        Intent intent = new Intent(this, InviteFriendsActivity.class);
+        startActivity(intent);
+    }
 }

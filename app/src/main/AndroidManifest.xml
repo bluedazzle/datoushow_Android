@@ -34,8 +34,9 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".ui.activity.welcome.WelcomeActivity"
-                  android:screenOrientation="portrait"
+        <activity
+            android:name=".ui.activity.welcome.WelcomeActivity"
+            android:screenOrientation="portrait"
             >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
@@ -74,15 +75,21 @@
         </activity>
         <activity
             android:name=".ui.activity.setting.UseGuideActivity"
-            android:theme="@style/AppFullDarkTheme"
-            android:screenOrientation="portrait">
+            android:screenOrientation="portrait"
+            android:theme="@style/AppFullDarkTheme">
 
         </activity>
-        <activity android:name=".ui.activity.setting.FeedbackActivity"
-                  android:screenOrientation="portrait"
-                  android:theme="@style/AppRedTheme"
-                  android:windowSoftInputMode="stateAlwaysHidden"
+        <activity
+            android:name=".ui.activity.setting.FeedbackActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppRedTheme"
+            android:windowSoftInputMode="stateAlwaysHidden"
             >
+
+        </activity>
+        <activity
+            android:name=".ui.activity.setting.InviteFriendsActivity"
+            android:screenOrientation="portrait">
 
         </activity>
         <activity
