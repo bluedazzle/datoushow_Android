@@ -15,6 +15,7 @@ import com.lypeer.zybuluo.model.bean.ViewPagerDb;
 import com.lypeer.zybuluo.presenter.main.AddPresenter;
 import com.lypeer.zybuluo.ui.adapter.ViewPagerAdapter;
 import com.lypeer.zybuluo.ui.base.BaseFragment;
+import com.lypeer.zybuluo.utils.DataFormatter;
 
 import butterknife.BindView;
 
@@ -71,12 +72,13 @@ public class AddFragment extends BaseFragment<AddPresenter> {
         assert view != null;
         ImageView imageView = (ImageView) view.findViewById(R.id.iv_icon);
         TextView textView = (TextView) view.findViewById(R.id.tv_name);
+        textView.setTextColor(getResources().getColor(R.color.colorWhite));
 
         if (targetStatus == STATUS_NORMAL) {
-            textView.setTextColor(getResources().getColor(R.color.colorGray));
+            textView.setTextSize(DataFormatter.dipToPixels(4));
             imageView.setImageDrawable(getActivity().getResources().getDrawable(ViewPagerDb.getIconsNormal().get(tab.getPosition())));
         } else if (targetStatus == STATUS_SELECTED) {
-            textView.setTextColor(getResources().getColor(R.color.colorRed));
+            textView.setTextSize(DataFormatter.dipToPixels(5));
             imageView.setImageDrawable(getActivity().getResources().getDrawable(ViewPagerDb.getIconsSelected().get(tab.getPosition())));
         }
     }
@@ -101,12 +103,13 @@ public class AddFragment extends BaseFragment<AddPresenter> {
         ImageView imageView = (ImageView) view.findViewById(R.id.iv_icon);
 
         textView.setText(ViewPagerDb.getTitles().get(index));
+        textView.setTextColor(getResources().getColor(R.color.colorWhite));
 
         if (index == 0) {
-            textView.setTextColor(getResources().getColor(R.color.colorRed));
+            textView.setTextSize(DataFormatter.dipToPixels(5));
             imageView.setImageDrawable(getActivity().getResources().getDrawable(ViewPagerDb.getIconsSelected().get(index)));
         } else {
-            textView.setTextColor(getResources().getColor(R.color.colorGray));
+            textView.setTextSize(DataFormatter.dipToPixels(4));
             imageView.setImageDrawable(getActivity().getResources().getDrawable(ViewPagerDb.getIconsNormal().get(index)));
         }
 

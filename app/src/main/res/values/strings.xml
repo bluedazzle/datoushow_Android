@@ -20,7 +20,7 @@
     <string name="prompt_no_result">没有符合条件的结果</string>
     <string name="prompt_version">大头秀 Version\t</string>
     <string name="prompt_contact">如果您喜欢我们的产品，或者有问题反馈\n联系方式，QQ：3296963354</string>
-    <string name="prompt_agree_terms">使用此应用程序即表示您同意们的服务条款。</string>
+    <string name="prompt_agree_terms">使用此应用程序即表示您同意我们的服务条款。</string>
     <string name="prompt_terms">服务条款及声明</string>
     <string name="prompt_back">返回</string>
     <string name="prompt_save">保存</string>
@@ -46,6 +46,10 @@
     <string name="title_share">分享</string>
     <string name="prompt_share_anytime">随时在图库中分享</string>
     <string name="error_data_wrong">数据有误，请返回重试</string>
+    <string name="prompt_use_guide">使用指南</string>
+    <string name="prompt_invite_friend">邀请好友</string>
+    <string name="prompt_feedback">意见反馈</string>
+    <string name="prompt_service_terms">服务条款及声明</string>
 
     <string-array name="status_error">
         <item>未知错误</item>

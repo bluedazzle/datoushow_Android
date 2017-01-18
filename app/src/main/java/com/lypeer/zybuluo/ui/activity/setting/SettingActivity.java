@@ -5,7 +5,9 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.widget.Button;
+import android.support.v7.widget.Toolbar;
+import android.view.View;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.lypeer.zybuluo.R;
@@ -22,13 +24,25 @@ import butterknife.OnClick;
 public class SettingActivity extends BaseCustomActivity {
     @BindView(R.id.tv_version)
     TextView mTvVersion;
-    @BindView(R.id.tv_terms)
-    TextView mTvTerms;
-    @BindView(R.id.btn_back)
-    Button mBtnBack;
+    @BindView(R.id.toolbar)
+    Toolbar mToolbar;
+    @BindView(R.id.rl_use_guide)
+    RelativeLayout mRlUseGuide;
+    @BindView(R.id.rl_invite_friends)
+    RelativeLayout mRlInviteFriends;
+    @BindView(R.id.rl_feedback)
+    RelativeLayout mRlFeedback;
+    @BindView(R.id.rl_service_terms)
+    RelativeLayout mRlServiceTerms;
 
     @Override
     protected void initView(@Nullable Bundle savedInstanceState) {
+        mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onBackPressed();
+            }
+        });
         try {
             mTvVersion.setText(getVersionName());
         } catch (Exception e) {
@@ -53,15 +67,9 @@ public class SettingActivity extends BaseCustomActivity {
         return R.layout.activity_setting;
     }
 
-
-    @OnClick(R.id.btn_back)
-    public void onBackClick() {
-        onBackPressed();
-    }
-
-    @OnClick(R.id.tv_terms)
+    @OnClick(R.id.rl_service_terms)
     public void onTermsClick() {
-        Intent intent = new Intent(this , TermsActivity.class);
+        Intent intent = new Intent(this, TermsActivity.class);
         startActivity(intent);
     }
 }
