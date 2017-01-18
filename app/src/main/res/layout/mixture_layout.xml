@@ -30,7 +30,7 @@
             android:visibility="invisible"
             android:id="@+id/tv_mixture_prepare"
             android:textColor="@android:color/white"
-            android:textSize="30sp"
+            android:textSize="300sp"
             android:text="3"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
