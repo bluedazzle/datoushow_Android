@@ -19,6 +19,7 @@ import com.lypeer.zybuluo.ui.fragment.MyFragment;
 import com.lypeer.zybuluo.utils.ActivityController;
 import com.lypeer.zybuluo.utils.Constants;
 import com.lypeer.zybuluo.utils.FileUtil;
+import com.lypeer.zybuluo.utils.SharePreferencesUtil;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -65,6 +66,7 @@ public class MainActivity extends BaseCustomActivity {
     @Override
     protected void initView(@Nullable Bundle savedInstanceState) {
         ActivityController.finishAllExceptNow(MainActivity.this);
+        SharePreferencesUtil.launched();
         initList();
         initMap();
         mManager = getSupportFragmentManager();
