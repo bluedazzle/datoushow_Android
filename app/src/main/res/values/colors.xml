@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="colorPrimary">#ff0f50</color>
-    <color name="colorPrimaryDark">#ff0f50</color>
+    <color name="colorPrimaryDark">#E2164A</color>
     <color name="colorAccent">#ffffff</color>
 
     <color name="colorDivider">#11000000</color>
@@ -14,4 +14,5 @@
     <color name="google_green">#ff0f50</color>
     <color name="google_yellow">#ff0f50</color>
     <color name="colorWhite">#ffffff</color>
+    <color name="colorPink">#ffa4bd</color>
 </resources>

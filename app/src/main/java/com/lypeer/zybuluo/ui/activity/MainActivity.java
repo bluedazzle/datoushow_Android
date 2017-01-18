@@ -95,7 +95,7 @@ public class MainActivity extends BaseCustomActivity {
     private void clearSelection() {
         for (int id : mFragmentIdList) {
             mImageViewMap.get(id).setImageResource(mImgResNormalMap.get(id));
-            mTextViewMap.get(id).setTextColor(getResources().getColor(R.color.colorGray));
+            mTextViewMap.get(id).setTextColor(getResources().getColor(R.color.colorPink));
         }
     }
 
