@@ -78,6 +78,13 @@
             android:screenOrientation="portrait">
 
         </activity>
+        <activity android:name=".ui.activity.setting.FeedbackActivity"
+                  android:screenOrientation="portrait"
+                  android:theme="@style/AppRedTheme"
+                  android:windowSoftInputMode="stateAlwaysHidden"
+            >
+
+        </activity>
         <activity
             android:name=".mixture.activity.MainActivity"
             android:screenOrientation="portrait">

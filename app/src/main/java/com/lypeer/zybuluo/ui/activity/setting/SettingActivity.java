@@ -85,4 +85,10 @@ public class SettingActivity extends BaseCustomActivity {
         Intent intent = new Intent(this, UseGuideActivity.class);
         startActivity(intent);
     }
+
+    @OnClick(R.id.rl_feedback)
+    public void onFeedbackClick() {
+        Intent intent = new Intent(this, FeedbackActivity.class);
+        startActivity(intent);
+    }
 }

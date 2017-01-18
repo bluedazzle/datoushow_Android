@@ -5,13 +5,13 @@ import android.app.Application;
 import android.content.Context;
 import android.content.res.Resources;
 
+import com.bugtags.library.Bugtags;
+import com.bugtags.library.BugtagsOptions;
 import com.growingio.android.sdk.collection.Configuration;
 import com.growingio.android.sdk.collection.GrowingIO;
 import com.lypeer.zybuluo.utils.Constants;
 import com.lypeer.zybuluo.utils.SharePreferencesUtil;
 import com.lypeer.zybuluo.utils.meipai.MeiPaiFactory;
-import com.tencent.bugly.crashreport.CrashReport;
-
 import cn.sharesdk.framework.ShareSDK;
 import io.realm.Realm;
 import io.realm.RealmConfiguration;
@@ -36,12 +36,19 @@ public class App extends Application {
         GrowingIO.startWithConfiguration(this, new Configuration()
                 .useID()
                 .trackAllFragments()
-                .setChannel("XXX应用商店"));
+                .setChannel("不告诉你"));
         Realm.init(this);
         RealmConfiguration realmConfiguration = new RealmConfiguration.Builder().build();
         Realm.setDefaultConfiguration(realmConfiguration);
-        CrashReport.initCrashReport(getApplicationContext(), "281bc63437", true);
         SharePreferencesUtil.init();
+
+        BugtagsOptions options = new BugtagsOptions.Builder().
+                trackingCrashLog(true).
+                trackingConsoleLog(true).
+                trackingUserSteps(true).
+                build();
+
+        Bugtags.start("a7899237a27d3215dbdd5f90d4d43e86", this, Bugtags.BTGInvocationEventNone);
     }
 
     public static Context getAppContext() {

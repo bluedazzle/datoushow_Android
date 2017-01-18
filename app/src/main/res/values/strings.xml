@@ -60,6 +60,13 @@
     <string name="prompt_guide_4_message">在录制时，尽量保持头部不要晃\n动，大头框自己会动哦</string>
     <string name="prompt_scroll_to_next">滑动至下一页</string>
     <string name="prompt_start_datoushow">开始大头秀</string>
+    <string name="prompt_commit">提交</string>
+    <string name="title_feedback">意见反馈</string>
+    <string name="hint_feedback">用着不爽？来这里吐槽！</string>
+    <string name="hint_contact_way">您的联系方式（QQ号/微信号/微博/手机号）</string>
+    <string name="error_input_complete">请填写完整！</string>
+    <string name="message_send_success">您的反馈已经提交成功，我们将会在最短的时间内对您提出的问题进行处理！</string>
+    <string name="prompt_ok">好的</string>
 
     <string-array name="status_error">
         <item>未知错误</item>
