@@ -54,7 +54,8 @@ public class Constants {
                 TYPE_FILM_TV = 1,
                 TYPE_MV = 2,
                 TYPE_FUNNY = 3,
-                TYPE_VARIETY = 4;
+                TYPE_VARIETY = 4,
+                TYPE_SPRING_FESTIVAL = 5;
     }
 
     public interface StatusCode {

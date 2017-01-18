@@ -30,9 +30,8 @@ public class SpringFestivalModel extends BaseModel<SpringFestivalPresenter> {
 
 
     public void refreshVideos(int currentPage) {
-        //@todo 这里暂时是用的mv的数据，因为还没给春节的接口，记得修改
         RetrofitClient.buildService(ApiService.class)
-                .getTypeVideos(currentPage, Constants.VideosType.TYPE_MV)
+                .getTypeVideos(currentPage, Constants.VideosType.TYPE_SPRING_FESTIVAL)
                 .enqueue(new Callback<VideoResponse>() {
                     @Override
                     public void onResponse(Call<VideoResponse> call, Response<VideoResponse> response) {
