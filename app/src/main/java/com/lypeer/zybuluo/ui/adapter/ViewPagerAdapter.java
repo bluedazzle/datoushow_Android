@@ -33,7 +33,7 @@ public class ViewPagerAdapter extends FragmentPagerAdapter {
 
     @Override
     public int getCount() {
-        return titleList == null ? 0 : titleList.size();
+        return fragmentList == null ? 0 : fragmentList.size();
     }
 
     @Override

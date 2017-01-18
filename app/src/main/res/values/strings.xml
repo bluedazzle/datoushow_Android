@@ -50,6 +50,16 @@
     <string name="prompt_invite_friend">邀请好友</string>
     <string name="prompt_feedback">意见反馈</string>
     <string name="prompt_service_terms">服务条款及声明</string>
+    <string name="prompt_guide_1_title">释放演\n技</string>
+    <string name="prompt_guide_1_message">为亲友送上有趣的问\n候</string>
+    <string name="prompt_guide_2_title">纵情搞\n怪</string>
+    <string name="prompt_guide_2_message">笑翻你的朋友\n圈</string>
+    <string name="prompt_guide_3_title">节日祝\n福</string>
+    <string name="prompt_guide_3_message">为亲友送上有趣的祝\n福</string>
+    <string name="prompt_guide_4_title">新手提\n示</string>
+    <string name="prompt_guide_4_message">在录制时，尽量保持头部不要晃\n动，大头框自己会动哦</string>
+    <string name="prompt_scroll_to_next">滑动至下一页</string>
+    <string name="prompt_start_datoushow">开始大头秀</string>
 
     <string-array name="status_error">
         <item>未知错误</item>

@@ -9,6 +9,7 @@ import com.growingio.android.sdk.collection.Configuration;
 import com.growingio.android.sdk.collection.GrowingIO;
 import com.lypeer.zybuluo.utils.Constants;
 import com.lypeer.zybuluo.utils.meipai.MeiPaiFactory;
+import com.tencent.bugly.crashreport.CrashReport;
 
 import cn.sharesdk.framework.ShareSDK;
 import io.realm.Realm;
@@ -38,6 +39,7 @@ public class App extends Application {
         Realm.init(this);
         RealmConfiguration realmConfiguration = new RealmConfiguration.Builder().build();
         Realm.setDefaultConfiguration(realmConfiguration);
+        CrashReport.initCrashReport(getApplicationContext(), "281bc63437", true);
     }
 
     public static Context getAppContext() {

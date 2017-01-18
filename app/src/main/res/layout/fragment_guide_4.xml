@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/bg_guide_4">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center_horizontal"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:gravity="center"
+            android:text="@string/prompt_guide_4_title"
+            android:textColor="@color/colorWhite"
+            android:textSize="16sp"
+            android:textStyle="bold"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:gravity="center"
+            android:text="@string/prompt_guide_4_message"
+            android:textColor="@color/colorWhite"/>
+
+        <com.lypeer.zybuluo.ui.custom.RatioLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            android:layout_marginTop="16dp"
+            app:ratio="1">
+
+            <fm.jiecao.jcvideoplayer_lib.JCVideoPlayerStandard
+                android:id="@+id/video_player"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:clickable="false"
+                android:focusable="false"
+                android:focusableInTouchMode="false"/>
+        </com.lypeer.zybuluo.ui.custom.RatioLayout>
+
+        <Button
+            android:layout_width="match_parent"
+            android:id="@+id/btn_enter"
+            android:background="@drawable/bg_rc_red"
+            android:textColor="@color/colorWhite"
+            android:visibility="invisible"
+            android:layout_marginLeft="64dp"
+            android:layout_marginRight="64dp"
+            android:text="@string/prompt_start_datoushow"
+            android:layout_height="wrap_content"/>
+    </LinearLayout>
+</ScrollView>

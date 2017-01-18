@@ -18,6 +18,9 @@ import com.lypeer.zybuluo.ui.fragment.AddFragment;
 import com.lypeer.zybuluo.ui.fragment.MyFragment;
 import com.lypeer.zybuluo.utils.ActivityController;
 import com.lypeer.zybuluo.utils.Constants;
+import com.lypeer.zybuluo.utils.FileUtil;
+
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -66,6 +69,11 @@ public class MainActivity extends BaseCustomActivity {
         initMap();
         mManager = getSupportFragmentManager();
         setCurrentSelection(Constants.FragmentId.ADD);
+        try {
+            FileUtil.copy();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     private void setCurrentSelection(int fragmentId) {

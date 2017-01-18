@@ -73,5 +73,11 @@ public class Constants {
                 STATUS_VERIFY_CODE_WRONG = 10;
     }
 
-
+    public interface GuideFragmentId {
+        int
+                GUIDE_1 = 0,
+                GUIDE_2 = 1,
+                GUIDE_3 = 2,
+                GUIDE_4 = 3;
+    }
 }
