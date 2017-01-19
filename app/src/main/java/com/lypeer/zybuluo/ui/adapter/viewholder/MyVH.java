@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -52,15 +53,16 @@ public class MyVH extends BaseViewHolder<Video> {
                 , JCVideoPlayerStandard.SCREEN_LAYOUT_NORMAL, "");
         mVideoPlayer.coverImageView.setVisibility(View.GONE);
         if (itemValue.getThumbnail() != null) {
-
-            try {
+            mVideoPlayer.thumbImageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
+            mVideoPlayer.thumbImageView.setImageBitmap(itemValue.getThumbnail());
+/*            try {
                 File f = new File(App.getAppContext().getCacheDir(), itemValue.getTitle());
                 f.createNewFile();
 
 
                 Bitmap bitmap = itemValue.getThumbnail();
                 ByteArrayOutputStream bos = new ByteArrayOutputStream();
-                bitmap.compress(Bitmap.CompressFormat.PNG, 0 /*ignored for PNG*/, bos);
+                bitmap.compress(Bitmap.CompressFormat.PNG, 0 *//*ignored for PNG*//*, bos);
                 byte[] bitmapdata = bos.toByteArray();
 
                 FileOutputStream fos = new FileOutputStream(f);
@@ -71,7 +73,7 @@ public class MyVH extends BaseViewHolder<Video> {
                 Picasso.with(App.getAppContext()).load(f).fit().into(mVideoPlayer.thumbImageView);
             } catch (IOException e) {
                 e.printStackTrace();
-            }
+            }*/
         }
 
         View.OnClickListener onClickListener = new View.OnClickListener() {
