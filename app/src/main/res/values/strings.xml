@@ -79,6 +79,10 @@
     <string name="prompt_cancel">取消</string>
     <string name="prompt_copy_success">复制成功！快去和你的小伙伴一起分享吧！</string>
     <string name="title_practise">练习模式</string>
+    <string name="title_preparing">准备开始录制</string>
+    <string name="title_recording">录制中</string>
+    <string name="title_preview">预览</string>
+    <string name="prompt_progress">当前进度：0%</string>
 
     <string-array name="status_error">
         <item>未知错误</item>

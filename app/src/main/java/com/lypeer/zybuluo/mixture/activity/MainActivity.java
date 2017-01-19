@@ -113,9 +113,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private Button mRedoButton;
     private Button mSaveButton;
     private RelativeLayout mSaveAndRedoLayout;
-    private TextView mTrainingTextView;
     private TextView mPrepareTextView;
     private ImageView mCloseImageView;
+    private TextView mTitle;
     private WaveView mWaveView;
     private CircleProgressView mProgressBar;
     private RelativeLayout mFrontLayout;
@@ -193,11 +193,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mGLSurfaceView.setRenderMode(GLSurfaceView.RENDERMODE_WHEN_DIRTY);
         mStartButton = (Button) findViewById(R.id.btn_mixture_start);
         mSaveAndRedoLayout = (RelativeLayout) findViewById(R.id.rv_mixture_save_and_redo);
-        mTrainingTextView = (TextView) findViewById(R.id.tv_mixture_training);
         mRedoButton = (Button) findViewById(R.id.btn_mixture_redo);
         mSaveButton = (Button) findViewById(R.id.btn_mixture_save);
         mPrepareTextView = (TextView) findViewById(R.id.tv_mixture_prepare);
         mCloseImageView = (ImageView) findViewById(R.id.iv_mixture_close);
+        mTitle = (TextView) findViewById(R.id.tv_title);
         mWaveView = (WaveView) findViewById(R.id.wv_mixture_wave);
         mProgressBar = (CircleProgressView) findViewById(R.id.lv_mixture_progress);
         mFrontLayout = (RelativeLayout) findViewById(R.id.rl_mixture_front);
@@ -331,9 +331,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 mStartButton.setVisibility(View.INVISIBLE);
                 mSaveAndRedoLayout.setVisibility(View.INVISIBLE);
                 mCloseImageView.setVisibility(View.INVISIBLE);
-                mTrainingTextView.setVisibility(View.INVISIBLE);
                 mProgressBar.setProgress(0);
-                mProgressBar.setVisibility(View.VISIBLE);
+                mProgressBar.show();
+                mProgressBar.setText("正在初始化环境");
                 mFrontLayout.setVisibility(View.VISIBLE);
                 mFrontLayout.setBackgroundColor(Color.TRANSPARENT);
                 mFrontLayout.setOnClickListener(null);
@@ -826,11 +826,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void gotoStageTraining() {
+        mTitle.setText(R.string.title_practise);
+
         Log.v(TAG, "gotoStageTraining" + mCurrentStage);
         mCurrentStage = MixtureStage.Training;
         mCameraPreviewTime = System.currentTimeMillis();
-        mTrainingTextView.setVisibility(View.VISIBLE);
-        mProgressBar.setVisibility(View.INVISIBLE);
+        mProgressBar.dismiss();
         mPrepareTextView.setVisibility(View.INVISIBLE);
         mCloseImageView.setVisibility(View.VISIBLE);
         mSaveAndRedoLayout.setVisibility(View.INVISIBLE);
@@ -850,6 +851,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void gotoStageRecordPrepare() {
+        mTitle.setText(R.string.title_preparing);
+
         Log.v(TAG, "gotoStageRecordPrepare");
         mPaused = false;
         mMediaPlayer.reset();
@@ -864,7 +867,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
         mCurrentStage = MixtureStage.RecordPrepare;
         //mMediaPlayer.seekTo(HeadInfoManager.getPreparedTime());
-        mTrainingTextView.setVisibility(View.INVISIBLE);
         mStartButton.setText("取消");
         mCloseImageView.setVisibility(View.GONE);
         mStartButton.setBackgroundResource(R.drawable.bt_cancel_bk);
@@ -873,6 +875,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void gotoStageRecordStart() {
+        mTitle.setText(R.string.title_recording);
+
         Log.v(TAG, "gotoStageRecordStart" + mCurrentStage);
         mHeadInfoManager.videoWidth = mVideoWidth;
         mHeadInfoManager.videoHeight = mVideoHeight;
@@ -896,7 +900,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         Log.v(TAG, "gotoStageRecordComplete" + mCurrentStage);
         mCurrentStage = MixtureStage.RecordComplete;
         try {
-            mProgressBar.setVisibility(View.VISIBLE);
+            mProgressBar.show();
+            mProgressBar.setText("保存中，请稍候");
             mFrontLayout.setVisibility(View.VISIBLE);
             mFrontLayout.setBackgroundColor(Color.TRANSPARENT);
             mFrontLayout.setOnClickListener(null);
@@ -908,6 +913,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void gotoStagePreview() {
+        mTitle.setText(R.string.title_preview);
+
         Log.v(TAG, "gotoStagePreview" + mCurrentStage);
         mCurrentStage = MixtureStage.Preview;
         closePipeLine();
@@ -924,7 +931,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mStartButton.setVisibility(View.INVISIBLE);
         mSaveAndRedoLayout.setVisibility(View.VISIBLE);
         mCloseImageView.setVisibility(View.VISIBLE);
-        mProgressBar.setVisibility(View.INVISIBLE);
+        mProgressBar.dismiss();
 
     }
 
