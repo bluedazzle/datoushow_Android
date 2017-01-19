@@ -29,28 +29,35 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="136dp"
-                android:background="@drawable/ic_invite_background"
-                android:gravity="center_horizontal"
-                android:orientation="vertical"
-                android:paddingTop="48dp">
+                android:background="@drawable/bg_rc_red_half"
+                android:paddingTop="3dp"
+                android:layout_height="wrap_content">
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/prompt_invite_friend"
-                    android:textColor="@color/colorWhite"
-                    android:textSize="18sp"/>
-
-                <TextView
+                <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="32dp"
-                    android:layout_marginRight="32dp"
-                    android:layout_marginTop="8dp"
-                    android:gravity="center"
-                    android:text="@string/prompt_invite_message"
-                    android:textColor="@color/colorWhite"/>
+                    android:layout_height="136dp"
+                    android:background="@drawable/ic_invite_background"
+                    android:gravity="center_horizontal"
+                    android:orientation="vertical"
+                    android:paddingTop="44dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/prompt_invite_friend"
+                        android:textColor="@color/colorWhite"
+                        android:textSize="18sp"/>
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="32dp"
+                        android:layout_marginRight="32dp"
+                        android:layout_marginTop="8dp"
+                        android:gravity="center"
+                        android:text="@string/prompt_invite_message"
+                        android:textColor="@color/colorWhite"/>
+                </LinearLayout>
             </LinearLayout>
 
             <LinearLayout
