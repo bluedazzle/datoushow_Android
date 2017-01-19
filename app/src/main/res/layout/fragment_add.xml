@@ -14,6 +14,7 @@
             android:layout_width="match_parent"
             android:layout_height="78dp"
             app:tabGravity="fill"
+            app:tabMaxWidth="64dp"
             app:tabMode="scrollable"/>
     </android.support.design.widget.AppBarLayout>
 
