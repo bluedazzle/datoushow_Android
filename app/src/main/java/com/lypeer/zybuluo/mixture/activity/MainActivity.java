@@ -57,11 +57,13 @@ import com.lypeer.zybuluo.model.bean.BodyBean;
 import com.lypeer.zybuluo.model.bean.CreateShareLinkResponse;
 import com.lypeer.zybuluo.model.bean.VideoResponse;
 import com.lypeer.zybuluo.ui.activity.share.ShareActivity;
+import com.lypeer.zybuluo.ui.custom.SubtitleView;
 import com.lypeer.zybuluo.utils.ApiSignUtil;
 import com.lypeer.zybuluo.utils.Constants;
 import com.lypeer.zybuluo.utils.DeviceUuidFactory;
 import com.lypeer.zybuluo.utils.FileUtil;
 import com.lypeer.zybuluo.utils.RetrofitClient;
+import com.lypeer.zybuluo.utils.SharePreferencesUtil;
 import com.lypeer.zybuluo.utils.meipai.MeiPai;
 import com.qiniu.android.common.Zone;
 import com.qiniu.android.http.ResponseInfo;
@@ -112,10 +114,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private RelativeLayout mSaveAndRedoLayout;
     private TextView mPrepareTextView;
     private ImageView mCloseImageView;
-    private TextView mTitle;
+    private ImageView mIvSubtitle;
+    private TextView mTvTitle;
     private WaveView mWaveView;
     private CircleProgressView mProgressBar;
     private RelativeLayout mFrontLayout;
+    private SubtitleView mSubtitleView;
 
     private TextureRender mRender;
     private SurfaceTexture mSurfaceTextureFromVideo;
@@ -194,14 +198,18 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mSaveButton = (Button) findViewById(R.id.btn_mixture_save);
         mPrepareTextView = (TextView) findViewById(R.id.tv_mixture_prepare);
         mCloseImageView = (ImageView) findViewById(R.id.iv_mixture_close);
-        mTitle = (TextView) findViewById(R.id.tv_title);
+        mIvSubtitle = (ImageView) findViewById(R.id.iv_subtitle);
+        mTvTitle = (TextView) findViewById(R.id.tv_title);
         mWaveView = (WaveView) findViewById(R.id.wv_mixture_wave);
         mProgressBar = (CircleProgressView) findViewById(R.id.lv_mixture_progress);
         mFrontLayout = (RelativeLayout) findViewById(R.id.rl_mixture_front);
+        mSubtitleView = (SubtitleView) findViewById(R.id.sv_subtitle);
 
         mWaveView.bringToFront();
+        mSubtitleView.bringToFront();
 
         mStartButton.setOnClickListener(this);
+        mIvSubtitle.setOnClickListener(this);
         mRedoButton.setOnClickListener(this);
         mSaveButton.setOnClickListener(this);
         mCloseImageView.setOnClickListener(this);
@@ -449,6 +457,33 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         mPaused = false;
                     }
                 }
+            } else if (v == mIvSubtitle) {
+                if (!mSubtitleView.mEnable) {
+                    Toast.makeText(MainActivity.this, R.string.error_no_subtitle, Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+                if (mCurrentStage == MixtureStage.Training) {
+                    if (mSubtitleView.getVisibility() == View.VISIBLE) {
+                        mSubtitleView.setVisibility(View.INVISIBLE);
+                        mIvSubtitle.setImageResource(R.drawable.ic_subtitle_close_practise);
+                        SharePreferencesUtil.setIsUserLikeSubtitle(false);
+                    } else {
+                        mSubtitleView.setVisibility(View.VISIBLE);
+                        mIvSubtitle.setImageResource(R.drawable.ic_subtitle_open_practise);
+                        SharePreferencesUtil.setIsUserLikeSubtitle(true);
+                    }
+                } else if (mCurrentStage == MixtureStage.Preview) {
+                    if (mSubtitleView.getVisibility() == View.VISIBLE) {
+                        mSubtitleView.setVisibility(View.INVISIBLE);
+                        mIvSubtitle.setImageResource(R.drawable.ic_subtitle_close_review);
+                        SharePreferencesUtil.setIsUserLikeSubtitle(false);
+                    } else {
+                        mSubtitleView.setVisibility(View.VISIBLE);
+                        mIvSubtitle.setImageResource(R.drawable.ic_subtitle_open_review);
+                        SharePreferencesUtil.setIsUserLikeSubtitle(true);
+                    }
+                }
             }
         }
     }
@@ -687,6 +722,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 return;
             }
             if (mCurrentStage != MixtureStage.Init) return;
+
+            mSubtitleView.setData(mHeadInfoManager.getSubtitleInfoMap());
+
             MediaMetadataRetriever m = new MediaMetadataRetriever();
             m.setDataSource(DOWNLOADED_VIDEO_PATH);
             mFirstFrame = m.getFrameAtTime(mHeadInfoManager.getTimeByFrame(mHeadInfoManager.getPreparedFrame()) * 1000);
@@ -816,17 +854,36 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         int frame = (mMediaPlayer.getCurrentPosition() * mHeadInfoManager.frameRate / 1000) + 1;
         mCurrentFrame = frame > mHeadInfoManager.maxFrame ? mHeadInfoManager.maxFrame : frame;
         if (mVideoDuration > 0) {
-            int pos = mCurrentFrame * WaveView.WAVE_COUNT / mHeadInfoManager.maxFrame;
-            mWaveView.setPosition(pos);
-            mWaveView.invalidate();
+
+            MainActivity.this.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    int pos = mCurrentFrame * WaveView.WAVE_COUNT / mHeadInfoManager.maxFrame;
+                    mWaveView.setPosition(pos);
+                    mWaveView.invalidate();
+
+                    float currentTime = ((float) mCurrentFrame / mHeadInfoManager.maxFrame) * mHeadInfoManager.duration;
+                    mSubtitleView.updateTime((long) currentTime + 500);
+                }
+            });
         }
     }
 
     private void gotoStageTraining() {
-        mTitle.setText(R.string.title_practise);
+        mTvTitle.setText(R.string.title_practise);
+        mCurrentStage = MixtureStage.Training;
+
+        if (mSubtitleView.mEnable) {
+            mIvSubtitle.setImageResource(R.drawable.ic_subtitle_open_practise);
+
+            if (!SharePreferencesUtil.isUserLikeSubtitle()) {
+                onClick(mIvSubtitle);
+            }
+        } else {
+            mIvSubtitle.setImageResource(R.drawable.ic_subtitle_close_practise);
+        }
 
         Log.v(TAG, "gotoStageTraining" + mCurrentStage);
-        mCurrentStage = MixtureStage.Training;
         mCameraPreviewTime = System.currentTimeMillis();
         mProgressBar.dismiss();
         mPrepareTextView.setVisibility(View.INVISIBLE);
@@ -845,10 +902,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
         mCurrentFrame = 0;
         mMediaPlayer.start();
+
+
     }
 
     private void gotoStageRecordPrepare() {
-        mTitle.setText(R.string.title_preparing);
+        mTvTitle.setText("");
 
         Log.v(TAG, "gotoStageRecordPrepare");
         mPaused = false;
@@ -872,7 +931,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void gotoStageRecordStart() {
-        mTitle.setText(R.string.title_recording);
+        mTvTitle.setText(R.string.title_recording);
 
         Log.v(TAG, "gotoStageRecordStart" + mCurrentStage);
         mHeadInfoManager.videoWidth = mVideoWidth;
@@ -911,7 +970,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void gotoStagePreview() {
-        mTitle.setText(R.string.title_preview);
+        mTvTitle.setText(R.string.title_preview);
+
+        if (mSubtitleView.getVisibility() == View.VISIBLE) {
+            mIvSubtitle.setImageResource(R.drawable.ic_subtitle_open_review);
+        } else {
+            mIvSubtitle.setImageResource(R.drawable.ic_subtitle_close_review);
+        }
 
         Log.v(TAG, "gotoStagePreview" + mCurrentStage);
         mCurrentStage = MixtureStage.Preview;

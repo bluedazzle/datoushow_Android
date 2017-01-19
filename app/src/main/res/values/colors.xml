@@ -18,4 +18,7 @@
     <color name="colorPink">#ffa4bd</color>
     <color name="colorDark">#000000</color>
     <color name="colorEmpty">#00ffffff</color>
+    <color name="colorSubtitleSelected">#fed631</color>
+    <color name="colorSubtitleNormal">#afffffff</color>
+    <color name="colorSubtitleWeak">#6fffffff</color>
 </resources>
