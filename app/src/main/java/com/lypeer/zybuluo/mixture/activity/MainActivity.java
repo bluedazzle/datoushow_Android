@@ -333,7 +333,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 mCloseImageView.setVisibility(View.INVISIBLE);
                 mProgressBar.setProgress(0);
                 mProgressBar.show();
-                mProgressBar.setText("正在初始化环境");
+                mProgressBar.setText("正在缓冲");
                 mFrontLayout.setVisibility(View.VISIBLE);
                 mFrontLayout.setBackgroundColor(Color.TRANSPARENT);
                 mFrontLayout.setOnClickListener(null);
@@ -901,7 +901,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mCurrentStage = MixtureStage.RecordComplete;
         try {
             mProgressBar.show();
-            mProgressBar.setText("保存中，请稍候");
+            mProgressBar.setText("正在创建预览");
             mFrontLayout.setVisibility(View.VISIBLE);
             mFrontLayout.setBackgroundColor(Color.TRANSPARENT);
             mFrontLayout.setOnClickListener(null);

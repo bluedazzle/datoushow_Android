@@ -1,0 +1,311 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:app="http://schemas.android.com/apk/res-auto"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:background="#55000000"
+              android:gravity="bottom"
+              android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/colorWhite"
+        android:gravity="center_horizontal"
+        android:orientation="vertical"
+        android:paddingTop="42dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <!-- 不知道为什么如果这里设置成vertical的话其weightSum就不起作用了，所以进行了更多嵌套-->
+
+            <com.lypeer.zybuluo.ui.custom.RatioLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:clickable="true"
+                android:gravity="center"
+                android:weightSum="5"
+                app:ratio="1">
+
+
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1.3"/>
+
+                <com.lypeer.zybuluo.ui.custom.RatioLayout
+                    android:id="@+id/lly_wechat"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:layout_weight="3"
+                    android:background="@android:color/background_light"
+                    android:gravity="center"
+                    android:orientation="vertical"
+                    app:ratio="2">
+
+                    <com.lypeer.zybuluo.ui.custom.RatioLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        app:ratio="1">
+
+                        <ImageView
+                            android:id="@+id/imageView3"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:scaleType="centerInside"
+                            android:src="@drawable/ic_wechat"/>
+
+                    </com.lypeer.zybuluo.ui.custom.RatioLayout>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="16dp"
+                        android:text="@string/ssdk_wechat"/>
+                </com.lypeer.zybuluo.ui.custom.RatioLayout>
+
+
+            </com.lypeer.zybuluo.ui.custom.RatioLayout>
+
+            <com.lypeer.zybuluo.ui.custom.RatioLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:clickable="true"
+                android:gravity="center"
+                android:weightSum="5"
+                app:ratio="1">
+
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="0.5"/>
+
+                <com.lypeer.zybuluo.ui.custom.RatioLayout
+                    android:id="@+id/lly_comment"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:layout_weight="3"
+                    android:background="@android:color/background_light"
+                    android:gravity="center"
+                    android:orientation="vertical"
+                    app:ratio="2">
+
+                    <com.lypeer.zybuluo.ui.custom.RatioLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        app:ratio="1">
+
+                        <ImageView
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:scaleType="centerInside"
+                            android:src="@drawable/ic_wechat_comment"/>
+                    </com.lypeer.zybuluo.ui.custom.RatioLayout>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="16dp"
+                        android:text="@string/ssdk_wechatmoments"/>
+                </com.lypeer.zybuluo.ui.custom.RatioLayout>
+
+
+            </com.lypeer.zybuluo.ui.custom.RatioLayout>
+
+            <com.lypeer.zybuluo.ui.custom.RatioLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:clickable="true"
+                android:gravity="center"
+                android:weightSum="5"
+                app:ratio="1">
+
+
+                <com.lypeer.zybuluo.ui.custom.RatioLayout
+                    android:id="@+id/lly_qq"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:layout_weight="3"
+                    android:background="@android:color/background_light"
+                    android:gravity="center"
+                    android:orientation="vertical"
+                    app:ratio="2">
+
+                    <com.lypeer.zybuluo.ui.custom.RatioLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        app:ratio="1">
+
+                        <ImageView
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:scaleType="centerInside"
+                            android:src="@drawable/ic_qq"/>
+                    </com.lypeer.zybuluo.ui.custom.RatioLayout>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="16dp"
+                        android:text="@string/ssdk_qq"/>
+                </com.lypeer.zybuluo.ui.custom.RatioLayout>
+
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="0.5"/>
+            </com.lypeer.zybuluo.ui.custom.RatioLayout>
+
+            <com.lypeer.zybuluo.ui.custom.RatioLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:clickable="true"
+                android:gravity="center"
+                android:weightSum="5"
+                app:ratio="1">
+
+
+                <com.lypeer.zybuluo.ui.custom.RatioLayout
+                    android:id="@+id/lly_meipai"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:layout_weight="3"
+                    android:background="@android:color/background_light"
+                    android:gravity="center"
+                    android:orientation="vertical"
+                    app:ratio="2">
+
+                    <com.lypeer.zybuluo.ui.custom.RatioLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        app:ratio="1">
+
+                        <ImageView
+                            android:id="@+id/imageView2"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:scaleType="centerInside"
+                            android:src="@drawable/ic_meipai_big"/>
+                    </com.lypeer.zybuluo.ui.custom.RatioLayout>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="16dp"
+                        android:text="@string/meipai"/>
+                </com.lypeer.zybuluo.ui.custom.RatioLayout>
+
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1.3"/>
+
+            </com.lypeer.zybuluo.ui.custom.RatioLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp">
+
+            <!-- 不知道为什么如果这里设置成vertical的话其weightSum就不起作用了，所以进行了更多嵌套-->
+
+
+            <com.lypeer.zybuluo.ui.custom.RatioLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:clickable="true"
+                android:gravity="center"
+                android:weightSum="5"
+                app:ratio="1">
+
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1.3"/>
+
+                <com.lypeer.zybuluo.ui.custom.RatioLayout
+                    android:id="@+id/lly_weibo"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:layout_weight="3"
+                    android:background="@android:color/background_light"
+                    android:gravity="center"
+                    android:orientation="vertical"
+                    app:ratio="2">
+
+                    <com.lypeer.zybuluo.ui.custom.RatioLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        app:ratio="1">
+
+                        <ImageView
+                            android:id="@+id/imageView"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:scaleType="centerInside"
+                            android:src="@drawable/ic_sinaweibo"/>
+                    </com.lypeer.zybuluo.ui.custom.RatioLayout>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="16dp"
+                        android:text="@string/prompt_sinaweibo"/>
+                </com.lypeer.zybuluo.ui.custom.RatioLayout>
+
+
+            </com.lypeer.zybuluo.ui.custom.RatioLayout>
+
+            <com.lypeer.zybuluo.ui.custom.RatioLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:weightSum="2"
+                app:ratio="1">
+
+            </com.lypeer.zybuluo.ui.custom.RatioLayout>
+
+
+            <com.lypeer.zybuluo.ui.custom.RatioLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:weightSum="2"
+                app:ratio="1">
+
+            </com.lypeer.zybuluo.ui.custom.RatioLayout>
+
+            <com.lypeer.zybuluo.ui.custom.RatioLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:weightSum="2"
+                app:ratio="1">
+
+            </com.lypeer.zybuluo.ui.custom.RatioLayout>
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/btn_cancel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            android:layout_marginTop="16dp"
+            android:background="@drawable/bg_rc_gray"
+            android:paddingLeft="64dp"
+            android:paddingRight="64dp"
+            android:text="@string/prompt_cancel"/>
+    </LinearLayout>
+</LinearLayout>
