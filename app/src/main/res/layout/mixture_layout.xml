@@ -2,8 +2,8 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               xmlns:app="http://schemas.android.com/apk/res-auto"
               android:layout_width="match_parent"
-              android:orientation="vertical"
-              android:layout_height="match_parent">
+              android:layout_height="match_parent"
+              android:orientation="vertical">
 
     <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
@@ -53,9 +53,9 @@
         <RelativeLayout
             android:id="@+id/rv_mixture_play_area"
             android:layout_width="match_parent"
-            android:layout_marginTop="4dp"
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
+            android:layout_marginTop="4dp"
             android:orientation="horizontal">
 
             <android.opengl.GLSurfaceView
@@ -115,18 +115,20 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentLeft="true"
-                    android:layout_marginLeft="16px"
+                    android:layout_marginLeft="16dp"
                     android:background="@drawable/bt_redo_bk"
-                    android:text="重做"/>
+                    android:text="重做"
+                    android:textColor="@color/colorWhite"/>
 
                 <Button
                     android:id="@+id/btn_mixture_save"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
-                    android:layout_marginRight="16px"
+                    android:layout_marginRight="16dp"
                     android:background="@drawable/bt_save_bk"
-                    android:text="保存"/>
+                    android:text="保存"
+                    android:textColor="@color/colorWhite"/>
             </RelativeLayout>
         </RelativeLayout>
 

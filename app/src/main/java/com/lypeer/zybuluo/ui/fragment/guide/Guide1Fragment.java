@@ -8,6 +8,7 @@ import com.lypeer.zybuluo.R;
 import com.lypeer.zybuluo.event.EmptyEvent;
 import com.lypeer.zybuluo.event.PageChangeEvent;
 import com.lypeer.zybuluo.ui.base.BaseCustomFragment;
+import com.lypeer.zybuluo.ui.custom.LyVideoPlayer;
 import com.lypeer.zybuluo.utils.Constants;
 import com.lypeer.zybuluo.utils.FileUtil;
 
@@ -27,7 +28,7 @@ import fm.jiecao.jcvideoplayer_lib.JCVideoPlayerStandard;
 
 public class Guide1Fragment extends BaseCustomFragment {
     @BindView(R.id.video_player)
-    JCVideoPlayerStandard mVideoPlayer;
+    LyVideoPlayer mVideoPlayer;
 
     @Override
     protected int getResId() {
@@ -40,6 +41,7 @@ public class Guide1Fragment extends BaseCustomFragment {
         if (!EventBus.getDefault().isRegistered(this))
             EventBus.getDefault().register(this);
         checkFile(path);
+
     }
 
     private void checkFile(String path) {
@@ -59,7 +61,7 @@ public class Guide1Fragment extends BaseCustomFragment {
     }
 
     private void initVideo(String path) {
-        mVideoPlayer.coverImageView.setVisibility(View.INVISIBLE);
+        mVideoPlayer.setHasStartButton(false);
         mVideoPlayer.setUp(path
                 , JCVideoPlayerStandard.SCREEN_LAYOUT_NORMAL, "");
         mVideoPlayer.looping = true;
@@ -86,7 +88,7 @@ public class Guide1Fragment extends BaseCustomFragment {
 
                 mVideoPlayer.startButton.performClick();
             } else {
-                mVideoPlayer.changeUiToCompleteClear();
+                mVideoPlayer.setUiWitStateAndScreen(JCVideoPlayer.CURRENT_STATE_NORMAL);
             }
         }
     }

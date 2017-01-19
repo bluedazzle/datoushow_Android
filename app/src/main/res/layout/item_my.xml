@@ -1,138 +1,133 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v7.widget.CardView
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="2dp"
-    app:cardCornerRadius="1dp">
+    android:layout_marginBottom="8dp"
+    android:background="@color/colorWhite"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/tv_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="12dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginTop="12dp"
+        android:text="@string/prompt_loading"
+        android:textSize="16sp"/>
+
+    <TextView
+        android:id="@+id/tv_author"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginTop="8dp"
+        android:text="@string/prompt_loading"
+        android:textColor="@color/colorGray"
+        android:visibility="gone"/>
+
+    <com.lypeer.zybuluo.ui.custom.RatioLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:ratio="1">
+
+        <com.lypeer.zybuluo.ui.custom.LyVideoPlayer
+            android:id="@+id/video_player"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+    </com.lypeer.zybuluo.ui.custom.RatioLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
-
-        <TextView
-            android:id="@+id/tv_title"
-            android:layout_marginLeft="16dp"
-            android:layout_marginRight="16dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginBottom="8dp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/prompt_loading"
-            android:textSize="16sp"/>
-
-        <TextView
-            android:id="@+id/tv_author"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="16dp"
-            android:layout_marginRight="16dp"
-            android:visibility="gone"
-            android:layout_marginTop="8dp"
-            android:layout_marginBottom="8dp"
-            android:text="@string/prompt_loading"
-            android:textColor="@color/colorGray"/>
-
-        <com.lypeer.zybuluo.ui.custom.RatioLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:ratio="1">
-
-            <fm.jiecao.jcvideoplayer_lib.JCVideoPlayerStandard
-                android:id="@+id/video_player"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"/>
-        </com.lypeer.zybuluo.ui.custom.RatioLayout>
+        >
 
         <LinearLayout
-            android:layout_width="match_parent"
+            android:id="@+id/lly_save"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            >
+            android:layout_weight="1"
+            android:background="?attr/selectableItemBackground"
+            android:clickable="true"
+            android:gravity="center"
+            android:paddingBottom="8dp"
+            android:paddingTop="8dp">
 
-            <LinearLayout
-                android:id="@+id/lly_save"
-                android:layout_width="0dp"
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@drawable/ic_save"/>
+
+            <TextView
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:background="?attr/selectableItemBackground"
-                android:clickable="true"
-                android:gravity="center"
-                android:paddingBottom="8dp"
-                android:paddingTop="8dp">
+                android:layout_margin="4dp"
+                android:text="@string/prompt_save"/>
+        </LinearLayout>
 
-                <ImageView
-                    android:layout_width="24dp"
-                    android:layout_height="24dp"
-                    android:src="@drawable/ic_save"/>
+        <View
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:layout_marginBottom="8dp"
+            android:layout_marginTop="8dp"
+            android:background="@color/colorDivider"/>
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_margin="4dp"
-                    android:layout_height="wrap_content"
-                    android:text="@string/prompt_save"/>
-            </LinearLayout>
+        <LinearLayout
+            android:id="@+id/lly_share"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="?attr/selectableItemBackground"
+            android:clickable="true"
+            android:gravity="center"
+            android:paddingBottom="8dp"
+            android:paddingTop="8dp">
 
-            <View
-                android:layout_width="1dp"
-                android:layout_height="match_parent"
-                android:layout_marginTop="8dp"
-                android:layout_marginBottom="8dp"
-                android:background="@color/colorDivider"/>
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@drawable/ic_share"/>
 
-            <LinearLayout
-                android:id="@+id/lly_share"
-                android:layout_width="0dp"
+            <TextView
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:background="?attr/selectableItemBackground"
-                android:clickable="true"
-                android:gravity="center"
-                android:paddingBottom="8dp"
-                android:paddingTop="8dp">
+                android:layout_margin="4dp"
+                android:text="@string/prompt_share"/>
+        </LinearLayout>
 
-                <ImageView
-                    android:layout_width="24dp"
-                    android:layout_height="24dp"
-                    android:src="@drawable/ic_share"/>
+        <View
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:layout_marginBottom="8dp"
+            android:layout_marginTop="8dp"
+            android:background="@color/colorDivider"/>
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_margin="4dp"
-                    android:layout_height="wrap_content"
-                    android:text="@string/prompt_share"/>
-            </LinearLayout>
+        <LinearLayout
+            android:id="@+id/lly_delete"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="?attr/selectableItemBackground"
+            android:clickable="true"
+            android:gravity="center"
+            android:paddingBottom="8dp"
+            android:paddingTop="8dp">
 
-            <View
-                android:layout_width="1dp"
-                android:layout_height="match_parent"
-                android:layout_marginTop="8dp"
-                android:layout_marginBottom="8dp"
-                android:background="@color/colorDivider"/>
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@drawable/ic_delete"/>
 
-            <LinearLayout
-                android:id="@+id/lly_delete"
-                android:layout_width="0dp"
+            <TextView
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:background="?attr/selectableItemBackground"
-                android:clickable="true"
-                android:gravity="center"
-                android:paddingBottom="8dp"
-                android:paddingTop="8dp">
-
-                <ImageView
-                    android:layout_width="24dp"
-                    android:layout_height="24dp"
-                    android:src="@drawable/ic_delete"/>
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_margin="4dp"
-                    android:layout_height="wrap_content"
-                    android:text="@string/prompt_delete"/>
-            </LinearLayout>
+                android:layout_margin="4dp"
+                android:text="@string/prompt_delete"/>
         </LinearLayout>
     </LinearLayout>
-</android.support.v7.widget.CardView>
+</LinearLayout>

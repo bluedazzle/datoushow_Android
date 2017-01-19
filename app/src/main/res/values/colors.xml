@@ -17,4 +17,5 @@
     <color name="colorWhite">#ffffff</color>
     <color name="colorPink">#ffa4bd</color>
     <color name="colorDark">#000000</color>
+    <color name="colorEmpty">#00ffffff</color>
 </resources>

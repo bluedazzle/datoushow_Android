@@ -3,6 +3,7 @@
               xmlns:app="http://schemas.android.com/apk/res-auto"
               android:layout_width="match_parent"
               android:layout_height="match_parent"
+              android:background="#f6f6f6"
               android:orientation="vertical">
 
     <android.support.design.widget.AppBarLayout
@@ -20,18 +21,18 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:textColor="@color/colorWhite"
                 android:text="@string/title_my_home"
+                android:textColor="@color/colorWhite"
                 android:textSize="16sp"/>
 
             <ImageView
                 android:id="@+id/iv_setting"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
                 android:layout_gravity="right"
                 android:layout_marginRight="16dp"
                 android:background="?attr/selectableItemBackground"
-                android:src="@drawable/ic_settings_white_24dp"/>
+                android:src="@drawable/ic_setting"/>
         </android.support.v7.widget.Toolbar>
     </android.support.design.widget.AppBarLayout>
 
@@ -55,9 +56,9 @@
         <android.support.v7.widget.RecyclerView
             android:id="@+id/swipe_target"
             android:layout_width="match_parent"
-            android:paddingTop="4dp"
             android:layout_height="match_parent"
-            android:clipToPadding="false"/>
+            android:clipToPadding="false"
+            android:paddingTop="4dp"/>
 
         <include
             android:id="@id/swipe_load_more_footer"
