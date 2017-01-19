@@ -22,9 +22,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:text="@string/title_terms"
+                android:text="@string/title_service_terms"
                 android:textColor="@color/colorWhite"
-                android:textSize="16sp"/>
+                android:textSize="18sp"/>
         </android.support.v7.widget.Toolbar>
     </android.support.design.widget.AppBarLayout>
 
