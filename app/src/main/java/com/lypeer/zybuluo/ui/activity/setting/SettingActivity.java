@@ -73,13 +73,6 @@ public class SettingActivity extends BaseCustomActivity {
         startActivity(intent);
     }
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        // TODO: add setContentView(...) invocation
-        ButterKnife.bind(this);
-    }
-
     @OnClick(R.id.rl_use_guide)
     public void onUseGuideClick() {
         Intent intent = new Intent(this, UseGuideActivity.class);

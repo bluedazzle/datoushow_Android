@@ -41,7 +41,7 @@ public class FileUtil {
             return false;
         }
 
-        FileInputStream inputStream = null;
+        FileInputStream inputStream;
         try {
             File originFile = new File(path);
             inputStream = new FileInputStream(originFile);
@@ -90,7 +90,7 @@ public class FileUtil {
     public static boolean copy() throws IOException {
         AssetManager manager = App.getAppContext().getAssets();
 
-        List<String> srcFiles = new ArrayList<String>();
+        List<String> srcFiles = new ArrayList<>();
 
         //读取assets/$(subDirectory)目录下的assets.lst文件，得到需要copy的文件列表
         List<String> assets = getAssetsList(manager);

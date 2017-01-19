@@ -12,16 +12,13 @@ import android.widget.RelativeLayout;
 
 import com.lypeer.zybuluo.App;
 import com.lypeer.zybuluo.R;
-import com.lypeer.zybuluo.model.bean.CreateShareLinkResponse;
 import com.lypeer.zybuluo.ui.base.BaseCustomActivity;
 import com.lypeer.zybuluo.utils.Constants;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
 import butterknife.OnClick;
 import cn.sharesdk.framework.Platform;
 import cn.sharesdk.framework.ShareSDK;
-import cn.sharesdk.sina.weibo.SinaWeibo;
 import cn.sharesdk.tencent.qq.QQ;
 import cn.sharesdk.wechat.friends.Wechat;
 import cn.sharesdk.wechat.moments.WechatMoments;

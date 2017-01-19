@@ -5,12 +5,12 @@ package com.lypeer.zybuluo.mixture.core;
  */
 
 public class HeadInfo {
-    public int frame;
-    public double x;
-    public double y;
-    public double rotation;
-    public double size;
-    public double time;
+    public final int frame;
+    public final double x;
+    public final double y;
+    public final double rotation;
+    public final double size;
+    public final double time;
 
     public HeadInfo(int frame, double x, double y, double rotation, double size, double time) {
         this.frame = frame;

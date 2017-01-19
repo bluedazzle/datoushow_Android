@@ -27,7 +27,7 @@ import com.mob.tools.utils.UIHandler;
 
 /** 好友列表的适配器 */
 public class FriendAdapter extends PullToRequestListAdapter implements PlatformActionListener {
-	private FriendListPage activity;
+	private final FriendListPage activity;
 	private boolean hasNext;
 	private Platform platform;
 	/** 请求好友列表时，每页15个 */
@@ -35,9 +35,9 @@ public class FriendAdapter extends PullToRequestListAdapter implements PlatformA
 	/** 当前的好友列表是第几页 */
 	private int curPage;
 	/** 好友列表数据 */
-	private ArrayList<Following> follows;
+	private final ArrayList<Following> follows;
 	/** 判断当前的好友列表数据与请求的新数据是否有重复 */
-	private HashMap<String, Boolean> map;
+	private final HashMap<String, Boolean> map;
 	/** 好友列表的头部View */
 	private PRTHeader llHeader;
 	/** 根据设计，按照比例来布局，以此来适配所有手机 */
@@ -49,8 +49,8 @@ public class FriendAdapter extends PullToRequestListAdapter implements PlatformA
 
 		curPage = -1;
 		hasNext = true;
-		map = new HashMap<String, Boolean>();
-		follows = new ArrayList<Following>();
+		map = new HashMap<>();
+		follows = new ArrayList<>();
 
 		getListView().setDivider(new ColorDrawable(0xffeaeaea));
 	}
@@ -112,7 +112,7 @@ public class FriendAdapter extends PullToRequestListAdapter implements PlatformA
 		}
 
 		boolean hasNext = false;
-		ArrayList<Following> data = new ArrayList<Following>();
+		ArrayList<Following> data = new ArrayList<>();
 		if ("SinaWeibo".equals(platform)) {
 			// users[id, name, description]
 			@SuppressWarnings("unchecked")

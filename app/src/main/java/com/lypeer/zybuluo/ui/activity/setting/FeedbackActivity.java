@@ -15,7 +15,6 @@ import com.lypeer.zybuluo.presenter.setting.FeedbackPresenter;
 import com.lypeer.zybuluo.ui.base.BaseActivity;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 /**

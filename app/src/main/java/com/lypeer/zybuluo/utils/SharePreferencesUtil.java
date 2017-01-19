@@ -12,7 +12,7 @@ import com.lypeer.zybuluo.App;
 public class SharePreferencesUtil {
 
     private static SharedPreferences sSharedPreferences = null;
-    private static String KEY_IS_FIRST_LAUNCH = "isFirstLaunch";
+    private static final String KEY_IS_FIRST_LAUNCH = "isFirstLaunch";
 
     public static void init() {
         if (sSharedPreferences == null) {

@@ -17,9 +17,9 @@ public class GoogleCircleHookLoadMoreFooterView extends FrameLayout implements S
 
     private GoogleCircleProgressView progressView;
 
-    private int mTriggerOffset;
+    private final int mTriggerOffset;
 
-    private int mFinalOffset;
+    private final int mFinalOffset;
 
     public GoogleCircleHookLoadMoreFooterView(Context context) {
         this(context, null);

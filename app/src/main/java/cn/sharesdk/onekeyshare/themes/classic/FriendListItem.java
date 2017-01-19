@@ -29,9 +29,9 @@ public class FriendListItem extends LinearLayout {
 	private static final int DESIGN_ITEM_HEIGHT = 96;
 	private static final int DESIGN_ITEM_PADDING = 20;
 
-	private ImageView ivCheck;
-	private AsyncImageView aivIcon;
-	private TextView tvName;
+	private final ImageView ivCheck;
+	private final AsyncImageView aivIcon;
+	private final TextView tvName;
 	/** 好友列表中，被选中的checkbox图标 */
 	private Bitmap bmChd;
 	/** 好友列表中，没选中的checkbox图标 */

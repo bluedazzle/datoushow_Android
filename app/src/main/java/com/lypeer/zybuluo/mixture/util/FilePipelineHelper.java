@@ -53,7 +53,7 @@ public class FilePipelineHelper {
     }
 
     public static int bytes2int(byte[] b) {
-        int temp = 0;
+        int temp;
         int res = 0;
         for (int i=0;i<4;i++) {
             res <<= 8;

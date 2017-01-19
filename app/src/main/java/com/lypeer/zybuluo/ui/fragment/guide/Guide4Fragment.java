@@ -122,14 +122,6 @@ public class Guide4Fragment extends BaseCustomFragment {
         JCVideoPlayer.releaseAllVideos();
     }
 
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        // TODO: inflate a fragment view
-        View rootView = super.onCreateView(inflater, container, savedInstanceState);
-        ButterKnife.bind(this, rootView);
-        return rootView;
-    }
-
     @OnClick(R.id.btn_enter)
     public void onClick() {
         Intent intent = new Intent(getActivity() , MainActivity.class);

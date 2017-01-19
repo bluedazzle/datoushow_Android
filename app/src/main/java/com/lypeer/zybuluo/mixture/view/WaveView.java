@@ -15,7 +15,6 @@ import android.view.View;
 import com.lypeer.zybuluo.mixture.util.MediaEditorUtil;
 
 import java.io.IOException;
-import java.lang.annotation.Target;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.ShortBuffer;
@@ -28,15 +27,15 @@ import java.util.ArrayList;
 public class WaveView extends View {
     public final static int WAVE_COUNT = 120;
 
-    private short[] mWave = new short[WAVE_COUNT];
+    private final short[] mWave = new short[WAVE_COUNT];
 
-    private Paint mPaint;
+    private final Paint mPaint;
 
     private int mPosition = 0;
 
-    private int mPlayedColor = 0xFFFF0F50;
+    private final int mPlayedColor = 0xFFFF0F50;
 
-    private int mNotPlayedColor = 0xFF5c5c5c;
+    private final int mNotPlayedColor = 0xFF5c5c5c;
 
     public WaveView(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -45,7 +44,7 @@ public class WaveView extends View {
     }
 
     public long loadWaveFromFile(String videoPath) {
-        long duration = 0;
+        long duration;
         MediaExtractor audioExtractor = null;
         MediaCodec audioDecoder = null;
         try {

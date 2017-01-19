@@ -1,21 +1,17 @@
 package com.lypeer.zybuluo.ui.activity.welcome;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.widget.ImageView;
 
-import com.lypeer.zybuluo.App;
 import com.lypeer.zybuluo.R;
 import com.lypeer.zybuluo.ui.activity.MainActivity;
 import com.lypeer.zybuluo.ui.activity.setting.UseGuideActivity;
 import com.lypeer.zybuluo.ui.base.BaseCustomActivity;
 import com.lypeer.zybuluo.utils.SharePreferencesUtil;
-import com.squareup.picasso.Picasso;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
 
 /**
  * Created by lypeer on 2017/1/18.

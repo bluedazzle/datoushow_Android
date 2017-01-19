@@ -37,7 +37,7 @@ public class MediaEditor {
     private static final String TAG = MediaEditor.class.getSimpleName();
     private static final boolean VERBOSE = false;
 
-    private Context mContext;
+    private final Context mContext;
 
     private String mInputVideoPath = null;
     private String mOutputVideoPath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).toString() + "/edit.mp4";
@@ -46,16 +46,16 @@ public class MediaEditor {
     private float mScale = 1;
 
     /////////////////// parameters for the video encoder /////////////////////////////
-    private String mVideoMimeType = "video/avc";      // H.264 Advanced Video Coding
+    private final String mVideoMimeType = "video/avc";      // H.264 Advanced Video Coding
     private int mVideoBitRate = 2000000;              // 2Mbps
-    private int mVideoFrameRate = 25;                 // 15 frame per second
-    private int mVideoIFrame = 10;                    // 10 seconds between I-frames
-    private int mVideoColorFormat = MediaCodecInfo.CodecCapabilities.COLOR_FormatSurface;
+    private final int mVideoFrameRate = 25;                 // 15 frame per second
+    private final int mVideoIFrame = 10;                    // 10 seconds between I-frames
+    private final int mVideoColorFormat = MediaCodecInfo.CodecCapabilities.COLOR_FormatSurface;
 
     //////////////////// parameters for the audio encoder ////////////////////////////
-    private String mAudioMimeType = "audio/mp4a-latm"; // Advanced Audio Coding
+    private final String mAudioMimeType = "audio/mp4a-latm"; // Advanced Audio Coding
     private int mAudioChannelCount = 2;                // Must match the input stream.
-    private int mAudioBitRate = 128 * 1024;            //
+    private final int mAudioBitRate = 128 * 1024;            //
     private int mAudioProfile = MediaCodecInfo.CodecProfileLevel.AACObjectHE;
     private int mAudioSampleRate = 44100;              // Must match the input stream.
 
@@ -161,7 +161,7 @@ public class MediaEditor {
 
         // Create a MediaCodec for the desired codec, then configure it as an encoder with
         // our desired properties. Request a Surface to use for input.
-        AtomicReference<Surface> inputSurfaceReference = new AtomicReference<Surface>();
+        AtomicReference<Surface> inputSurfaceReference = new AtomicReference<>();
         mVideoEncoder = MediaEditorUtil.createVideoEncoder(videoCodecInfo, outputVideoFormat, inputSurfaceReference);
         mVideoEncoderinputSurface = new InputSurface(inputSurfaceReference.get());
         mVideoEncoderinputSurface.makeCurrent();

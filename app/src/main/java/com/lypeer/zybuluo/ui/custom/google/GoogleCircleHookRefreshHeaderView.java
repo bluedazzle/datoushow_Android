@@ -18,9 +18,9 @@ import com.lypeer.zybuluo.R;
 public class GoogleCircleHookRefreshHeaderView  extends FrameLayout implements SwipeTrigger, SwipeRefreshTrigger {
     private GoogleCircleProgressView progressView;
 
-    private int mTriggerOffset;
+    private final int mTriggerOffset;
 
-    private int mFinalOffset;
+    private final int mFinalOffset;
 
     public GoogleCircleHookRefreshHeaderView(Context context) {
         this(context, null);

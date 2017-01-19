@@ -43,7 +43,7 @@ import retrofit2.Response;
 
 public class MyModel extends BaseModel<MyPresenter> {
 
-    private MyModelLocal mModelLocal;
+    private final MyModelLocal mModelLocal;
 
     public MyModel(MyPresenter myPresenter) {
         super(myPresenter);

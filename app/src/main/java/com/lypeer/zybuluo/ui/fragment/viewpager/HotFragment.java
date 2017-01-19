@@ -16,7 +16,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 
@@ -36,7 +35,6 @@ import com.lypeer.zybuluo.presenter.viewpager.HotPresenter;
 import com.lypeer.zybuluo.ui.adapter.HotAdapter;
 import com.lypeer.zybuluo.ui.adapter.viewholder.HotBannerVH;
 import com.lypeer.zybuluo.ui.base.BaseBusFragment;
-import com.lypeer.zybuluo.ui.base.BaseFragment;
 import com.lypeer.zybuluo.ui.custom.google.GoogleCircleProgressView;
 import com.lypeer.zybuluo.utils.ApiSignUtil;
 import com.lypeer.zybuluo.utils.Constants;
@@ -44,17 +42,13 @@ import com.lypeer.zybuluo.utils.Constants;
 import org.greenrobot.eventbus.Subscribe;
 
 import java.util.List;
-import java.util.Objects;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
 import cn.sharesdk.framework.Platform;
 import cn.sharesdk.framework.ShareSDK;
 import cn.sharesdk.tencent.qq.QQ;
 import cn.sharesdk.wechat.friends.Wechat;
 import cn.sharesdk.wechat.moments.WechatMoments;
-import okhttp3.HttpUrl;
-import okhttp3.Request;
 
 /**
  * Created by lypeer on 2017/1/4.

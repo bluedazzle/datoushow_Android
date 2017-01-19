@@ -5,7 +5,6 @@ import com.lypeer.zybuluo.R;
 import com.lypeer.zybuluo.impl.ApiService;
 import com.lypeer.zybuluo.model.base.BaseModel;
 import com.lypeer.zybuluo.model.bean.VideoResponse;
-import com.lypeer.zybuluo.presenter.viewpager.MvPresenter;
 import com.lypeer.zybuluo.presenter.viewpager.SpringFestivalPresenter;
 import com.lypeer.zybuluo.utils.Constants;
 import com.lypeer.zybuluo.utils.RetrofitClient;

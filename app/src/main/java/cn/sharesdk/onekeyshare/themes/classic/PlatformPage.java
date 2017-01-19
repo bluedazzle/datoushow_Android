@@ -37,7 +37,7 @@ import com.mob.tools.utils.ResHelper;
 
 /** 九宫格的抽象类 */
 public abstract class PlatformPage extends OnekeySharePage {
-	private ClassicTheme impl;
+	private final ClassicTheme impl;
 	/** 点击九格宫，展示编辑界面，要执行的子线程 */
 	private Runnable beforeFinish;
 	/** 九宫格显示时的动画 */
@@ -119,7 +119,7 @@ public abstract class PlatformPage extends OnekeySharePage {
 	protected abstract PlatformPageAdapter newAdapter(ArrayList<Object> cells);
 
 	protected ArrayList<Object> collectCells() {
-		ArrayList<Object> cells = new ArrayList<Object>();
+		ArrayList<Object> cells = new ArrayList<>();
 
 		Platform[] platforms = ShareSDK.getPlatformList();
 		if (platforms == null) {
@@ -127,7 +127,7 @@ public abstract class PlatformPage extends OnekeySharePage {
 		}
 		HashMap<String, String> hides = getHiddenPlatforms();
 		if (hides == null) {
-			hides = new HashMap<String, String>();
+			hides = new HashMap<>();
 		}
 		for (Platform p : platforms) {
 			if (!hides.containsKey(p.getName())) {

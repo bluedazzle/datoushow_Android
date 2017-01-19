@@ -1,10 +1,8 @@
 package com.lypeer.zybuluo.presenter.viewpager;
 
 import com.lypeer.zybuluo.model.bean.VideoResponse;
-import com.lypeer.zybuluo.model.remote.viewpager.MvModel;
 import com.lypeer.zybuluo.model.remote.viewpager.SpringFestivalModel;
 import com.lypeer.zybuluo.presenter.base.BasePresenter;
-import com.lypeer.zybuluo.ui.fragment.viewpager.MvFragment;
 import com.lypeer.zybuluo.ui.fragment.viewpager.SpringFestivalFragment;
 
 /**

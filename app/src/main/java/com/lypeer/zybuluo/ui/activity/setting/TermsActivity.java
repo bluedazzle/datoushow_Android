@@ -38,11 +38,4 @@ public class TermsActivity extends BaseCustomActivity {
     protected int getLayoutResId() {
         return R.layout.activity_terms;
     }
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        // TODO: add setContentView(...) invocation
-        ButterKnife.bind(this);
-    }
 }

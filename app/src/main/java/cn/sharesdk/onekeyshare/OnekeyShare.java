@@ -30,10 +30,10 @@ import com.mob.tools.utils.ResHelper;
 * 通过不同的setter设置参数，然后调用{@link #show(Context)}方法启动快捷分享
 */
 public class OnekeyShare {
-	private HashMap<String, Object> params;
+	private final HashMap<String, Object> params;
 
 	public OnekeyShare() {
-		params = new HashMap<String, Object>();
+		params = new HashMap<>();
 		params.put("customers", new ArrayList<CustomerLogo>());
 		params.put("hiddenPlatforms", new HashMap<String, String>());
 	}
@@ -228,7 +228,7 @@ public class OnekeyShare {
 
 	@SuppressWarnings("unchecked")
 	public void show(Context context) {
-		HashMap<String, Object> shareParamsMap = new HashMap<String, Object>();
+		HashMap<String, Object> shareParamsMap = new HashMap<>();
 		shareParamsMap.putAll(params);
 
 		ShareSDK.initSDK(context.getApplicationContext());

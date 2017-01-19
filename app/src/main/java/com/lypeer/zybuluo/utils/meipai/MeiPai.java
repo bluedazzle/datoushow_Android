@@ -1,30 +1,13 @@
 package com.lypeer.zybuluo.utils.meipai;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
-import android.database.Cursor;
 import android.net.Uri;
-import android.provider.MediaStore;
 import android.text.TextUtils;
 
-import com.lypeer.zybuluo.App;
-import com.lypeer.zybuluo.R;
-import com.lypeer.zybuluo.ui.activity.MainActivity;
-import com.lypeer.zybuluo.utils.ActivityController;
 import com.meitu.meipaimv.sdk.modelmsg.MeipaiMessage;
 import com.meitu.meipaimv.sdk.modelmsg.MeipaiSendMessageRequest;
 import com.meitu.meipaimv.sdk.modelmsg.MeipaiVideoObject;
-import com.meitu.meipaimv.sdk.openapi.IMeipaiAPI;
-import com.meitu.meipaimv.sdk.openapi.MeipaiAPIFactory;
-
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.util.List;
-
-import cn.sharesdk.framework.CustomPlatform;
-
-import static android.R.attr.path;
 
 /**
  * Created by lypeer on 2017/1/13.
@@ -32,7 +15,7 @@ import static android.R.attr.path;
 
 public class MeiPai {
 
-    private Activity mActivity;
+    private final Activity mActivity;
 
     public MeiPai(Activity activity) {
         this.mActivity = activity;

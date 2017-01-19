@@ -5,17 +5,12 @@ import android.util.Log;
 import com.lypeer.zybuluo.mixture.core.HeadInfo;
 
 import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
 
 
@@ -25,7 +20,7 @@ import java.util.Map;
 
 public class HeadInfoManager {
     public final static Bitmap defaultBitmap = Bitmap.createBitmap(4, 4, Bitmap.Config.ARGB_8888);
-    private String TAG = HeadInfoManager.class.getSimpleName();
+    private final String TAG = HeadInfoManager.class.getSimpleName();
 
     private Map<Integer, HeadInfo> mTrackInfoMap = null;
 
@@ -77,11 +72,7 @@ public class HeadInfoManager {
         }
         frameRate = root.getJSONObject("body").getJSONObject("video").getInt("fps");
         int id = root.getJSONObject("body").getJSONObject("video").getInt("id");
-        if (id < ROTATION_DIFFERENCE_FRAME) {
-            rotationOnTop = true;
-        } else {
-            rotationOnTop = false;
-        }
+        rotationOnTop = id < ROTATION_DIFFERENCE_FRAME;
         Log.v(TAG, "loadHeadInfoFromHttpUrl " + mTrackInfoMap.size());
     }
 

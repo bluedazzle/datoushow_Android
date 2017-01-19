@@ -17,7 +17,7 @@ public class ActivityController {
     /**
      * List of activities alive
      */
-    public static List<Activity> sActivities = new ArrayList<>();
+    public static final List<Activity> sActivities = new ArrayList<>();
 
     /**
      * add activity to the list.

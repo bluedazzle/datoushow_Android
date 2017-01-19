@@ -17,7 +17,6 @@ import com.lypeer.zybuluo.model.bean.ViewPagerDb;
 import com.lypeer.zybuluo.presenter.main.AddPresenter;
 import com.lypeer.zybuluo.ui.adapter.ViewPagerAdapter;
 import com.lypeer.zybuluo.ui.base.BaseBusFragment;
-import com.lypeer.zybuluo.ui.base.BaseFragment;
 import com.lypeer.zybuluo.utils.DataFormatter;
 
 import org.greenrobot.eventbus.Subscribe;

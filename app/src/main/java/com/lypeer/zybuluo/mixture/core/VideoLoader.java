@@ -19,14 +19,14 @@ import java.net.URL;
  */
 
 public class VideoLoader extends AsyncTask<Void, Integer, Boolean> {
-    private String TAG = VideoLoader.class.getSimpleName();
+    private final String TAG = VideoLoader.class.getSimpleName();
 
     private VideoDownloadCallback mCallback;
 
     String videoUrl = null;
     String videoPath = null;
-    String jsonUrl;
-    HeadInfoManager manager;
+    final String jsonUrl;
+    final HeadInfoManager manager;
 
     private CircleProgressView mProgressBar;
 
@@ -72,7 +72,7 @@ public class VideoLoader extends AsyncTask<Void, Integer, Boolean> {
             output.close();
             input.close();
             conn.disconnect();
-            if (readTotalLength == totalLength) return true; else return false;
+            return readTotalLength == totalLength;
         } catch (Exception e) {
             e.printStackTrace();
             return false;

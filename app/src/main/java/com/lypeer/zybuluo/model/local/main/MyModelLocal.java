@@ -1,7 +1,5 @@
 package com.lypeer.zybuluo.model.local.main;
 
-import android.util.Log;
-
 import com.lypeer.zybuluo.model.bean.BodyBean;
 
 import io.realm.Realm;

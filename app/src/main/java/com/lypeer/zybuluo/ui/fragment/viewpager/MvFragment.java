@@ -7,9 +7,6 @@ import android.support.v4.view.ViewCompat;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
 
 import com.aspsine.swipetoloadlayout.OnLoadMoreListener;
 import com.aspsine.swipetoloadlayout.OnRefreshListener;
@@ -19,9 +16,7 @@ import com.lypeer.zybuluo.impl.OnItemClickListener;
 import com.lypeer.zybuluo.mixture.activity.MainActivity;
 import com.lypeer.zybuluo.mixture.core.MixtureKeys;
 import com.lypeer.zybuluo.model.bean.VideoResponse;
-import com.lypeer.zybuluo.presenter.main.MyPresenter;
 import com.lypeer.zybuluo.presenter.viewpager.MvPresenter;
-import com.lypeer.zybuluo.ui.adapter.HotAdapter;
 import com.lypeer.zybuluo.ui.adapter.MvAdapter;
 import com.lypeer.zybuluo.ui.base.BaseFragment;
 import com.lypeer.zybuluo.ui.custom.google.GoogleCircleProgressView;
@@ -30,7 +25,6 @@ import com.lypeer.zybuluo.utils.ApiSignUtil;
 import java.util.List;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
 
 /**
  * Created by lypeer on 2017/1/4.

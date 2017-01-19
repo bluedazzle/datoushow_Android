@@ -1,18 +1,15 @@
 package com.lypeer.zybuluo.model.remote.share;
 
 import android.text.TextUtils;
-import android.widget.Toast;
 
 import com.lypeer.zybuluo.App;
 import com.lypeer.zybuluo.R;
 import com.lypeer.zybuluo.impl.ApiService;
 import com.lypeer.zybuluo.impl.OnProgressChangedListener;
-import com.lypeer.zybuluo.mixture.activity.MainActivity;
 import com.lypeer.zybuluo.model.base.BaseModel;
 import com.lypeer.zybuluo.model.bean.BodyBean;
 import com.lypeer.zybuluo.model.bean.CreateShareLinkResponse;
 import com.lypeer.zybuluo.model.bean.UploadResponse;
-import com.lypeer.zybuluo.model.bean.VideoResponse;
 import com.lypeer.zybuluo.model.local.share.ShareModelLocal;
 import com.lypeer.zybuluo.presenter.share.SharePresenter;
 import com.lypeer.zybuluo.utils.ApiSignUtil;
@@ -40,7 +37,7 @@ import retrofit2.Response;
 
 public class ShareModel extends BaseModel<SharePresenter> {
 
-    private ShareModelLocal mModelLocal;
+    private final ShareModelLocal mModelLocal;
 
     public ShareModel(SharePresenter sharePresenter) {
         super(sharePresenter);

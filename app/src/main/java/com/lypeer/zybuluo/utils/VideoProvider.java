@@ -1,11 +1,7 @@
 package com.lypeer.zybuluo.utils;
 
 import android.content.Context;
-import android.database.Cursor;
 import android.os.AsyncTask;
-import android.os.Environment;
-import android.os.Handler;
-import android.provider.MediaStore;
 
 import com.lypeer.zybuluo.App;
 import com.lypeer.zybuluo.R;
@@ -20,7 +16,7 @@ import java.util.List;
  */
 
 public class VideoProvider {
-    private Context context;
+    private final Context context;
 
     public VideoProvider(Context context) {
         this.context = context;
