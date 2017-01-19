@@ -14,20 +14,24 @@
 
         <TextView
             android:id="@+id/tv_title"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
+            android:layout_marginTop="8dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/prompt_loading"
-            android:textSize="16sp"
-            android:visibility="gone"/>
+            android:textSize="16sp"/>
 
         <TextView
             android:id="@+id/tv_author"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
             android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp"
             android:text="@string/prompt_loading"
-            android:textColor="@color/colorGray"
-            android:visibility="gone"/>
+            android:textColor="@color/colorGray"/>
 
         <com.lypeer.zybuluo.ui.custom.RatioLayout
             android:layout_width="match_parent"
@@ -57,18 +61,19 @@
                 android:paddingTop="8dp">
 
                 <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/ic_file_download_black_24dp"/>
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:src="@drawable/ic_save"/>
 
                 <TextView
                     android:layout_width="wrap_content"
+                    android:layout_margin="4dp"
                     android:layout_height="wrap_content"
                     android:text="@string/prompt_save"/>
             </LinearLayout>
 
             <View
-                android:layout_width="0.5dp"
+                android:layout_width="1dp"
                 android:layout_height="match_parent"
                 android:layout_marginTop="8dp"
                 android:layout_marginBottom="8dp"
@@ -86,18 +91,19 @@
                 android:paddingTop="8dp">
 
                 <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/ic_share_ff0f50_24dp"/>
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:src="@drawable/ic_share"/>
 
                 <TextView
                     android:layout_width="wrap_content"
+                    android:layout_margin="4dp"
                     android:layout_height="wrap_content"
                     android:text="@string/prompt_share"/>
             </LinearLayout>
 
             <View
-                android:layout_width="0.5dp"
+                android:layout_width="1dp"
                 android:layout_height="match_parent"
                 android:layout_marginTop="8dp"
                 android:layout_marginBottom="8dp"
@@ -115,12 +121,13 @@
                 android:paddingTop="8dp">
 
                 <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/ic_delete_forever_ffof50_24dp"/>
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:src="@drawable/ic_delete"/>
 
                 <TextView
                     android:layout_width="wrap_content"
+                    android:layout_margin="4dp"
                     android:layout_height="wrap_content"
                     android:text="@string/prompt_delete"/>
             </LinearLayout>

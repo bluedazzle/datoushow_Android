@@ -49,7 +49,8 @@ public class MyVH extends BaseViewHolder<Video> {
         mTvTitle.setText(itemValue.getTitle());
         mTvAuthor.setText(itemValue.getArtist());
         mVideoPlayer.setUp(itemValue.getPath()
-                , JCVideoPlayerStandard.SCREEN_LAYOUT_NORMAL, itemValue.getTitle());
+                , JCVideoPlayerStandard.SCREEN_LAYOUT_NORMAL, "");
+        mVideoPlayer.coverImageView.setVisibility(View.GONE);
         if (itemValue.getThumbnail() != null) {
 
             try {
