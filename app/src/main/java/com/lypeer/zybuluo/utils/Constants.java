@@ -54,7 +54,8 @@ public class Constants {
                 TYPE_FILM_TV = 1,
                 TYPE_MV = 2,
                 TYPE_FUNNY = 3,
-                TYPE_VARIETY = 4;
+                TYPE_VARIETY = 4,
+                TYPE_SPRING_FESTIVAL = 5;
     }
 
     public interface StatusCode {
@@ -72,5 +73,21 @@ public class Constants {
                 STATUS_VERIFY_CODE_WRONG = 10;
     }
 
+    public interface GuideFragmentId {
+        int
+                GUIDE_1 = 0,
+                GUIDE_2 = 1,
+                GUIDE_3 = 2,
+                GUIDE_4 = 3;
+    }
 
+    public interface InviteData {
+        String
+                URL = "http://www.datoushow.com/",
+                TITLE = "搞笑短片，竟然可以这么录!",
+                TEXT = "终于有一款能够让我变身热门短片主角，轻松秀演技的App！这么有毒，还有谁没玩吗我不信!",
+                COPY_LINK = "终于有一款能够让我变身热门短片主角，轻松秀演技的App！\n" +
+                        "@大头秀 这么有毒，还有谁没玩吗我不信！\n" +
+                        "http://www.datoushow.com/";
+    }
 }

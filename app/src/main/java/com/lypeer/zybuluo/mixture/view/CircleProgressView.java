@@ -1,143 +1,75 @@
 package com.lypeer.zybuluo.mixture.view;
 
 import android.content.Context;
-import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.Paint;
-import android.graphics.RectF;
 import android.util.AttributeSet;
 import android.view.View;
+import android.widget.LinearLayout;
+import android.widget.ProgressBar;
+import android.widget.TextView;
+
+import com.lypeer.zybuluo.R;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
 
 /**
  * Created by 游小光 on 2016/12/31.
  */
 
-public class CircleProgressView extends View {
+public class CircleProgressView extends LinearLayout {
 
-    private static final String TAG = "CircleProgressBar";
+    @BindView(R.id.tv_progress)
+    TextView mTvProgress;
+    @BindView(R.id.tv_text)
+    TextView mTvText;
+    @BindView(R.id.pb_progress)
+    ProgressBar mPbProgress;
 
-    private int mMaxProgress = 100;
+    private int mProgress = 0;
 
-    private int mProgress = 30;
-
-    private final int mCircleLineStrokeWidth = 8;
-
-    private final int mTxtStrokeWidth = 2;
-
-    // 画圆所在的距形区域
-    private final RectF mRectF;
-
-    private final Paint mPaint;
-
-    private final Context mContext;
-
-    private String mTxtHint1;
-
-    private String mTxtHint2;
+    public CircleProgressView(Context context) {
+        super(context);
+        init(context, null, 0);
+    }
 
     public CircleProgressView(Context context, AttributeSet attrs) {
         super(context, attrs);
-
-        mContext = context;
-        mRectF = new RectF();
-        mPaint = new Paint();
+        init(context, attrs, 0);
     }
 
-    @Override
-    protected void onDraw(Canvas canvas) {
-        super.onDraw(canvas);
-        int width = this.getWidth();
-        int height = this.getHeight();
-
-        if (width != height) {
-            int min = Math.min(width, height);
-            width = min;
-            height = min;
-        }
-
-        // 设置画笔相关属性
-        mPaint.setAntiAlias(true);
-        mPaint.setColor(Color.rgb(0x00, 0x00, 0x00));
-        canvas.drawColor(Color.TRANSPARENT);
-        mPaint.setStrokeWidth(mCircleLineStrokeWidth);
-        mPaint.setStyle(Paint.Style.STROKE);
-        mPaint.setAlpha(50);
-        // 位置
-        mRectF.left = mCircleLineStrokeWidth / 2; // 左上角x
-        mRectF.top = mCircleLineStrokeWidth / 2; // 左上角y
-        mRectF.right = width - mCircleLineStrokeWidth / 2; // 左下角x
-        mRectF.bottom = height - mCircleLineStrokeWidth / 2; // 右下角y
-
-        // 绘制圆圈，进度条背景
-        canvas.drawArc(mRectF, -90, 360, false, mPaint);
-        mPaint.setColor(Color.rgb(0xff, 0xff, 0xff));
-        mPaint.setAlpha(255);
-        canvas.drawArc(mRectF, -90, ((float) mProgress / mMaxProgress) * 360, false, mPaint);
-
-        // 绘制进度文案显示
-        /*mPaint.setStrokeWidth(mTxtStrokeWidth);
-        String text = mProgress + "%";
-        int textHeight = height / 4;
-        mPaint.setTextSize(textHeight);
-        int textWidth = (int) mPaint.measureText(text, 0, text.length());
-        mPaint.setStyle(Paint.Style.FILL);
-        canvas.drawText(text, width / 2 - textWidth / 2, height / 2 + textHeight / 2, mPaint);
-
-        if (!TextUtils.isEmpty(mTxtHint1)) {
-            mPaint.setStrokeWidth(mTxtStrokeWidth);
-            text = mTxtHint1;
-            textHeight = height / 8;
-            mPaint.setTextSize(textHeight);
-            mPaint.setColor(Color.rgb(0x99, 0x99, 0x99));
-            textWidth = (int) mPaint.measureText(text, 0, text.length());
-            mPaint.setStyle(Paint.Style.FILL);
-            canvas.drawText(text, width / 2 - textWidth / 2, height / 4 + textHeight / 2, mPaint);
-        }
-
-        if (!TextUtils.isEmpty(mTxtHint2)) {
-            mPaint.setStrokeWidth(mTxtStrokeWidth);
-            text = mTxtHint2;
-            textHeight = height / 8;
-            mPaint.setTextSize(textHeight);
-            textWidth = (int) mPaint.measureText(text, 0, text.length());
-            mPaint.setStyle(Paint.Style.FILL);
-            canvas.drawText(text, width / 2 - textWidth / 2, 3 * height / 4 + textHeight / 2, mPaint);
-        }
-                */
+    public CircleProgressView(Context context, AttributeSet attrs, int defStyleAttr) {
+        super(context, attrs, defStyleAttr);
+        init(context, attrs, defStyleAttr);
     }
 
-    public int getProgress() { return mProgress; }
-    public int getMaxProgress() {
-        return mMaxProgress;
+    private void init(Context context, AttributeSet attrs, int defStyleAttr) {
+        View view = View.inflate(context, R.layout.view_circle_progress, this);
+        ButterKnife.bind(this, view);
     }
 
-    public void setMaxProgress(int maxProgress) {
-        this.mMaxProgress = maxProgress;
+    public int getProgress() {
+        return mProgress;
+    }
+
+    private long mLastTime = 0;
+
+    public void setText(String text) {
+        mTvText.setVisibility(VISIBLE);
+        mTvText.setText(text);
     }
 
     public void setProgress(int progress) {
-        this.mProgress = progress > mMaxProgress ? mMaxProgress : progress;
-        this.invalidate();
+        mProgress = progress;
+        mTvProgress.setText("当前进度为：" + progress + "%");
     }
 
-    public void setProgressNotInUiThread(int progress) {
-        this.mProgress = progress;
-        this.postInvalidate();
+    public void show() {
+        this.setVisibility(VISIBLE);
+        mTvText.setVisibility(GONE);
     }
 
-    public String getmTxtHint1() {
-        return mTxtHint1;
-    }
-
-    public void setmTxtHint1(String mTxtHint1) {
-        this.mTxtHint1 = mTxtHint1;
-    }
-
-    public String getmTxtHint2() {
-        return mTxtHint2;
-    }
-
-    public void setmTxtHint2(String mTxtHint2) {
-        this.mTxtHint2 = mTxtHint2;
+    public void dismiss() {
+        this.setVisibility(GONE);
+        mTvText.setVisibility(GONE);
     }
 }

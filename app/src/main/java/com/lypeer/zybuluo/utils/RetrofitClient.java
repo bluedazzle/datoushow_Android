@@ -1,7 +1,6 @@
 package com.lypeer.zybuluo.utils;
 
 import android.text.TextUtils;
-import android.util.Log;
 
 import java.io.IOException;
 import java.util.concurrent.locks.Lock;

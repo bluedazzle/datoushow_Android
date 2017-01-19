@@ -19,7 +19,7 @@ import com.mob.tools.FakeActivity;
 
 /** 快捷分享的基类 */
 public class OnekeySharePage extends FakeActivity {
-	private OnekeyShareThemeImpl impl;
+	private final OnekeyShareThemeImpl impl;
 
 	public OnekeySharePage(OnekeyShareThemeImpl impl) {
 		this.impl = impl;

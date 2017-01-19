@@ -1,43 +1,60 @@
 package com.lypeer.zybuluo.ui.fragment.viewpager;
 
+import android.content.ClipboardManager;
+import android.content.Context;
 import android.content.Intent;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.view.ViewCompat;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.PopupWindow;
+import android.widget.TextView;
 
 import com.aspsine.swipetoloadlayout.OnLoadMoreListener;
 import com.aspsine.swipetoloadlayout.OnRefreshListener;
 import com.aspsine.swipetoloadlayout.SwipeToLoadLayout;
+import com.lypeer.zybuluo.App;
 import com.lypeer.zybuluo.R;
+import com.lypeer.zybuluo.event.BannerEvent;
+import com.lypeer.zybuluo.event.EmptyEvent;
 import com.lypeer.zybuluo.impl.OnItemClickListener;
 import com.lypeer.zybuluo.mixture.activity.MainActivity;
 import com.lypeer.zybuluo.mixture.core.MixtureKeys;
+import com.lypeer.zybuluo.model.bean.BannerResponse;
 import com.lypeer.zybuluo.model.bean.VideoResponse;
 import com.lypeer.zybuluo.presenter.viewpager.HotPresenter;
 import com.lypeer.zybuluo.ui.adapter.HotAdapter;
-import com.lypeer.zybuluo.ui.base.BaseFragment;
+import com.lypeer.zybuluo.ui.adapter.viewholder.HotBannerVH;
+import com.lypeer.zybuluo.ui.base.BaseBusFragment;
 import com.lypeer.zybuluo.ui.custom.google.GoogleCircleProgressView;
 import com.lypeer.zybuluo.utils.ApiSignUtil;
 import com.lypeer.zybuluo.utils.Constants;
 
+import org.greenrobot.eventbus.Subscribe;
+
 import java.util.List;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
-import okhttp3.HttpUrl;
-import okhttp3.Request;
+import cn.sharesdk.framework.Platform;
+import cn.sharesdk.framework.ShareSDK;
+import cn.sharesdk.tencent.qq.QQ;
+import cn.sharesdk.wechat.friends.Wechat;
+import cn.sharesdk.wechat.moments.WechatMoments;
 
 /**
  * Created by lypeer on 2017/1/4.
  */
 
-public class HotFragment extends BaseFragment<HotPresenter> implements OnRefreshListener, OnLoadMoreListener {
+public class HotFragment extends BaseBusFragment<HotPresenter> implements OnRefreshListener, OnLoadMoreListener {
     @BindView(R.id.googleProgress)
     GoogleCircleProgressView mGoogleProgress;
     @BindView(R.id.swipe_target)
@@ -47,6 +64,7 @@ public class HotFragment extends BaseFragment<HotPresenter> implements OnRefresh
 
     private HotAdapter mAdapter;
     private int mCurrentPage = 1;
+    private PopupWindow mPopupWindow;
 
     @Override
     protected HotPresenter createPresenter() {
@@ -72,6 +90,9 @@ public class HotFragment extends BaseFragment<HotPresenter> implements OnRefresh
 
     private void initList() {
         mAdapter = new HotAdapter();
+        mAdapter.hasHeader(true);
+        mAdapter.setHeaderVH(new HotBannerVH(getActivity(), mAdapter.getParent()));
+
         mSwipeTarget.setItemAnimator(new DefaultItemAnimator());
         mSwipeTarget.setLayoutManager(new LinearLayoutManager(getActivity()));
         mSwipeTarget.setAdapter(mAdapter);
@@ -110,7 +131,7 @@ public class HotFragment extends BaseFragment<HotPresenter> implements OnRefresh
         Intent intent = new Intent(getActivity(), MainActivity.class);
         intent.putExtra(MixtureKeys.KEY_VIDEO_PATH, target.getUrl());
         intent.putExtra(MixtureKeys.KEY_DATA_PATH, dataUrl);
-        intent.putExtra(MixtureKeys.KEY_VIDEO , target);
+        intent.putExtra(MixtureKeys.KEY_VIDEO, target);
         startActivity(intent);
     }
 
@@ -123,6 +144,7 @@ public class HotFragment extends BaseFragment<HotPresenter> implements OnRefresh
     public void onRefresh() {
         mCurrentPage = 1;
         getPresenter().refreshVideos(mCurrentPage);
+        getPresenter().refreshBanner();
     }
 
     public void refreshVideosSuccess(VideoResponse body) {
@@ -151,5 +173,118 @@ public class HotFragment extends BaseFragment<HotPresenter> implements OnRefresh
     public void loadMoreVideosFail(String errorMessage) {
         mSwipeToLoadLayout.setLoadingMore(false);
         showMessage(errorMessage);
+    }
+
+    public void refreshBannerFail(String errorMessage) {
+        showMessage(errorMessage);
+    }
+
+    public void refreshBannerSuccess(BannerResponse bannerResponse) {
+        mAdapter.setHeaderValue(bannerResponse);
+    }
+
+    @Subscribe
+    @Override
+    public void onEvent(EmptyEvent event) {
+        if (event == null) {
+            return;
+        }
+        if (event instanceof BannerEvent) {
+            BannerEvent bannerEvent = (BannerEvent) event;
+            if (bannerEvent.getNav() == 1) {
+                showPpw();
+            }
+        }
+    }
+
+    private void showPpw() {
+        View view = LayoutInflater.from(getActivity()).inflate(R.layout.ppw_invite_friends, null);
+        initPpwView(view);
+
+        mPopupWindow = new PopupWindow(view,
+                ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT, true);
+        mPopupWindow.setAnimationStyle(R.style.anim_menu_bottombar);
+        mPopupWindow.setBackgroundDrawable(new ColorDrawable(0x00000000));
+        mPopupWindow.showAtLocation(mRootView, Gravity.BOTTOM, 0, 0);
+    }
+
+    private void initPpwView(View view) {
+        ImageView ivLogo = (ImageView) view.findViewById(R.id.iv_logo);
+        ivLogo.bringToFront();
+        ivLogo.requestLayout();
+
+        View.OnClickListener listener = new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                handlerClick(view.getId());
+                mPopupWindow.dismiss();
+                mPopupWindow = null;
+            }
+        };
+        view.findViewById(R.id.lly_wechat_comment).setOnClickListener(listener);
+        view.findViewById(R.id.lly_wechat).setOnClickListener(listener);
+        view.findViewById(R.id.lly_qq).setOnClickListener(listener);
+        view.findViewById(R.id.lly_copy_link).setOnClickListener(listener);
+
+
+        TextView tvCancel = (TextView) view.findViewById(R.id.tv_cancel);
+        tvCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mPopupWindow.dismiss();
+                mPopupWindow = null;
+            }
+        });
+    }
+
+    private void handlerClick(int id) {
+        if (id == R.id.lly_copy_link) {
+            onCopyLinkClick();
+        } else {
+            onInviteClick(id);
+        }
+    }
+
+    private void onInviteClick(int id) {
+        Platform.ShareParams sp = new Platform.ShareParams();
+
+        sp.setUrl(Constants.InviteData.URL);
+        sp.setImageUrl(Constants.InviteData.URL);
+        sp.setTitleUrl(Constants.InviteData.URL);
+        sp.setSiteUrl(Constants.InviteData.URL);
+
+        sp.setSite(App.getAppContext().getString(R.string.app_name));
+        sp.setTitle(Constants.InviteData.TITLE);
+        sp.setText(Constants.InviteData.TEXT);
+
+        String shareType = "";
+        switch (id) {
+            case R.id.lly_wechat:
+                shareType = Wechat.NAME;
+                break;
+            case R.id.lly_wechat_comment:
+                shareType = WechatMoments.NAME;
+                break;
+            case R.id.lly_qq:
+                shareType = QQ.NAME;
+                break;
+        }
+
+        if (TextUtils.isEmpty(shareType)) {
+            showMessage(R.string.error_data_wrong);
+            return;
+        }
+        if (shareType.equals(Wechat.NAME) || shareType.equals(WechatMoments.NAME)) {
+            sp.setShareType(Platform.SHARE_WEBPAGE);
+        }
+
+        Platform platform = ShareSDK.getPlatform(shareType);
+        platform.share(sp);
+    }
+
+    public void onCopyLinkClick() {
+        ClipboardManager cmb = (ClipboardManager) getActivity().getSystemService(Context.CLIPBOARD_SERVICE);
+        cmb.setText(Constants.InviteData.COPY_LINK);
+        showMessage(R.string.prompt_copy_success);
     }
 }

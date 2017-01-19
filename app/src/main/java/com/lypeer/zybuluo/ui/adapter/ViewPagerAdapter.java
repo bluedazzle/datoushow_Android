@@ -13,12 +13,12 @@ public class ViewPagerAdapter extends FragmentPagerAdapter {
     /**
      * 每一个选项页的标题的list
      */
-    private List<String> titleList;
+    private final List<String> titleList;
 
     /**
      * 每一个选项卡的fragment的list
      */
-    private List<Fragment> fragmentList;
+    private final List<Fragment> fragmentList;
 
     public ViewPagerAdapter(FragmentManager fm , List<String> titleList , List<Fragment> fragmentList) {
         super(fm);
@@ -33,7 +33,7 @@ public class ViewPagerAdapter extends FragmentPagerAdapter {
 
     @Override
     public int getCount() {
-        return titleList == null ? 0 : titleList.size();
+        return fragmentList == null ? 0 : fragmentList.size();
     }
 
     @Override

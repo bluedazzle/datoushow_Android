@@ -1,6 +1,7 @@
 package com.lypeer.zybuluo.impl;
 
 
+import com.lypeer.zybuluo.model.bean.BannerResponse;
 import com.lypeer.zybuluo.model.bean.CreateShareLinkResponse;
 import com.lypeer.zybuluo.model.bean.UploadResponse;
 import com.lypeer.zybuluo.model.bean.VideoDetailResponse;
@@ -45,6 +46,10 @@ public interface ApiService {
 
     @GET("upload")
     Call<UploadResponse> upload();
+
+
+    @GET("banners")
+    Call<BannerResponse> getBanner();
 
     @FormUrlEncoded
     @POST("share/")

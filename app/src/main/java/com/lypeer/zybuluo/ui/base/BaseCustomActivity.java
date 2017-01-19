@@ -6,8 +6,10 @@ import android.support.annotation.LayoutRes;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
+import android.view.MotionEvent;
 import android.widget.Toast;
 
+import com.bugtags.library.Bugtags;
 import com.lypeer.zybuluo.R;
 import com.lypeer.zybuluo.utils.ActivityController;
 
@@ -103,5 +105,23 @@ public abstract class BaseCustomActivity extends AppCompatActivity {
     public void setProgressMessage(String message) {
         if (!TextUtils.isEmpty(message))
             mProgressDialog.setMessage(message);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Bugtags.onResume(this);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        Bugtags.onPause(this);
+    }
+
+    @Override
+    public boolean dispatchTouchEvent(MotionEvent ev) {
+        Bugtags.onDispatchTouchEvent(this, ev);
+        return super.dispatchTouchEvent(ev);
     }
 }

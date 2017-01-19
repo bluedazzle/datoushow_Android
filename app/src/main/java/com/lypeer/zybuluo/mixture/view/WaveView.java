@@ -15,7 +15,6 @@ import android.view.View;
 import com.lypeer.zybuluo.mixture.util.MediaEditorUtil;
 
 import java.io.IOException;
-import java.lang.annotation.Target;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.ShortBuffer;
@@ -28,15 +27,15 @@ import java.util.ArrayList;
 public class WaveView extends View {
     public final static int WAVE_COUNT = 120;
 
-    private short[] mWave = new short[WAVE_COUNT];
+    private final short[] mWave = new short[WAVE_COUNT];
 
-    private Paint mPaint;
+    private final Paint mPaint;
 
     private int mPosition = 0;
 
-    private int mPlayedColor = 0xFFFF0F50;
+    private final int mPlayedColor = 0xFFFF0F50;
 
-    private int mNotPlayedColor = 0xFF5c5c5c;
+    private final int mNotPlayedColor = 0xFF5c5c5c;
 
     public WaveView(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -45,7 +44,7 @@ public class WaveView extends View {
     }
 
     public long loadWaveFromFile(String videoPath) {
-        long duration = 0;
+        long duration;
         MediaExtractor audioExtractor = null;
         MediaCodec audioDecoder = null;
         try {
@@ -107,9 +106,9 @@ public class WaveView extends View {
 
             int current = 0;
             for (int i = 0; i < pcms.size(); i++) {
-                for (int j = 0; j < pcms.get(i).length; j ++) {
+                for (int j = 0; j < pcms.get(i).length; j++) {
                     mWave[current * WAVE_COUNT / total] += pcms.get(i)[j];
-                   current++;
+                    current++;
                 }
             }
             Log.v("WaveView", "loadWaveFromFile sample count" + current);
@@ -132,7 +131,8 @@ public class WaveView extends View {
         return 0;
     }
 
-    @Override
+    // 为了最快的实现设计图效果，就直接改了这里的代码了，兄弟别见怪啊。。。
+    /*@Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
         int width = getWidth();
@@ -151,7 +151,31 @@ public class WaveView extends View {
             }
             canvas.drawLine(x, sy, x, ey, mPaint);
         }
+    }*/
+
+    @Override
+    protected void onDraw(Canvas canvas) {
+        super.onDraw(canvas);
+        int width = getWidth();
+        int height = getHeight();
+        mPaint.setStrokeWidth(width / WAVE_COUNT);
+        for (int i = 0; i < WAVE_COUNT; i++) {
+            int x = i * width / WAVE_COUNT;
+            int sy = height / 2 - 5;
+            int ey = height / 2 + 5;
+            if (sy < 0) sy = 0;
+            if (ey > height) ey = height;
+            if (i <= mPosition) {
+                mPaint.setColor(mPlayedColor);
+            } else {
+                mPaint.setColor(mNotPlayedColor);
+            }
+            for (int j = 0; j < 5; j++) {
+                canvas.drawLine(x + j, sy, x + j, ey, mPaint);
+            }
+        }
     }
+
 
     public void setPosition(int position) {
         mPosition = position;

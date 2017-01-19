@@ -35,7 +35,7 @@ public abstract class PlatformPageAdapter extends ViewPagerAdapter implements On
 
 	/** 九格宫内图标排列的二维数组，一维对应平台，二维对应页数 */
 	protected Object[][] cells;
-	private PlatformPage page;
+	private final PlatformPage page;
 	private IndicatorView vInd;
 
 	protected int bottomHeight;

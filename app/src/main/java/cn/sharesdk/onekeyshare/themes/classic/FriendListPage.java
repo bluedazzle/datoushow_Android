@@ -148,14 +148,14 @@ public abstract class FriendListPage extends OnekeySharePage implements OnClickL
 		if (v.equals(tvCancel)) {
 			finish();
 		} else {
-			ArrayList<String> selected = new ArrayList<String>();
+			ArrayList<String> selected = new ArrayList<>();
 			for (int i = 0, size = adapter.getCount(); i < size; i++) {
 				if (adapter.getItem(i).checked) {
 					selected.add(adapter.getItem(i).atName);
 				}
 			}
 
-			HashMap<String, Object> res = new HashMap<String, Object>();
+			HashMap<String, Object> res = new HashMap<>();
 			res.put("selected", selected);
 			res.put("platform", platform);
 			setResult(res);

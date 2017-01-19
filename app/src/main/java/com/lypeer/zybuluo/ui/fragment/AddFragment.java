@@ -11,10 +11,15 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.lypeer.zybuluo.R;
+import com.lypeer.zybuluo.event.BannerEvent;
+import com.lypeer.zybuluo.event.EmptyEvent;
 import com.lypeer.zybuluo.model.bean.ViewPagerDb;
 import com.lypeer.zybuluo.presenter.main.AddPresenter;
 import com.lypeer.zybuluo.ui.adapter.ViewPagerAdapter;
-import com.lypeer.zybuluo.ui.base.BaseFragment;
+import com.lypeer.zybuluo.ui.base.BaseBusFragment;
+import com.lypeer.zybuluo.utils.DataFormatter;
+
+import org.greenrobot.eventbus.Subscribe;
 
 import butterknife.BindView;
 
@@ -22,7 +27,7 @@ import butterknife.BindView;
  * Created by lypeer on 2017/1/4.
  */
 
-public class AddFragment extends BaseFragment<AddPresenter> {
+public class AddFragment extends BaseBusFragment<AddPresenter> {
     @BindView(R.id.tl_main)
     TabLayout mTlMain;
     @BindView(R.id.vp_main)
@@ -71,12 +76,13 @@ public class AddFragment extends BaseFragment<AddPresenter> {
         assert view != null;
         ImageView imageView = (ImageView) view.findViewById(R.id.iv_icon);
         TextView textView = (TextView) view.findViewById(R.id.tv_name);
+        textView.setTextColor(getResources().getColor(R.color.colorWhite));
 
         if (targetStatus == STATUS_NORMAL) {
-            textView.setTextColor(getResources().getColor(R.color.colorGray));
+            textView.setTextSize(DataFormatter.dipToPixels(4));
             imageView.setImageDrawable(getActivity().getResources().getDrawable(ViewPagerDb.getIconsNormal().get(tab.getPosition())));
         } else if (targetStatus == STATUS_SELECTED) {
-            textView.setTextColor(getResources().getColor(R.color.colorRed));
+            textView.setTextSize(DataFormatter.dipToPixels(5));
             imageView.setImageDrawable(getActivity().getResources().getDrawable(ViewPagerDb.getIconsSelected().get(tab.getPosition())));
         }
     }
@@ -101,15 +107,30 @@ public class AddFragment extends BaseFragment<AddPresenter> {
         ImageView imageView = (ImageView) view.findViewById(R.id.iv_icon);
 
         textView.setText(ViewPagerDb.getTitles().get(index));
+        textView.setTextColor(getResources().getColor(R.color.colorWhite));
 
         if (index == 0) {
-            textView.setTextColor(getResources().getColor(R.color.colorRed));
+            textView.setTextSize(DataFormatter.dipToPixels(5));
             imageView.setImageDrawable(getActivity().getResources().getDrawable(ViewPagerDb.getIconsSelected().get(index)));
         } else {
-            textView.setTextColor(getResources().getColor(R.color.colorGray));
+            textView.setTextSize(DataFormatter.dipToPixels(4));
             imageView.setImageDrawable(getActivity().getResources().getDrawable(ViewPagerDb.getIconsNormal().get(index)));
         }
 
         return view;
+    }
+
+    @Subscribe
+    @Override
+    public void onEvent(EmptyEvent event) {
+        if (event == null) {
+            return;
+        }
+        if (event instanceof BannerEvent) {
+            BannerEvent bannerEvent = (BannerEvent) event;
+            if (bannerEvent.getNav() == 0) {
+                mVpMain.setCurrentItem(1);
+            }
+        }
     }
 }

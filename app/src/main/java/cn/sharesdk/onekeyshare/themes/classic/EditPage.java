@@ -41,7 +41,7 @@ import com.mob.tools.utils.DeviceHelper;
 import com.mob.tools.utils.ResHelper;
 
 public class EditPage extends OnekeySharePage implements OnClickListener, TextWatcher, Runnable {
-	private OnekeyShareThemeImpl impl;
+	private final OnekeyShareThemeImpl impl;
 	protected Platform platform;
 	protected ShareParams sp;
 

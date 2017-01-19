@@ -20,7 +20,6 @@ import android.media.MediaPlayer;
 import android.opengl.GLSurfaceView;
 import android.os.Bundle;
 import android.os.CountDownTimer;
-import android.os.Environment;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
@@ -29,7 +28,6 @@ import android.util.Log;
 import android.view.Surface;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.view.animation.AnimationSet;
@@ -57,8 +55,8 @@ import com.lypeer.zybuluo.mixture.view.CircleProgressView;
 import com.lypeer.zybuluo.mixture.view.WaveView;
 import com.lypeer.zybuluo.model.bean.BodyBean;
 import com.lypeer.zybuluo.model.bean.CreateShareLinkResponse;
-import com.lypeer.zybuluo.model.bean.UploadResponse;
 import com.lypeer.zybuluo.model.bean.VideoResponse;
+import com.lypeer.zybuluo.ui.activity.share.ShareActivity;
 import com.lypeer.zybuluo.utils.ApiSignUtil;
 import com.lypeer.zybuluo.utils.Constants;
 import com.lypeer.zybuluo.utils.DeviceUuidFactory;
@@ -112,9 +110,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private Button mRedoButton;
     private Button mSaveButton;
     private RelativeLayout mSaveAndRedoLayout;
-    private TextView mTrainingTextView;
     private TextView mPrepareTextView;
     private ImageView mCloseImageView;
+    private TextView mTitle;
     private WaveView mWaveView;
     private CircleProgressView mProgressBar;
     private RelativeLayout mFrontLayout;
@@ -185,8 +183,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.mixture_layout);
 
-        this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
-
         mGLSurfaceView = (GLSurfaceView) findViewById(R.id.gl_mixture_surface);
         mGLSurfaceView.setEGLContextClientVersion(2);
         mGLSurfaceView.setRenderer(this);
@@ -194,14 +190,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mGLSurfaceView.setRenderMode(GLSurfaceView.RENDERMODE_WHEN_DIRTY);
         mStartButton = (Button) findViewById(R.id.btn_mixture_start);
         mSaveAndRedoLayout = (RelativeLayout) findViewById(R.id.rv_mixture_save_and_redo);
-        mTrainingTextView = (TextView) findViewById(R.id.tv_mixture_training);
         mRedoButton = (Button) findViewById(R.id.btn_mixture_redo);
         mSaveButton = (Button) findViewById(R.id.btn_mixture_save);
         mPrepareTextView = (TextView) findViewById(R.id.tv_mixture_prepare);
         mCloseImageView = (ImageView) findViewById(R.id.iv_mixture_close);
+        mTitle = (TextView) findViewById(R.id.tv_title);
         mWaveView = (WaveView) findViewById(R.id.wv_mixture_wave);
         mProgressBar = (CircleProgressView) findViewById(R.id.lv_mixture_progress);
         mFrontLayout = (RelativeLayout) findViewById(R.id.rl_mixture_front);
+
+        mWaveView.bringToFront();
 
         mStartButton.setOnClickListener(this);
         mRedoButton.setOnClickListener(this);
@@ -330,9 +328,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 mStartButton.setVisibility(View.INVISIBLE);
                 mSaveAndRedoLayout.setVisibility(View.INVISIBLE);
                 mCloseImageView.setVisibility(View.INVISIBLE);
-                mTrainingTextView.setVisibility(View.INVISIBLE);
                 mProgressBar.setProgress(0);
-                mProgressBar.setVisibility(View.VISIBLE);
+                mProgressBar.show();
+                mProgressBar.setText("正在缓冲");
                 mFrontLayout.setVisibility(View.VISIBLE);
                 mFrontLayout.setBackgroundColor(Color.TRANSPARENT);
                 mFrontLayout.setOnClickListener(null);
@@ -438,6 +436,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     mFinalPath = newFilePath;
 
                 FileUtil.saveToGallery(mFinalPath);
+
                 share(mFinalPath, mVideoBean.getId());
                 return;
             } else if (v == mGLSurfaceView) {
@@ -478,7 +477,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     public void share(final String path, final int id) {
-        mMediaPlayer.pause();
+        Intent intent = new Intent(MainActivity.this, ShareActivity.class);
+        intent.putExtra(ShareActivity.SHARE_KEY_PATH, path);
+        intent.putExtra(ShareActivity.SHARE_KEY_ID, id);
+        startActivity(intent);
+
+        /*mMediaPlayer.pause();
         mProgressDialog.show();
         mProgressDialog.setMessage(App.getAppContext().getString(R.string.prompt_saving));
         RetrofitClient.buildService(ApiService.class)
@@ -502,9 +506,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         mProgressDialog.dismiss();
                         Toast.makeText(MainActivity.this, t.getMessage(), Toast.LENGTH_SHORT).show();
                     }
-                });
+                });*/
     }
 
+    /**
+     * v2.0 改版，已弃用，改为在单独页面进行分享
+     */
+    @Deprecated
     private void upload(final String path, String uptoken, final int id) {
         DeviceUuidFactory factory = new DeviceUuidFactory(App.getAppContext());
         String uuid = factory.getDeviceUuid().toString();
@@ -514,7 +522,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         UploadManager uploadManager = new UploadManager(config);
         try {
 
-            uploadManager.put(path,  ApiSignUtil.md5(uuid + time) + ".mp4", uptoken, new UpCompletionHandler() {
+            uploadManager.put(path, ApiSignUtil.md5(uuid + time) + ".mp4", uptoken, new UpCompletionHandler() {
                 @Override
                 public void complete(String key, ResponseInfo info, JSONObject response) {
                     if (info == null) {
@@ -549,6 +557,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
+    /**
+     * v2.0 改版，已弃用，改为在单独页面进行分享
+     */
+    @Deprecated
     private void createLink(final String path, int id, final String url) {
         DeviceUuidFactory factory = new DeviceUuidFactory(App.getAppContext());
         String uuid = factory.getDeviceUuid().toString();
@@ -591,6 +603,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 });
     }
 
+    /**
+     * v2.0 改版，已弃用，改为在单独页面进行分享
+     */
+    @Deprecated
     private void shareSuccess(CreateShareLinkResponse shareLinkResponse, String path) {
         mProgressDialog.dismiss();
         shareLinkResponse.getBody().setPath(path);
@@ -598,6 +614,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         showSharePanel(shareLinkResponse, path);
     }
 
+    /**
+     * v2.0 改版，已弃用，改为在单独页面进行分享
+     */
+    @Deprecated
     public void insert(final BodyBean bodyBean) {
         Realm realm = Realm.getDefaultInstance();
         realm.executeTransactionAsync(new Realm.Transaction() {
@@ -608,6 +628,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         });
     }
 
+    /**
+     * v2.0 改版，已弃用，改为在单独页面进行分享
+     */
+    @Deprecated
     private void showSharePanel(final CreateShareLinkResponse response, final String videoUrl) {
         mMediaPlayer.pause();
         final OnekeyShare oks = new OnekeyShare();
@@ -754,7 +778,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     if (mHeadInfoManager.rotationOnTop) {
                         matrix.postRotate((float) headInfo.rotation, (float) headInfo.x + (float) headInfo.size / 2, (float) headInfo.y);
                     } else {
-                        matrix.postRotate((float) headInfo.rotation, (float) headInfo.x + (float)  headInfo.size / 2, (float) headInfo.y + (float) (headInfo.size * 1.33));
+                        matrix.postRotate((float) headInfo.rotation, (float) headInfo.x + (float) headInfo.size / 2, (float) headInfo.y + (float) (headInfo.size * 1.33));
                     }
                     mFilterBitmap.eraseColor(Color.TRANSPARENT);
                     if (mFirstTimeTraining) {
@@ -799,11 +823,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void gotoStageTraining() {
+        mTitle.setText(R.string.title_practise);
+
         Log.v(TAG, "gotoStageTraining" + mCurrentStage);
         mCurrentStage = MixtureStage.Training;
         mCameraPreviewTime = System.currentTimeMillis();
-        mTrainingTextView.setVisibility(View.VISIBLE);
-        mProgressBar.setVisibility(View.INVISIBLE);
+        mProgressBar.dismiss();
         mPrepareTextView.setVisibility(View.INVISIBLE);
         mCloseImageView.setVisibility(View.VISIBLE);
         mSaveAndRedoLayout.setVisibility(View.INVISIBLE);
@@ -823,6 +848,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void gotoStageRecordPrepare() {
+        mTitle.setText(R.string.title_preparing);
+
         Log.v(TAG, "gotoStageRecordPrepare");
         mPaused = false;
         mMediaPlayer.reset();
@@ -837,7 +864,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
         mCurrentStage = MixtureStage.RecordPrepare;
         //mMediaPlayer.seekTo(HeadInfoManager.getPreparedTime());
-        mTrainingTextView.setVisibility(View.INVISIBLE);
         mStartButton.setText("取消");
         mCloseImageView.setVisibility(View.GONE);
         mStartButton.setBackgroundResource(R.drawable.bt_cancel_bk);
@@ -846,6 +872,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void gotoStageRecordStart() {
+        mTitle.setText(R.string.title_recording);
+
         Log.v(TAG, "gotoStageRecordStart" + mCurrentStage);
         mHeadInfoManager.videoWidth = mVideoWidth;
         mHeadInfoManager.videoHeight = mVideoHeight;
@@ -869,7 +897,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         Log.v(TAG, "gotoStageRecordComplete" + mCurrentStage);
         mCurrentStage = MixtureStage.RecordComplete;
         try {
-            mProgressBar.setVisibility(View.VISIBLE);
+            mProgressBar.show();
+            mProgressBar.setProgress(0);
+            mProgressBar.setText("正在创建预览");
             mFrontLayout.setVisibility(View.VISIBLE);
             mFrontLayout.setBackgroundColor(Color.TRANSPARENT);
             mFrontLayout.setOnClickListener(null);
@@ -881,6 +911,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void gotoStagePreview() {
+        mTitle.setText(R.string.title_preview);
+
         Log.v(TAG, "gotoStagePreview" + mCurrentStage);
         mCurrentStage = MixtureStage.Preview;
         closePipeLine();
@@ -897,7 +929,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mStartButton.setVisibility(View.INVISIBLE);
         mSaveAndRedoLayout.setVisibility(View.VISIBLE);
         mCloseImageView.setVisibility(View.VISIBLE);
-        mProgressBar.setVisibility(View.INVISIBLE);
+        mProgressBar.dismiss();
 
     }
 

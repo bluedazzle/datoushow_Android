@@ -34,12 +34,12 @@ public class VarietyModel extends BaseModel<VarietyPresenter> {
                 .enqueue(new Callback<VideoResponse>() {
                     @Override
                     public void onResponse(Call<VideoResponse> call, Response<VideoResponse> response) {
-                        VideoResponse videoResponse = response.body();
 
-                        if (videoResponse == null) {
+                        if (response == null || response.body() == null) {
                             getPresenter().refreshVideosFail(App.getAppContext().getString(R.string.prompt_no_more));
                             return;
                         }
+                        VideoResponse videoResponse = response.body();
 
                         if (videoResponse.getStatus() == Constants.StatusCode.STATUS_SUCCESS) {
                             getPresenter().refreshVideosSuccess(videoResponse);
@@ -61,12 +61,12 @@ public class VarietyModel extends BaseModel<VarietyPresenter> {
                 .enqueue(new Callback<VideoResponse>() {
                     @Override
                     public void onResponse(Call<VideoResponse> call, Response<VideoResponse> response) {
-                        VideoResponse videoResponse = response.body();
 
-                        if (videoResponse == null) {
-                            getPresenter().loadMoreVideosFail(App.getAppContext().getString(R.string.prompt_no_more));
+                        if (response == null || response.body() == null) {
+                            getPresenter().refreshVideosFail(App.getAppContext().getString(R.string.prompt_no_more));
                             return;
                         }
+                        VideoResponse videoResponse = response.body();
 
                         if (videoResponse.getStatus() == Constants.StatusCode.STATUS_SUCCESS) {
                             getPresenter().loadMoreVideosSuccess(videoResponse);

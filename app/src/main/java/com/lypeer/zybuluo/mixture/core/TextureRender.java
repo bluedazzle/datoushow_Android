@@ -60,9 +60,9 @@ public class TextureRender {
             1.0f, 0.0f,
     };
 
-    protected FloatBuffer mTriangleVertices;
+    protected final FloatBuffer mTriangleVertices;
 
-    protected FloatBuffer mFilterTextureCoordinate;
+    protected final FloatBuffer mFilterTextureCoordinate;
 
     private static final String ALPHA_BLEND_VERTEX_SHADER = "uniform mat4 uMVPMatrix;\n" +
             "uniform mat4 uSTMatrix;\n" +
@@ -180,8 +180,8 @@ public class TextureRender {
             "   gl_FragColor = mix(textureColor1, beauty, beauty.a);\n" +
             " }";
 
-    private float[] mMVPMatrix = new float[16];
-    private float[] mSTMatrix = new float[16];
+    private final float[] mMVPMatrix = new float[16];
+    private final float[] mSTMatrix = new float[16];
 
     private int mProgram;
     private int mTextureID = -12345;
@@ -195,8 +195,8 @@ public class TextureRender {
 
     public int mFilterInputTextureUniform2;
 
-    private String mVertexShader;
-    private String mFragmentShader;
+    private final String mVertexShader;
+    private final String mFragmentShader;
 
     private int mDisFactorLocation;
     private int mSingleStepOffsetLocation;

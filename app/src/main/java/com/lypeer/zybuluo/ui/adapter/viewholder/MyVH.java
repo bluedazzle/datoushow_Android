@@ -1,23 +1,16 @@
 package com.lypeer.zybuluo.ui.adapter.viewholder;
 
 import android.content.Context;
-import android.graphics.Bitmap;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.lypeer.zybuluo.App;
 import com.lypeer.zybuluo.R;
 import com.lypeer.zybuluo.impl.OnItemClickListener;
 import com.lypeer.zybuluo.model.bean.Video;
 import com.lypeer.zybuluo.ui.base.BaseViewHolder;
-import com.squareup.picasso.Picasso;
-
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
 
 import butterknife.BindView;
 import fm.jiecao.jcvideoplayer_lib.JCVideoPlayerStandard;
@@ -49,17 +42,19 @@ public class MyVH extends BaseViewHolder<Video> {
         mTvTitle.setText(itemValue.getTitle());
         mTvAuthor.setText(itemValue.getArtist());
         mVideoPlayer.setUp(itemValue.getPath()
-                , JCVideoPlayerStandard.SCREEN_LAYOUT_NORMAL, itemValue.getTitle());
+                , JCVideoPlayerStandard.SCREEN_LAYOUT_NORMAL, "");
+        mVideoPlayer.coverImageView.setVisibility(View.GONE);
         if (itemValue.getThumbnail() != null) {
-
-            try {
+            mVideoPlayer.thumbImageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
+            mVideoPlayer.thumbImageView.setImageBitmap(itemValue.getThumbnail());
+/*            try {
                 File f = new File(App.getAppContext().getCacheDir(), itemValue.getTitle());
                 f.createNewFile();
 
 
                 Bitmap bitmap = itemValue.getThumbnail();
                 ByteArrayOutputStream bos = new ByteArrayOutputStream();
-                bitmap.compress(Bitmap.CompressFormat.PNG, 0 /*ignored for PNG*/, bos);
+                bitmap.compress(Bitmap.CompressFormat.PNG, 0 *//*ignored for PNG*//*, bos);
                 byte[] bitmapdata = bos.toByteArray();
 
                 FileOutputStream fos = new FileOutputStream(f);
@@ -70,7 +65,7 @@ public class MyVH extends BaseViewHolder<Video> {
                 Picasso.with(App.getAppContext()).load(f).fit().into(mVideoPlayer.thumbImageView);
             } catch (IOException e) {
                 e.printStackTrace();
-            }
+            }*/
         }
 
         View.OnClickListener onClickListener = new View.OnClickListener() {

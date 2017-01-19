@@ -5,7 +5,6 @@ import android.view.ViewGroup;
 
 import com.lypeer.zybuluo.model.bean.VideoResponse;
 import com.lypeer.zybuluo.ui.adapter.viewholder.FunnyVH;
-import com.lypeer.zybuluo.ui.adapter.viewholder.HotVH;
 import com.lypeer.zybuluo.ui.base.BaseAdapter;
 import com.lypeer.zybuluo.ui.base.BaseViewHolder;
 

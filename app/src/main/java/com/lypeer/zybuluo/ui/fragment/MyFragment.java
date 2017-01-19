@@ -3,6 +3,7 @@ package com.lypeer.zybuluo.ui.fragment;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.view.ViewCompat;
@@ -11,8 +12,13 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.PopupWindow;
 
 import com.aspsine.swipetoloadlayout.OnLoadMoreListener;
 import com.aspsine.swipetoloadlayout.OnRefreshListener;
@@ -37,9 +43,13 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.OnClick;
 import cn.sharesdk.framework.Platform;
+import cn.sharesdk.framework.ShareSDK;
 import cn.sharesdk.onekeyshare.OnekeyShare;
 import cn.sharesdk.onekeyshare.ShareContentCustomizeCallback;
 import cn.sharesdk.sina.weibo.SinaWeibo;
+import cn.sharesdk.tencent.qq.QQ;
+import cn.sharesdk.wechat.friends.Wechat;
+import cn.sharesdk.wechat.moments.WechatMoments;
 
 /**
  * Created by lypeer on 2017/1/4.
@@ -59,6 +69,8 @@ public class MyFragment extends BaseFragment<MyPresenter> implements OnRefreshLi
 
     private MyAdapter mAdapter;
     private int mCurrentPage = 1;
+    private String mShareType = "";
+    private PopupWindow mPopupWindow;
 
     @Override
     protected MyPresenter createPresenter() {
@@ -112,7 +124,7 @@ public class MyFragment extends BaseFragment<MyPresenter> implements OnRefreshLi
                         save(itemValue);
                         break;
                     case R.id.lly_share:
-                        share(itemValue);
+                        showPpw(itemValue);
                         break;
                     case R.id.lly_delete:
                         delete(itemValue, position);
@@ -130,6 +142,67 @@ public class MyFragment extends BaseFragment<MyPresenter> implements OnRefreshLi
         } else {
             hideProgressBar();
             showMessage(R.string.error_save_fail);
+        }
+    }
+
+    private void showPpw(Video itemValue) {
+        View view = LayoutInflater.from(getActivity()).inflate(R.layout.ppw_share, null);
+        initPpwView(view, itemValue);
+
+        mPopupWindow = new PopupWindow(view,
+                ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT, true);
+        mPopupWindow.setAnimationStyle(R.style.anim_menu_bottombar);
+        mPopupWindow.setBackgroundDrawable(new ColorDrawable(0x00000000));
+        mPopupWindow.showAtLocation(mRootView, Gravity.BOTTOM, 0, 0);
+    }
+
+    private void initPpwView(View view, final Video video) {
+        View.OnClickListener listener = new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                handlerClick(view.getId(), video);
+                mPopupWindow.dismiss();
+                mPopupWindow = null;
+            }
+        };
+        view.findViewById(R.id.lly_comment).setOnClickListener(listener);
+        view.findViewById(R.id.lly_wechat).setOnClickListener(listener);
+        view.findViewById(R.id.lly_qq).setOnClickListener(listener);
+        view.findViewById(R.id.lly_meipai).setOnClickListener(listener);
+        view.findViewById(R.id.lly_weibo).setOnClickListener(listener);
+
+
+        Button btnCancel = (Button) view.findViewById(R.id.btn_cancel);
+        btnCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mPopupWindow.dismiss();
+                mPopupWindow = null;
+            }
+        });
+    }
+
+    private void handlerClick(int id, Video video) {
+        if (id == R.id.lly_meipai) {
+            MeiPai meiPai = new MeiPai(getActivity());
+            meiPai.share(video.getPath());
+        } else {
+            switch (id) {
+                case R.id.lly_weibo:
+                    mShareType = SinaWeibo.NAME;
+                    break;
+                case R.id.lly_wechat:
+                    mShareType = Wechat.NAME;
+                    break;
+                case R.id.lly_comment:
+                    mShareType = WechatMoments.NAME;
+                    break;
+                case R.id.lly_qq:
+                    mShareType = QQ.NAME;
+                    break;
+            }
+
+            share(video);
         }
     }
 
@@ -204,9 +277,33 @@ public class MyFragment extends BaseFragment<MyPresenter> implements OnRefreshLi
     public void shareSuccess(CreateShareLinkResponse shareLinkResponse, String videoUrl) {
         hideProgressBar();
         Log.e("MyFragment", "share success , response data is - > " + shareLinkResponse.toString());
-        showSharePanel(shareLinkResponse, videoUrl);
+
+        CreateShareLinkResponse.BodyBean bodyBean = shareLinkResponse.getBody();
+        Platform.ShareParams sp = new Platform.ShareParams();
+        sp.setUrl(bodyBean.getUrl());
+        sp.setImageUrl(bodyBean.getThumb_nail());
+        sp.setTitleUrl(bodyBean.getUrl());
+        sp.setSite(App.getAppContext().getString(R.string.app_name));
+        sp.setSiteUrl(bodyBean.getUrl());
+
+        if (mShareType.equals(SinaWeibo.NAME)) {
+            sp.setTitle(bodyBean.getWeibo_title() + "\t\t" + "大头秀－分享-" + shareLinkResponse.getBody().getUrl());
+            sp.setText(bodyBean.getWeibo_title() + "\t\t" + "大头秀－分享-" + shareLinkResponse.getBody().getUrl());
+        } else {
+            sp.setTitle(bodyBean.getWeibo_title());
+            sp.setText(bodyBean.getWeibo_title());
+        }
+
+        if (mShareType.equals(Wechat.NAME) || mShareType.equals(WechatMoments.NAME)) {
+            sp.setShareType(Platform.SHARE_WEBPAGE);
+        }
+
+        Platform platform = ShareSDK.getPlatform(mShareType);
+        platform.share(sp);
     }
 
+    // 应用改版，已经不用这个面板了
+    @Deprecated
     private void showSharePanel(final CreateShareLinkResponse response, final String videoUrl) {
         final OnekeyShare oks = new OnekeyShare();
 
@@ -214,6 +311,9 @@ public class MyFragment extends BaseFragment<MyPresenter> implements OnRefreshLi
         oks.setText(response.getBody().getWeibo_title());
         oks.setImageUrl(response.getBody().getThumb_nail());
         oks.setUrl(response.getBody().getUrl());
+        oks.setTitleUrl(response.getBody().getUrl());
+        oks.setSite(App.getAppContext().getString(R.string.app_name));
+        oks.setSiteUrl(response.getBody().getUrl());
 
         Bitmap enableLogo = BitmapFactory.decodeResource(App.getAppContext().getResources(), R.drawable.ic_meipai);
         String label = "美拍";
@@ -229,8 +329,8 @@ public class MyFragment extends BaseFragment<MyPresenter> implements OnRefreshLi
             @Override
             public void onShare(Platform platform, Platform.ShareParams paramsToShare) {
                 if (platform.getName().equals(SinaWeibo.NAME)) {
-                    oks.setTitle(response.getBody().getWeibo_title() + "\t\t" + "大头秀－分享-" + response.getBody().getUrl());
-                    oks.setText(response.getBody().getWeibo_title() + "\t\t" + "大头秀－分享-" + response.getBody().getUrl());
+                    paramsToShare.setTitle(response.getBody().getWeibo_title() + "\t\t" + "大头秀－分享-" + response.getBody().getUrl());
+                    paramsToShare.setText(response.getBody().getWeibo_title() + "\t\t" + "大头秀－分享-" + response.getBody().getUrl());
                 }
             }
         });

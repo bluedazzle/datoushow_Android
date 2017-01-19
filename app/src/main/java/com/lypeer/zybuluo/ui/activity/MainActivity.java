@@ -1,6 +1,5 @@
 package com.lypeer.zybuluo.ui.activity;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -18,13 +17,16 @@ import com.lypeer.zybuluo.ui.fragment.AddFragment;
 import com.lypeer.zybuluo.ui.fragment.MyFragment;
 import com.lypeer.zybuluo.utils.ActivityController;
 import com.lypeer.zybuluo.utils.Constants;
+import com.lypeer.zybuluo.utils.FileUtil;
+import com.lypeer.zybuluo.utils.SharePreferencesUtil;
+
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
 import butterknife.OnClick;
 import fm.jiecao.jcvideoplayer_lib.JCVideoPlayer;
 
@@ -62,10 +64,16 @@ public class MainActivity extends BaseCustomActivity {
     @Override
     protected void initView(@Nullable Bundle savedInstanceState) {
         ActivityController.finishAllExceptNow(MainActivity.this);
+        SharePreferencesUtil.launched();
         initList();
         initMap();
         mManager = getSupportFragmentManager();
         setCurrentSelection(Constants.FragmentId.ADD);
+        try {
+            FileUtil.copy();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     private void setCurrentSelection(int fragmentId) {
@@ -95,7 +103,7 @@ public class MainActivity extends BaseCustomActivity {
     private void clearSelection() {
         for (int id : mFragmentIdList) {
             mImageViewMap.get(id).setImageResource(mImgResNormalMap.get(id));
-            mTextViewMap.get(id).setTextColor(getResources().getColor(R.color.colorGray));
+            mTextViewMap.get(id).setTextColor(getResources().getColor(R.color.colorPink));
         }
     }
 

@@ -1,9 +1,7 @@
 package com.lypeer.zybuluo.model.bean;
 
 import android.graphics.Bitmap;
-import android.media.ThumbnailUtils;
-import android.provider.MediaStore;
-import android.text.TextUtils;
+import android.media.MediaMetadataRetriever;
 
 /**
  * Created by lypeer on 2017/1/9.
@@ -14,7 +12,7 @@ public class Video {
     private int id;
     private String title;
     private String artist;
-    private String path;
+    private final String path;
     private Bitmap thumbnail;
 
     public Video(int id, String title, String artist, String path) {
@@ -27,11 +25,35 @@ public class Video {
     }
 
     public void setThumbnail() {
+        Bitmap bitmap;
+        MediaMetadataRetriever retriever = new MediaMetadataRetriever();
         try {
-            this.thumbnail = ThumbnailUtils.createVideoThumbnail(getPath(), MediaStore.Images.Thumbnails.MICRO_KIND);
+            retriever.setDataSource(getPath());
+            bitmap = retriever.getFrameAtTime(-1);
+
+            if (bitmap == null)
+                return;
+
+            int width = bitmap.getWidth();
+            int height = bitmap.getHeight();
+            int max = Math.max(width, height);
+            if (max > 720) {
+                float scale = 720f / max;
+                int w = Math.round(scale * width);
+                int h = Math.round(scale * height);
+                bitmap = Bitmap.createScaledBitmap(bitmap, w, h, true);
+            }
+
+            thumbnail = bitmap;
         } catch (Exception e) {
             e.printStackTrace();
-            this.thumbnail = null;
+            thumbnail = null;
+        } finally {
+            try {
+                retriever.release();
+            } catch (RuntimeException ex) {
+                // Ignore failures while cleaning up.
+            }
         }
     }
 

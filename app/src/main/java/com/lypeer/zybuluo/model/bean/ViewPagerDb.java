@@ -8,6 +8,7 @@ import com.lypeer.zybuluo.ui.fragment.viewpager.FunnyFragment;
 import com.lypeer.zybuluo.ui.fragment.viewpager.HotFragment;
 import com.lypeer.zybuluo.ui.fragment.viewpager.MvFragment;
 import com.lypeer.zybuluo.ui.fragment.viewpager.SearchFragment;
+import com.lypeer.zybuluo.ui.fragment.viewpager.SpringFestivalFragment;
 import com.lypeer.zybuluo.ui.fragment.viewpager.VarietyFragment;
 
 import java.util.ArrayList;
@@ -28,10 +29,11 @@ public class ViewPagerDb {
         }
 
         titles.add("热门");
+        titles.add("春节");
+        titles.add("搞笑");
         titles.add("MV");
         titles.add("影视");
         titles.add("综艺");
-        titles.add("搞笑");
         titles.add("搜索");
         return titles;
     }
@@ -42,10 +44,11 @@ public class ViewPagerDb {
         }
 
         iconsNormal.add(R.drawable.ic_hot_normal);
+        iconsNormal.add(R.drawable.ic_spring_festival_normal);
+        iconsNormal.add(R.drawable.ic_funny_normal);
         iconsNormal.add(R.drawable.ic_mv_normal);
         iconsNormal.add(R.drawable.ic_film_tv_normal);
         iconsNormal.add(R.drawable.ic_variety_normal);
-        iconsNormal.add(R.drawable.ic_funny_normal);
         iconsNormal.add(R.drawable.ic_search_normal);
         return iconsNormal;
     }
@@ -57,10 +60,11 @@ public class ViewPagerDb {
 
         ArrayList<Integer> iconsSelected = new ArrayList<>();
         iconsSelected.add(R.drawable.ic_hot_selected);
+        iconsSelected.add(R.drawable.ic_spring_festival_selected);
+        iconsSelected.add(R.drawable.ic_funnny_selected);
         iconsSelected.add(R.drawable.ic_mv_selected);
         iconsSelected.add(R.drawable.ic_film_tv_selected);
         iconsSelected.add(R.drawable.ic_variety_selected);
-        iconsSelected.add(R.drawable.ic_funnny_selected);
         iconsSelected.add(R.drawable.ic_search_normal);
         return iconsSelected;
     }
@@ -68,10 +72,11 @@ public class ViewPagerDb {
     public static ArrayList<Fragment> getFragments() {
         ArrayList<Fragment> fragments = new ArrayList<>();
         fragments.add(new HotFragment());
+        fragments.add(new SpringFestivalFragment());
+        fragments.add(new FunnyFragment());
         fragments.add(new MvFragment());
         fragments.add(new FilmTvFragment());
         fragments.add(new VarietyFragment());
-        fragments.add(new FunnyFragment());
         fragments.add(new SearchFragment());
         return fragments;
     }

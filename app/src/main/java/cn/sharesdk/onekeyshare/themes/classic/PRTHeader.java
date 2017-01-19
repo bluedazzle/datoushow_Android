@@ -25,9 +25,9 @@ public class PRTHeader extends LinearLayout {
 	private static final int DESIGN_AVATAR_WIDTH = 64;
 	private static final int DESIGN_AVATAR_PADDING = 24;
 
-	private TextView tvHeader;
-	private RotateImageView ivArrow;
-	private ProgressBar pbRefreshing;
+	private final TextView tvHeader;
+	private final RotateImageView ivArrow;
+	private final ProgressBar pbRefreshing;
 
 	public PRTHeader(Context context) {
 		super(context);
