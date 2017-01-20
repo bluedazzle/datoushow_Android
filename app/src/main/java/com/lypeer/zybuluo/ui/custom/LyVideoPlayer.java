@@ -115,7 +115,7 @@ public class LyVideoPlayer extends JCVideoPlayer {
 
     @Override
     public void onClick(View v) {
-        if (v.getId() == R.id.thumb) {
+        if (v.getId() == R.id.thumb || v.getId() == R.id.surface_container) {
             startButton.performClick();
             return;
         }

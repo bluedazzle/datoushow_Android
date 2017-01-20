@@ -249,7 +249,7 @@ public class HotFragment extends BaseBusFragment<HotPresenter> implements OnRefr
         Platform.ShareParams sp = new Platform.ShareParams();
 
         sp.setUrl(Constants.InviteData.URL);
-        sp.setImageUrl(Constants.InviteData.URL);
+        sp.setImageUrl(Constants.InviteData.LOGO_URL);
         sp.setTitleUrl(Constants.InviteData.URL);
         sp.setSiteUrl(Constants.InviteData.URL);
 

@@ -1,6 +1,7 @@
 package com.lypeer.zybuluo.mixture.view;
 
 import android.content.Context;
+import android.content.res.TypedArray;
 import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.view.View;
@@ -23,8 +24,8 @@ public class CircleProgressView extends LinearLayout {
     TextView mTvProgress;
     @BindView(R.id.tv_text)
     TextView mTvText;
-    @BindView(R.id.cp_progress)
-    RoundProgressBar mCpProgress;
+    @BindView(R.id.rp_progress)
+    RoundProgressBar mRpProgress;
     @BindView(R.id.lly_container)
     LinearLayout mLlyContainer;
 
@@ -73,10 +74,10 @@ public class CircleProgressView extends LinearLayout {
 
         if (!TextUtils.isEmpty(progressText)) {
             mProgress = progress;
-            mCpProgress.setProgress(progress);
+            mRpProgress.setProgress(progress);
             mTvProgress.setText(progressText);
         } else {
-            mCpProgress.setProgress(progress);
+            mRpProgress.setProgress(progress);
             mTvProgress.setVisibility(GONE);
         }
     }
@@ -97,9 +98,17 @@ public class CircleProgressView extends LinearLayout {
         mLlyContainerBg = App.getRes().getColor(color);
     }
 
-    public void setTextColor(int color){
+    public void setTextColor(int color) {
         mTvProgress.setTextColor(App.getRes().getColor(color));
         mTvText.setTextColor(App.getRes().getColor(color));
+    }
+
+    public void setRoundColor(int color){
+        mRpProgress.setRoundColor(color);
+    }
+
+    public void setRoundProgressColor(int roundProgressColor) {
+        mRpProgress.setRoundProgressColor(roundProgressColor);
     }
 
     public int getMax() {
@@ -108,6 +117,6 @@ public class CircleProgressView extends LinearLayout {
 
     public void setMax(int max) {
         mMax = max;
-        mCpProgress.setMax(max);
+        mRpProgress.setMax(max);
     }
 }

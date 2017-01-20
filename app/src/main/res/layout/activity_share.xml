@@ -32,6 +32,13 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
+        <com.lypeer.zybuluo.mixture.view.CircleProgressView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/cp_progress"
+            android:visibility="invisible"
+            android:layout_centerInParent="true"/>
+
         <ScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent">
@@ -243,7 +250,6 @@
                         android:id="@+id/lly_weibo"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
-                        android:layout_margin="1dp"
                         android:layout_weight="1"
                         android:background="@android:color/background_light"
                         android:clickable="true"

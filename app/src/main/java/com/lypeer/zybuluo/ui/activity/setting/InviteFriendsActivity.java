@@ -68,7 +68,7 @@ public class InviteFriendsActivity extends BaseCustomActivity {
         Platform.ShareParams sp = new Platform.ShareParams();
 
         sp.setUrl(Constants.InviteData.URL);
-        sp.setImageUrl(Constants.InviteData.URL);
+        sp.setImageUrl(Constants.InviteData.LOGO_URL);
         sp.setTitleUrl(Constants.InviteData.URL);
         sp.setSiteUrl(Constants.InviteData.URL);
 

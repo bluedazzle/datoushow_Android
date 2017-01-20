@@ -16,20 +16,20 @@
         android:orientation="vertical">
 
         <com.lypeer.zybuluo.mixture.view.RoundProgressBar
-            android:layout_width="48dp"
-            android:id="@+id/cp_progress"
-            android:layout_height="48dp"/>
+            android:layout_width="42dp"
+            android:id="@+id/rp_progress"
+            android:layout_height="42dp"/>
 
         <TextView
             android:layout_width="wrap_content"
             android:id="@+id/tv_progress"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="12dp"
             android:layout_height="wrap_content"
             android:text="@string/prompt_progress"/>
 
         <TextView
             android:layout_width="wrap_content"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="12dp"
             android:id="@+id/tv_text"
             android:layout_height="wrap_content"/>
     </LinearLayout>

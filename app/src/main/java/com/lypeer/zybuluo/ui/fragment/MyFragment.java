@@ -27,6 +27,7 @@ import com.lypeer.zybuluo.App;
 import com.lypeer.zybuluo.R;
 import com.lypeer.zybuluo.impl.OnItemClickListener;
 import com.lypeer.zybuluo.impl.OnProgressChangedListener;
+import com.lypeer.zybuluo.mixture.view.CircleProgressView;
 import com.lypeer.zybuluo.model.bean.CreateShareLinkResponse;
 import com.lypeer.zybuluo.model.bean.Video;
 import com.lypeer.zybuluo.presenter.main.MyPresenter;
@@ -41,6 +42,7 @@ import java.util.Collections;
 import java.util.List;
 
 import butterknife.BindView;
+import butterknife.ButterKnife;
 import butterknife.OnClick;
 import cn.sharesdk.framework.Platform;
 import cn.sharesdk.framework.ShareSDK;
@@ -66,6 +68,8 @@ public class MyFragment extends BaseFragment<MyPresenter> implements OnRefreshLi
     RecyclerView mSwipeTarget;
     @BindView(R.id.swipeToLoadLayout)
     SwipeToLoadLayout mSwipeToLoadLayout;
+    @BindView(R.id.cp_progress)
+    CircleProgressView mCpProgress;
 
     private MyAdapter mAdapter;
     private int mCurrentPage = 1;
@@ -85,6 +89,9 @@ public class MyFragment extends BaseFragment<MyPresenter> implements OnRefreshLi
     @Override
     protected void initView(@Nullable Bundle savedInstanceState) {
         getProgressDialog().setCancelable(false);
+        mCpProgress.setRoundProgressColor(App.getRes().getColor(R.color.colorDark));
+        mCpProgress.setRoundColor(App.getRes().getColor(R.color.colorGray));
+
         initList();
 
         mSwipeToLoadLayout.post(new Runnable() {
@@ -213,12 +220,16 @@ public class MyFragment extends BaseFragment<MyPresenter> implements OnRefreshLi
     }
 
     private void share(Video target) {
-        setProgressMessage(App.getAppContext().getString(R.string.prompt_sharing));
-        showProgressBar();
+        //setProgressMessage(App.getAppContext().getString(R.string.prompt_sharing));
+        //showProgressBar();
+        mCpProgress.setVisibility(View.VISIBLE);
+        mCpProgress.bringToFront();
+        mCpProgress.setProgress(0, "视频已上传 0%");
+        mCpProgress.setText("");
         getPresenter().share(target, new OnProgressChangedListener() {
             @Override
             public void onProgressChanged(double currentProgress) {
-                setProgressMessage("上传中，当前进度为：" + (int) (currentProgress * 100) + "%");
+                mCpProgress.setProgress((int) (currentProgress * 100), "视频已上传 " + (int) (currentProgress * 100) + "%");
             }
         });
 
@@ -270,12 +281,13 @@ public class MyFragment extends BaseFragment<MyPresenter> implements OnRefreshLi
     }
 
     public void shareFail(String errorMessage) {
-        hideProgressBar();
+        //hideProgressBar();
+        mCpProgress.setVisibility(View.GONE);
         showMessage(errorMessage);
     }
 
     public void shareSuccess(CreateShareLinkResponse shareLinkResponse, String videoUrl) {
-        hideProgressBar();
+        //hideProgressBar();
         Log.e("MyFragment", "share success , response data is - > " + shareLinkResponse.toString());
 
         CreateShareLinkResponse.BodyBean bodyBean = shareLinkResponse.getBody();
@@ -300,6 +312,8 @@ public class MyFragment extends BaseFragment<MyPresenter> implements OnRefreshLi
 
         Platform platform = ShareSDK.getPlatform(mShareType);
         platform.share(sp);
+
+        mCpProgress.setVisibility(View.GONE);
     }
 
     // 应用改版，已经不用这个面板了

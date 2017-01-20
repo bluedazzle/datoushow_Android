@@ -80,6 +80,9 @@ public class RoundProgressBar extends View {
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
 
+        paintRound.setColor(roundColor);
+        paintProgress.setColor(roundProgressColor);
+
         int center = getWidth() / 2;
         int radius = (int) (center - roundWidth / 2);
 
@@ -142,5 +145,19 @@ public class RoundProgressBar extends View {
         this.roundWidth = roundWidth;
     }
 
+    public int getRoundColor() {
+        return roundColor;
+    }
 
+    public void setRoundColor(int roundColor) {
+        this.roundColor = roundColor;
+    }
+
+    public int getRoundProgressColor() {
+        return roundProgressColor;
+    }
+
+    public void setRoundProgressColor(int roundProgressColor) {
+        this.roundProgressColor = roundProgressColor;
+    }
 }

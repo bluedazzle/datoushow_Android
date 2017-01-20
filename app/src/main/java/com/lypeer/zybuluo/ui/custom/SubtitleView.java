@@ -30,7 +30,7 @@ public class SubtitleView extends View {
     private TextPaint mNormalPaint = new TextPaint();
     private List<SubtitleInfo> mSubtitleInfos;
     private int mCurrentLine = -1;
-    private float mDividerHeight = DataFormatter.dipToPixels(28);
+    private float mDividerHeight = DataFormatter.dipToPixels(24);
 
     public SubtitleView(Context context) {
         super(context);
@@ -74,6 +74,10 @@ public class SubtitleView extends View {
         mWeakPaint.setTextAlign(Paint.Align.CENTER);
         mWeakPaint.setStrokeWidth(DataFormatter.dipToPixels(6));
         mWeakPaint.setStyle(Paint.Style.FILL);
+
+        mCurrentPaint.setShadowLayer(4 , 0 , 2 , R.color.colorGray);
+        mNormalPaint.setShadowLayer(4 , 0 , 2 , R.color.colorGray);
+        mWeakPaint.setShadowLayer(4 , 0 , 2 , R.color.colorGray);
     }
 
     public void setData(List<SubtitleInfo> data) {
