@@ -77,5 +77,4 @@ dependencies {
     compile 'com.bugtags.library:bugtags-lib:latest.integration'
 
     apt 'com.jakewharton:butterknife-compiler:8.2.1'
-    compile 'com.tencent.bugly:crashreport:latest.release'
 }

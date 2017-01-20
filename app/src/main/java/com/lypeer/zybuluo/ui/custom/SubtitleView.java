@@ -75,9 +75,11 @@ public class SubtitleView extends View {
         mWeakPaint.setStrokeWidth(DataFormatter.dipToPixels(6));
         mWeakPaint.setStyle(Paint.Style.FILL);
 
-        mCurrentPaint.setShadowLayer(4 , 0 , 2 , R.color.colorGray);
-        mNormalPaint.setShadowLayer(4 , 0 , 2 , R.color.colorGray);
-        mWeakPaint.setShadowLayer(4 , 0 , 2 , R.color.colorGray);
+        float r = DataFormatter.dipToPixels(4);
+        float y = DataFormatter.dipToPixels(1);
+        mCurrentPaint.setShadowLayer(r, 0, y, R.color.colorDark);
+        mNormalPaint.setShadowLayer(r, 0, y, R.color.colorDark);
+        mWeakPaint.setShadowLayer(r, 0, y, R.color.colorDark);
     }
 
     public void setData(List<SubtitleInfo> data) {

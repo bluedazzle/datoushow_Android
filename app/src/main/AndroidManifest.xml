@@ -49,6 +49,10 @@
 
                 <category android:name="android.intent.category.DEFAULT"/>
                 <category android:name="android.intent.category.BROWSABLE"/>
+
+                <data
+                    android:host="star"
+                    android:scheme="Star" />
             </intent-filter>
         </activity>
         <activity

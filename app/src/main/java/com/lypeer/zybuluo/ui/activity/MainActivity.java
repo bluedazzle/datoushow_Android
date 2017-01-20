@@ -1,17 +1,26 @@
 package com.lypeer.zybuluo.ui.activity;
 
+import android.content.Intent;
+import android.graphics.drawable.ColorDrawable;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.PopupWindow;
 import android.widget.TextView;
 
 import com.lypeer.zybuluo.R;
+import com.lypeer.zybuluo.impl.OnCheckUpdateInfoListener;
+import com.lypeer.zybuluo.model.bean.UpdateInfoBean;
 import com.lypeer.zybuluo.ui.base.BaseCustomActivity;
 import com.lypeer.zybuluo.ui.fragment.AddFragment;
 import com.lypeer.zybuluo.ui.fragment.MyFragment;
@@ -19,6 +28,9 @@ import com.lypeer.zybuluo.utils.ActivityController;
 import com.lypeer.zybuluo.utils.Constants;
 import com.lypeer.zybuluo.utils.FileUtil;
 import com.lypeer.zybuluo.utils.SharePreferencesUtil;
+import com.lypeer.zybuluo.utils.UpdateUtil;
+
+import org.w3c.dom.Text;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -60,6 +72,7 @@ public class MainActivity extends BaseCustomActivity {
     private Map<Integer, Integer> mImgResSelectedMap;
 
     private FragmentManager mManager;
+    private PopupWindow mPopupWindow;
 
     @Override
     protected void initView(@Nullable Bundle savedInstanceState) {
@@ -74,6 +87,8 @@ public class MainActivity extends BaseCustomActivity {
         } catch (IOException e) {
             e.printStackTrace();
         }
+
+        checkUpdate();
     }
 
     private void setCurrentSelection(int fragmentId) {
@@ -152,6 +167,59 @@ public class MainActivity extends BaseCustomActivity {
                 setCurrentSelection(Constants.FragmentId.MY);
                 break;
         }
+    }
+
+    private void checkUpdate() {
+        UpdateUtil.checkUpdateInfo(new OnCheckUpdateInfoListener() {
+            @Override
+            public void success(boolean hasUpdate, UpdateInfoBean updateBean) {
+                if (hasUpdate) {
+                    showPpw(updateBean);
+                }
+            }
+
+            @Override
+            public void fail(String errorMessage) {
+
+            }
+        });
+    }
+
+    private void showPpw(UpdateInfoBean updateInfoBean) {
+        View view = LayoutInflater.from(this).inflate(R.layout.ppw_update, null);
+        initPpwView(view, updateInfoBean.getBody().getUpdate());
+
+        mPopupWindow = new PopupWindow(view,
+                ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT, true);
+        mPopupWindow.setAnimationStyle(R.style.anim_menu_bottombar);
+        mPopupWindow.setBackgroundDrawable(new ColorDrawable(0x00000000));
+        mPopupWindow.showAtLocation(mNbMain, Gravity.BOTTOM, 0, 0);
+    }
+
+    private void initPpwView(View view, final UpdateInfoBean.BodyBean.UpdateBean updateBean) {
+        TextView tvTitle = (TextView) view.findViewById(R.id.tv_title);
+        TextView tvLog = (TextView) view.findViewById(R.id.tv_log);
+        TextView tvCancel = (TextView) view.findViewById(R.id.tv_cancel);
+        TextView tvUpdate = (TextView) view.findViewById(R.id.tv_update);
+
+        tvTitle.setText(updateBean.getAndroid_title());
+        tvLog.setText(updateBean.getAndroid_log());
+
+        tvCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mPopupWindow.dismiss();
+                mPopupWindow = null;
+            }
+        });
+
+        tvUpdate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(updateBean.getAndroid_download()));
+                startActivity(intent);
+            }
+        });
     }
 
     @Override

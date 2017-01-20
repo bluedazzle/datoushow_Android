@@ -84,6 +84,8 @@
     <string name="error_no_subtitle">当前视频没有浮动字幕</string>
     <string name="prompt_begin">开始</string>
     <string name="prompt_redo">重做</string>
+    <string name="prompt_update_now">立即升级</string>
+    <string name="prompt_wait">以后再说</string>
 
     <string-array name="status_error">
         <item>未知错误</item>
