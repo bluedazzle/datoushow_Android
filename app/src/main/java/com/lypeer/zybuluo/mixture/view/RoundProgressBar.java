@@ -20,8 +20,8 @@ public class RoundProgressBar extends View {
     private Paint paintRound;
     private Paint paintProgress;
 
-    private int roundColor = App.getRes().getColor(R.color.colorLightGray);
-    private int roundProgressColor = App.getRes().getColor(R.color.colorDark);
+    private int roundColor = App.getRes().getColor(R.color.colorSubtitleWeak);
+    private int roundProgressColor = App.getRes().getColor(R.color.colorWhite);
 
     private float roundWidth = 5;
 
@@ -57,8 +57,8 @@ public class RoundProgressBar extends View {
             TypedArray mTypedArray = context.obtainStyledAttributes(attrs,
                     R.styleable.RoundProgressBar);
 
-            roundColor = mTypedArray.getColor(R.styleable.RoundProgressBar_roundColor, App.getRes().getColor(R.color.colorLightGray));
-            roundProgressColor = mTypedArray.getColor(R.styleable.RoundProgressBar_roundProgressColor, App.getRes().getColor(R.color.colorDark));
+            roundColor = mTypedArray.getColor(R.styleable.RoundProgressBar_roundColor, App.getRes().getColor(R.color.colorSubtitleWeak));
+            roundProgressColor = mTypedArray.getColor(R.styleable.RoundProgressBar_roundProgressColor, App.getRes().getColor(R.color.colorWhite));
             roundWidth = mTypedArray.getDimension(R.styleable.RoundProgressBar_roundWidth, 5);
             max = mTypedArray.getInteger(R.styleable.RoundProgressBar_max, 100);
             style = mTypedArray.getInt(R.styleable.RoundProgressBar_style, 0);

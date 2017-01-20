@@ -72,6 +72,7 @@ import com.qiniu.android.storage.UpCompletionHandler;
 import com.qiniu.android.storage.UpProgressHandler;
 import com.qiniu.android.storage.UploadManager;
 import com.qiniu.android.storage.UploadOptions;
+import com.squareup.picasso.Picasso;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -115,6 +116,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private TextView mPrepareTextView;
     private ImageView mCloseImageView;
     private ImageView mIvSubtitle;
+    private ImageView mIvCover;
     private TextView mTvTitle;
     private WaveView mWaveView;
     private CircleProgressView mProgressBar;
@@ -187,6 +189,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.mixture_layout);
 
+        Intent intent = getIntent();
+        String videoHttpUrl = intent.getStringExtra(MixtureKeys.KEY_VIDEO_PATH);
+        String dataHttpUrl = intent.getStringExtra(MixtureKeys.KEY_DATA_PATH);
+        mVideoBean = (VideoResponse.BodyBean.VideoListBean) intent.getSerializableExtra(MixtureKeys.KEY_VIDEO);
+
         mGLSurfaceView = (GLSurfaceView) findViewById(R.id.gl_mixture_surface);
         mGLSurfaceView.setEGLContextClientVersion(2);
         mGLSurfaceView.setRenderer(this);
@@ -199,6 +206,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mPrepareTextView = (TextView) findViewById(R.id.tv_mixture_prepare);
         mCloseImageView = (ImageView) findViewById(R.id.iv_mixture_close);
         mIvSubtitle = (ImageView) findViewById(R.id.iv_subtitle);
+        mIvCover = (ImageView)findViewById(R.id.iv_cover);
         mTvTitle = (TextView) findViewById(R.id.tv_title);
         mWaveView = (WaveView) findViewById(R.id.wv_mixture_wave);
         mProgressBar = (CircleProgressView) findViewById(R.id.lv_mixture_progress);
@@ -207,6 +215,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         mWaveView.bringToFront();
         mSubtitleView.bringToFront();
+        mProgressBar.bringToFront();
+        mProgressBar.setLlyContainerBg(R.color.colorEmpty);
+        mProgressBar.setTextColor(R.color.colorWhite);
+        Picasso.with(App.getAppContext()).load(mVideoBean.getThumb_nail()).fit().centerInside().into(mIvCover);
 
         mStartButton.setOnClickListener(this);
         mIvSubtitle.setOnClickListener(this);
@@ -236,10 +248,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mBigheadPaint = new Paint();
         mSurfaceTextureFromCamera = new SurfaceTexture(MAGIC_TEXTURE_ID);
 
-        Intent intent = getIntent();
-        String videoHttpUrl = intent.getStringExtra(MixtureKeys.KEY_VIDEO_PATH);
-        String dataHttpUrl = intent.getStringExtra(MixtureKeys.KEY_DATA_PATH);
-        mVideoBean = (VideoResponse.BodyBean.VideoListBean) intent.getSerializableExtra(MixtureKeys.KEY_VIDEO);
         mMixtureResult = new MixtureResult();
         if (TEST) {
             if (videoHttpUrl != null && !videoHttpUrl.isEmpty() && dataHttpUrl != null && !dataHttpUrl.isEmpty()) {
@@ -336,9 +344,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 mStartButton.setVisibility(View.INVISIBLE);
                 mSaveAndRedoLayout.setVisibility(View.INVISIBLE);
                 mCloseImageView.setVisibility(View.INVISIBLE);
-                mProgressBar.setProgress(0);
+                mProgressBar.setProgress(0 , "");
                 mProgressBar.show();
-                mProgressBar.setText("正在缓冲");
+                mProgressBar.setText("");
                 mFrontLayout.setVisibility(View.VISIBLE);
                 mFrontLayout.setBackgroundColor(Color.TRANSPARENT);
                 mFrontLayout.setOnClickListener(null);
@@ -886,6 +894,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         Log.v(TAG, "gotoStageTraining" + mCurrentStage);
         mCameraPreviewTime = System.currentTimeMillis();
         mProgressBar.dismiss();
+        mIvCover.setVisibility(View.GONE);
         mPrepareTextView.setVisibility(View.INVISIBLE);
         mCloseImageView.setVisibility(View.VISIBLE);
         mSaveAndRedoLayout.setVisibility(View.INVISIBLE);
@@ -957,7 +966,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mCurrentStage = MixtureStage.RecordComplete;
         try {
             mProgressBar.show();
-            mProgressBar.setProgress(0);
+            mProgressBar.setProgress(0 , "");
             mProgressBar.setText("正在创建预览");
             mFrontLayout.setVisibility(View.VISIBLE);
             mFrontLayout.setBackgroundColor(Color.TRANSPARENT);

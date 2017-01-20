@@ -12,12 +12,13 @@
         android:background="@drawable/bg_rc"
         android:padding="16dp"
         android:gravity="center"
+        android:id="@+id/lly_container"
         android:orientation="vertical">
 
         <com.lypeer.zybuluo.mixture.view.RoundProgressBar
-            android:layout_width="36dp"
+            android:layout_width="48dp"
             android:id="@+id/cp_progress"
-            android:layout_height="36dp"/>
+            android:layout_height="48dp"/>
 
         <TextView
             android:layout_width="wrap_content"

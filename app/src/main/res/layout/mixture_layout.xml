@@ -55,6 +55,12 @@
         android:background="@android:color/black"
         android:orientation="vertical">
 
+        <com.lypeer.zybuluo.mixture.view.CircleProgressView
+            android:id="@+id/lv_mixture_progress"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_centerInParent="true"/>
+
         <com.lypeer.zybuluo.mixture.view.WaveView
             android:id="@+id/wv_mixture_wave"
             android:layout_width="match_parent"
@@ -91,12 +97,10 @@
                 android:visibility="invisible"
                 />
 
-            <com.lypeer.zybuluo.mixture.view.CircleProgressView
-                android:id="@+id/lv_mixture_progress"
+            <ImageView
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_centerInParent="true"/>
-
+                android:id="@+id/iv_cover"
+                android:layout_height="match_parent"/>
         </RelativeLayout>
 
         <RelativeLayout
