@@ -14,11 +14,10 @@
         android:gravity="center"
         android:orientation="vertical">
 
-        <ProgressBar
-            style="@android:style/Widget.Holo.ProgressBar.Large"
-            android:layout_width="wrap_content"
-            android:id="@+id/pb_progress"
-            android:layout_height="wrap_content"/>
+        <com.lypeer.zybuluo.mixture.view.RoundProgressBar
+            android:layout_width="36dp"
+            android:id="@+id/cp_progress"
+            android:layout_height="36dp"/>
 
         <TextView
             android:layout_width="wrap_content"

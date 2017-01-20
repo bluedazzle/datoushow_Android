@@ -7,6 +7,7 @@ import android.text.TextPaint;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.View;
+import android.widget.Toast;
 
 import com.lypeer.zybuluo.App;
 import com.lypeer.zybuluo.R;
@@ -84,7 +85,6 @@ public class SubtitleView extends View {
             this.setVisibility(VISIBLE);
             invalidate();
         }
-
     }
 
     @Override
@@ -178,6 +178,7 @@ public class SubtitleView extends View {
             if (nextStartTime <= time && nextEndTime >= time) {
                 if (mCurrentLine != i) {
                     mCurrentLine = i;
+
                     this.invalidate();
                     this.requestLayout();
                 }

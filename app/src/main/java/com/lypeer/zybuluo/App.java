@@ -51,7 +51,7 @@ public class App extends Application {
                 build();
 
         Bugtags.start("a7899237a27d3215dbdd5f90d4d43e86", this, Bugtags.BTGInvocationEventNone);
-        CrashReport.initCrashReport(getApplicationContext(), "9bdb34892f", false);
+        CrashReport.initCrashReport(getApplicationContext(), "9bdb34892f", true);
     }
 
     public static Context getAppContext() {

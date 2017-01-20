@@ -237,3 +237,8 @@
 # LeakCanary
 -keep class org.eclipse.mat.** { *; }
 -keep class com.squareup.leakcanary.** { *; }
+
+# 自定义view
+-keep class com.lypeer.zybuluo.ui.custom.** { *; }
+-keep class com.lypeer.zybuluo.mixture.core.** { *; }
+

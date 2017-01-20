@@ -724,6 +724,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             if (mCurrentStage != MixtureStage.Init) return;
 
             mSubtitleView.setData(mHeadInfoManager.getSubtitleInfoMap());
+            if (mSubtitleView.mEnable) {
+                mIvSubtitle.setImageResource(R.drawable.ic_subtitle_open_practise);
+
+                if (!SharePreferencesUtil.isUserLikeSubtitle()) {
+                    mSubtitleView.setVisibility(View.INVISIBLE);
+                    mIvSubtitle.setImageResource(R.drawable.ic_subtitle_close_practise);
+                }
+            } else {
+                mIvSubtitle.setImageResource(R.drawable.ic_subtitle_close_practise);
+            }
 
             MediaMetadataRetriever m = new MediaMetadataRetriever();
             m.setDataSource(DOWNLOADED_VIDEO_PATH);
@@ -872,16 +882,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private void gotoStageTraining() {
         mTvTitle.setText(R.string.title_practise);
         mCurrentStage = MixtureStage.Training;
-
-        if (mSubtitleView.mEnable) {
-            mIvSubtitle.setImageResource(R.drawable.ic_subtitle_open_practise);
-
-            if (!SharePreferencesUtil.isUserLikeSubtitle()) {
-                onClick(mIvSubtitle);
-            }
-        } else {
-            mIvSubtitle.setImageResource(R.drawable.ic_subtitle_close_practise);
-        }
 
         Log.v(TAG, "gotoStageTraining" + mCurrentStage);
         mCameraPreviewTime = System.currentTimeMillis();

@@ -4,7 +4,6 @@ import android.content.Context;
 import android.util.AttributeSet;
 import android.view.View;
 import android.widget.LinearLayout;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.lypeer.zybuluo.R;
@@ -22,8 +21,8 @@ public class CircleProgressView extends LinearLayout {
     TextView mTvProgress;
     @BindView(R.id.tv_text)
     TextView mTvText;
-    @BindView(R.id.pb_progress)
-    ProgressBar mPbProgress;
+    @BindView(R.id.cp_progress)
+    RoundProgressBar mCpProgress;
 
     private int mProgress = 0;
 
@@ -51,8 +50,6 @@ public class CircleProgressView extends LinearLayout {
         return mProgress;
     }
 
-    private long mLastTime = 0;
-
     public void setText(String text) {
         mTvText.setVisibility(VISIBLE);
         mTvText.setText(text);
@@ -60,6 +57,7 @@ public class CircleProgressView extends LinearLayout {
 
     public void setProgress(int progress) {
         mProgress = progress;
+        mCpProgress.setProgress(progress);
         mTvProgress.setText("当前进度为：" + progress + "%");
     }
 
