@@ -3,6 +3,7 @@ package com.lypeer.zybuluo.impl;
 
 import com.lypeer.zybuluo.model.bean.BannerResponse;
 import com.lypeer.zybuluo.model.bean.CreateShareLinkResponse;
+import com.lypeer.zybuluo.model.bean.UpdateInfoBean;
 import com.lypeer.zybuluo.model.bean.UploadResponse;
 import com.lypeer.zybuluo.model.bean.VideoDetailResponse;
 import com.lypeer.zybuluo.model.bean.VideoResponse;
@@ -43,6 +44,9 @@ public interface ApiService {
     Call<VideoResponse> search(
             @Query(Constants.RequestParam.K_SEARCH) String searchContent
     );
+
+    @GET("update")
+    Call<UpdateInfoBean> update();
 
     @GET("upload")
     Call<UploadResponse> upload();

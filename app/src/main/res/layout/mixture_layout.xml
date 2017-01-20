@@ -2,8 +2,8 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               xmlns:app="http://schemas.android.com/apk/res-auto"
               android:layout_width="match_parent"
-              android:orientation="vertical"
-              android:layout_height="match_parent">
+              android:layout_height="match_parent"
+              android:orientation="vertical">
 
     <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
@@ -15,6 +15,16 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:title="">
+
+            <ImageView
+                android:id="@+id/iv_subtitle"
+                android:layout_width="72dp"
+                android:layout_height="30dp"
+                android:clickable="true"
+                android:paddingLeft="8dp"
+                android:paddingRight="8dp"
+                android:scaleType="centerInside"
+                android:src="@drawable/ic_subtitle_open_practise"/>
 
             <TextView
                 android:id="@+id/tv_title"
@@ -45,60 +55,78 @@
         android:background="@android:color/black"
         android:orientation="vertical">
 
+        <com.lypeer.zybuluo.mixture.view.CircleProgressView
+            android:id="@+id/lv_mixture_progress"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_centerInParent="true"/>
+
         <com.lypeer.zybuluo.mixture.view.WaveView
             android:id="@+id/wv_mixture_wave"
             android:layout_width="match_parent"
             android:layout_height="6dp"/>
 
-        <RelativeLayout
-            android:id="@+id/rv_mixture_play_area"
+        <com.lypeer.zybuluo.ui.custom.SubtitleView
+            android:id="@+id/sv_subtitle"
             android:layout_width="match_parent"
-            android:layout_marginTop="4dp"
+            android:layout_height="128dp"/>
+
+        <com.lypeer.zybuluo.ui.custom.RatioLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
-            android:orientation="horizontal">
+            app:ratio="1">
 
-            <android.opengl.GLSurfaceView
-                android:id="@+id/gl_mixture_surface"
+            <RelativeLayout
+                android:id="@+id/rv_mixture_play_area"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"/>
-
-
-            <TextView
-                android:id="@+id/tv_mixture_prepare"
-                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_centerInParent="true"
-                android:gravity="center_vertical|center_horizontal"
-                android:text="3"
-                android:textColor="@android:color/white"
-                android:textSize="300sp"
-                android:visibility="invisible"
-                />
+                android:layout_alignParentTop="true"
+                android:layout_marginTop="4dp"
+                android:orientation="horizontal">
 
-            <com.lypeer.zybuluo.mixture.view.CircleProgressView
-                android:id="@+id/lv_mixture_progress"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_centerInParent="true"/>
+                <android.opengl.GLSurfaceView
+                    android:id="@+id/gl_mixture_surface"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"/>
 
-        </RelativeLayout>
+
+                <TextView
+                    android:id="@+id/tv_mixture_prepare"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:gravity="center_vertical|center_horizontal"
+                    android:text="3"
+                    android:textStyle="bold"
+                    android:textColor="@android:color/white"
+                    android:textSize="300sp"
+                    android:visibility="invisible"
+                    />
+
+                <ImageView
+                    android:id="@+id/iv_cover"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"/>
+            </RelativeLayout>
+
+        </com.lypeer.zybuluo.ui.custom.RatioLayout>
 
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_below="@id/rv_mixture_play_area">
+            android:layout_alignParentBottom="true">
 
             <Button
                 android:id="@+id/btn_mixture_start"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
                 android:layout_alignParentBottom="true"
-                android:layout_centerInParent="true"
-                android:layout_marginBottom="16px"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:paddingTop="16dp"
+                android:paddingBottom="16dp"
+                android:gravity="center"
                 android:background="@drawable/bt_start_bk"
-                android:text="开始"
+                android:text="@string/prompt_begin"
                 android:textColor="@android:color/background_light"/>
 
             <RelativeLayout
@@ -106,8 +134,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_alignParentBottom="true"
-                android:layout_centerInParent="true"
-                android:layout_marginBottom="40px"
+                android:paddingBottom="16dp"
                 android:orientation="horizontal">
 
                 <Button
@@ -115,18 +142,20 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentLeft="true"
-                    android:layout_marginLeft="16px"
+                    android:layout_marginLeft="16dp"
                     android:background="@drawable/bt_redo_bk"
-                    android:text="重做"/>
+                    android:text="@string/prompt_redo"
+                    android:textColor="@color/colorWhite"/>
 
                 <Button
                     android:id="@+id/btn_mixture_save"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
-                    android:layout_marginRight="16px"
+                    android:layout_marginRight="16dp"
                     android:background="@drawable/bt_save_bk"
-                    android:text="保存"/>
+                    android:text="@string/prompt_save"
+                    android:textColor="@color/colorWhite"/>
             </RelativeLayout>
         </RelativeLayout>
 

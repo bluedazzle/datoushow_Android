@@ -86,6 +86,7 @@ public class Constants {
                 URL = "http://www.datoushow.com/",
                 TITLE = "搞笑短片，竟然可以这么录!",
                 TEXT = "终于有一款能够让我变身热门短片主角，轻松秀演技的App！这么有毒，还有谁没玩吗我不信!",
+                LOGO_URL = "http://static.fibar.cn/logo@192.png",
                 COPY_LINK = "终于有一款能够让我变身热门短片主角，轻松秀演技的App！\n" +
                         "@大头秀 这么有毒，还有谁没玩吗我不信！\n" +
                         "http://www.datoushow.com/";

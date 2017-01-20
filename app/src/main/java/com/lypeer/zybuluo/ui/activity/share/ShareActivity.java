@@ -12,6 +12,7 @@ import android.widget.ImageView;
 import com.lypeer.zybuluo.App;
 import com.lypeer.zybuluo.R;
 import com.lypeer.zybuluo.impl.OnProgressChangedListener;
+import com.lypeer.zybuluo.mixture.view.CircleProgressView;
 import com.lypeer.zybuluo.model.bean.CreateShareLinkResponse;
 import com.lypeer.zybuluo.presenter.share.SharePresenter;
 import com.lypeer.zybuluo.ui.base.BaseActivity;
@@ -35,7 +36,6 @@ public class ShareActivity extends BaseActivity<SharePresenter> {
     public static final String SHARE_KEY_PATH = "path";
     public static final String SHARE_KEY_ID = "id";
 
-
     @BindView(R.id.toolbar)
     Toolbar mToolbar;
     @BindView(R.id.imageView2)
@@ -54,6 +54,8 @@ public class ShareActivity extends BaseActivity<SharePresenter> {
     RatioLayout mLlyQq;
     @BindView(R.id.btn_back)
     Button mBtnBack;
+    @BindView(R.id.cp_progress)
+    CircleProgressView mCpProgress;
 
     private String mPath = "";
     private int mId = -1;
@@ -73,6 +75,8 @@ public class ShareActivity extends BaseActivity<SharePresenter> {
                 onBackPressed();
             }
         });
+        mCpProgress.setRoundProgressColor(App.getRes().getColor(R.color.colorDark));
+        mCpProgress.setRoundColor(App.getRes().getColor(R.color.colorGray));
 
         Intent intent = getIntent();
 
@@ -119,13 +123,17 @@ public class ShareActivity extends BaseActivity<SharePresenter> {
     }
 
     private void share() {
-        mProgressDialog.show();
+/*        mProgressDialog.show();
         mProgressDialog.setCancelable(false);
-        mProgressDialog.setMessage(App.getAppContext().getString(R.string.prompt_saving));
+        mProgressDialog.setMessage(App.getAppContext().getString(R.string.prompt_saving));*/
+        mCpProgress.setVisibility(View.VISIBLE);
+        mCpProgress.bringToFront();
+        mCpProgress.setProgress(0, "视频已上传 0%");
+        mCpProgress.setText("");
         getPresenter().share(mPath, mId, new OnProgressChangedListener() {
             @Override
             public void onProgressChanged(double currentProgress) {
-                setProgressMessage("上传中，当前进度为：" + (int) (currentProgress * 100) + "%");
+                mCpProgress.setProgress((int) (currentProgress * 100), "视频已上传 " + (int) (currentProgress * 100) + "%");
             }
         });
     }
@@ -136,7 +144,7 @@ public class ShareActivity extends BaseActivity<SharePresenter> {
     }
 
     public void shareFail(String errorMessage) {
-        hideProgressBar();
+        mCpProgress.setVisibility(View.GONE);
         showMessage(errorMessage);
     }
 
@@ -170,6 +178,6 @@ public class ShareActivity extends BaseActivity<SharePresenter> {
             platform.share(sp);
         }
 
-        hideProgressBar();
+        mCpProgress.setVisibility(View.GONE);
     }
 }

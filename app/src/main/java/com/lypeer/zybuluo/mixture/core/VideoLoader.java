@@ -107,6 +107,6 @@ public class VideoLoader extends AsyncTask<Void, Integer, Boolean> {
     //onProgressUpdate方法用于更新进度信息
     @Override
     protected void onProgressUpdate(Integer... progresses) {
-        mProgressBar.setProgress(progresses[0]);
+        mProgressBar.setProgress(progresses[0] , "");
     }
 }

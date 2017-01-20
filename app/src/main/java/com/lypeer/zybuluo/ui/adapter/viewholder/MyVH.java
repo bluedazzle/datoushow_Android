@@ -11,6 +11,7 @@ import com.lypeer.zybuluo.R;
 import com.lypeer.zybuluo.impl.OnItemClickListener;
 import com.lypeer.zybuluo.model.bean.Video;
 import com.lypeer.zybuluo.ui.base.BaseViewHolder;
+import com.lypeer.zybuluo.ui.custom.LyVideoPlayer;
 
 import butterknife.BindView;
 import fm.jiecao.jcvideoplayer_lib.JCVideoPlayerStandard;
@@ -25,7 +26,7 @@ public class MyVH extends BaseViewHolder<Video> {
     @BindView(R.id.tv_author)
     TextView mTvAuthor;
     @BindView(R.id.video_player)
-    JCVideoPlayerStandard mVideoPlayer;
+    LyVideoPlayer mVideoPlayer;
     @BindView(R.id.lly_save)
     LinearLayout mLlySave;
     @BindView(R.id.lly_share)
@@ -43,7 +44,6 @@ public class MyVH extends BaseViewHolder<Video> {
         mTvAuthor.setText(itemValue.getArtist());
         mVideoPlayer.setUp(itemValue.getPath()
                 , JCVideoPlayerStandard.SCREEN_LAYOUT_NORMAL, "");
-        mVideoPlayer.coverImageView.setVisibility(View.GONE);
         if (itemValue.getThumbnail() != null) {
             mVideoPlayer.thumbImageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
             mVideoPlayer.thumbImageView.setImageBitmap(itemValue.getThumbnail());

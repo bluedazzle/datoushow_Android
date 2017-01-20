@@ -81,6 +81,11 @@
     <string name="error_data_wrong">数据有误，请返回重试</string>
     <string name="error_save_fail">保存失败，请稍后重试</string>
     <string name="error_input_complete">请填写完整！</string>
+    <string name="error_no_subtitle">当前视频没有浮动字幕</string>
+    <string name="prompt_begin">开始</string>
+    <string name="prompt_redo">重做</string>
+    <string name="prompt_update_now">立即升级</string>
+    <string name="prompt_wait">以后再说</string>
 
     <string-array name="status_error">
         <item>未知错误</item>

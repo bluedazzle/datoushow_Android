@@ -66,7 +66,7 @@ public class MediaEditorTask extends AsyncTask<Void, Integer, Boolean> {
         super.onProgressUpdate(values);
         if (values[0] - mCurrentProgress > 0) {
             mCurrentProgress = values[0];
-            mProgressView.setProgress(mCurrentProgress);
+            mProgressView.setProgress(mCurrentProgress , "");
         }
     }
 

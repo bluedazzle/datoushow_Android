@@ -57,7 +57,7 @@ public class SpringFestivalModel extends BaseModel<SpringFestivalPresenter> {
 
     public void loadMoreVideos(int currentPage) {
         RetrofitClient.buildService(ApiService.class)
-                .getTypeVideos(currentPage + 1, Constants.VideosType.TYPE_MV)
+                .getTypeVideos(currentPage + 1, Constants.VideosType.TYPE_SPRING_FESTIVAL)
                 .enqueue(new Callback<VideoResponse>() {
                     @Override
                     public void onResponse(Call<VideoResponse> call, Response<VideoResponse> response) {

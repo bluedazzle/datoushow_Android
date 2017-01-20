@@ -57,11 +57,13 @@ import com.lypeer.zybuluo.model.bean.BodyBean;
 import com.lypeer.zybuluo.model.bean.CreateShareLinkResponse;
 import com.lypeer.zybuluo.model.bean.VideoResponse;
 import com.lypeer.zybuluo.ui.activity.share.ShareActivity;
+import com.lypeer.zybuluo.ui.custom.SubtitleView;
 import com.lypeer.zybuluo.utils.ApiSignUtil;
 import com.lypeer.zybuluo.utils.Constants;
 import com.lypeer.zybuluo.utils.DeviceUuidFactory;
 import com.lypeer.zybuluo.utils.FileUtil;
 import com.lypeer.zybuluo.utils.RetrofitClient;
+import com.lypeer.zybuluo.utils.SharePreferencesUtil;
 import com.lypeer.zybuluo.utils.meipai.MeiPai;
 import com.qiniu.android.common.Zone;
 import com.qiniu.android.http.ResponseInfo;
@@ -70,6 +72,7 @@ import com.qiniu.android.storage.UpCompletionHandler;
 import com.qiniu.android.storage.UpProgressHandler;
 import com.qiniu.android.storage.UploadManager;
 import com.qiniu.android.storage.UploadOptions;
+import com.squareup.picasso.Picasso;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -112,10 +115,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private RelativeLayout mSaveAndRedoLayout;
     private TextView mPrepareTextView;
     private ImageView mCloseImageView;
-    private TextView mTitle;
+    private ImageView mIvSubtitle;
+    private ImageView mIvCover;
+    private TextView mTvTitle;
     private WaveView mWaveView;
     private CircleProgressView mProgressBar;
     private RelativeLayout mFrontLayout;
+    private SubtitleView mSubtitleView;
 
     private TextureRender mRender;
     private SurfaceTexture mSurfaceTextureFromVideo;
@@ -183,6 +189,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.mixture_layout);
 
+        Intent intent = getIntent();
+        String videoHttpUrl = intent.getStringExtra(MixtureKeys.KEY_VIDEO_PATH);
+        String dataHttpUrl = intent.getStringExtra(MixtureKeys.KEY_DATA_PATH);
+        mVideoBean = (VideoResponse.BodyBean.VideoListBean) intent.getSerializableExtra(MixtureKeys.KEY_VIDEO);
+
         mGLSurfaceView = (GLSurfaceView) findViewById(R.id.gl_mixture_surface);
         mGLSurfaceView.setEGLContextClientVersion(2);
         mGLSurfaceView.setRenderer(this);
@@ -194,14 +205,24 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mSaveButton = (Button) findViewById(R.id.btn_mixture_save);
         mPrepareTextView = (TextView) findViewById(R.id.tv_mixture_prepare);
         mCloseImageView = (ImageView) findViewById(R.id.iv_mixture_close);
-        mTitle = (TextView) findViewById(R.id.tv_title);
+        mIvSubtitle = (ImageView) findViewById(R.id.iv_subtitle);
+        mIvCover = (ImageView)findViewById(R.id.iv_cover);
+        mTvTitle = (TextView) findViewById(R.id.tv_title);
         mWaveView = (WaveView) findViewById(R.id.wv_mixture_wave);
         mProgressBar = (CircleProgressView) findViewById(R.id.lv_mixture_progress);
         mFrontLayout = (RelativeLayout) findViewById(R.id.rl_mixture_front);
+        mSubtitleView = (SubtitleView) findViewById(R.id.sv_subtitle);
 
+        mIvCover.bringToFront();
         mWaveView.bringToFront();
+        mSubtitleView.bringToFront();
+        mProgressBar.bringToFront();
+        mProgressBar.setLlyContainerBg(R.color.colorEmpty);
+        mProgressBar.setTextColor(R.color.colorWhite);
+        Picasso.with(App.getAppContext()).load(mVideoBean.getThumb_nail()).fit().centerInside().into(mIvCover);
 
         mStartButton.setOnClickListener(this);
+        mIvSubtitle.setOnClickListener(this);
         mRedoButton.setOnClickListener(this);
         mSaveButton.setOnClickListener(this);
         mCloseImageView.setOnClickListener(this);
@@ -228,10 +249,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mBigheadPaint = new Paint();
         mSurfaceTextureFromCamera = new SurfaceTexture(MAGIC_TEXTURE_ID);
 
-        Intent intent = getIntent();
-        String videoHttpUrl = intent.getStringExtra(MixtureKeys.KEY_VIDEO_PATH);
-        String dataHttpUrl = intent.getStringExtra(MixtureKeys.KEY_DATA_PATH);
-        mVideoBean = (VideoResponse.BodyBean.VideoListBean) intent.getSerializableExtra(MixtureKeys.KEY_VIDEO);
         mMixtureResult = new MixtureResult();
         if (TEST) {
             if (videoHttpUrl != null && !videoHttpUrl.isEmpty() && dataHttpUrl != null && !dataHttpUrl.isEmpty()) {
@@ -328,9 +345,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 mStartButton.setVisibility(View.INVISIBLE);
                 mSaveAndRedoLayout.setVisibility(View.INVISIBLE);
                 mCloseImageView.setVisibility(View.INVISIBLE);
-                mProgressBar.setProgress(0);
+                mProgressBar.setProgress(0 , "");
                 mProgressBar.show();
-                mProgressBar.setText("正在缓冲");
+                mProgressBar.setText("");
                 mFrontLayout.setVisibility(View.VISIBLE);
                 mFrontLayout.setBackgroundColor(Color.TRANSPARENT);
                 mFrontLayout.setOnClickListener(null);
@@ -449,6 +466,33 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         mPaused = false;
                     }
                 }
+            } else if (v == mIvSubtitle) {
+                if (!mSubtitleView.mEnable) {
+                    Toast.makeText(MainActivity.this, R.string.error_no_subtitle, Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+                if (mCurrentStage == MixtureStage.Training) {
+                    if (mSubtitleView.getVisibility() == View.VISIBLE) {
+                        mSubtitleView.setVisibility(View.INVISIBLE);
+                        mIvSubtitle.setImageResource(R.drawable.ic_subtitle_close_practise);
+                        SharePreferencesUtil.setIsUserLikeSubtitle(false);
+                    } else {
+                        mSubtitleView.setVisibility(View.VISIBLE);
+                        mIvSubtitle.setImageResource(R.drawable.ic_subtitle_open_practise);
+                        SharePreferencesUtil.setIsUserLikeSubtitle(true);
+                    }
+                } else if (mCurrentStage == MixtureStage.Preview) {
+                    if (mSubtitleView.getVisibility() == View.VISIBLE) {
+                        mSubtitleView.setVisibility(View.INVISIBLE);
+                        mIvSubtitle.setImageResource(R.drawable.ic_subtitle_close_review);
+                        SharePreferencesUtil.setIsUserLikeSubtitle(false);
+                    } else {
+                        mSubtitleView.setVisibility(View.VISIBLE);
+                        mIvSubtitle.setImageResource(R.drawable.ic_subtitle_open_review);
+                        SharePreferencesUtil.setIsUserLikeSubtitle(true);
+                    }
+                }
             }
         }
     }
@@ -481,7 +525,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         intent.putExtra(ShareActivity.SHARE_KEY_PATH, path);
         intent.putExtra(ShareActivity.SHARE_KEY_ID, id);
         startActivity(intent);
-
+        finish();
         /*mMediaPlayer.pause();
         mProgressDialog.show();
         mProgressDialog.setMessage(App.getAppContext().getString(R.string.prompt_saving));
@@ -687,6 +731,19 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 return;
             }
             if (mCurrentStage != MixtureStage.Init) return;
+
+            mSubtitleView.setData(mHeadInfoManager.getSubtitleInfoMap());
+            if (mSubtitleView.mEnable) {
+                mIvSubtitle.setImageResource(R.drawable.ic_subtitle_open_practise);
+
+                if (!SharePreferencesUtil.isUserLikeSubtitle()) {
+                    mSubtitleView.setVisibility(View.INVISIBLE);
+                    mIvSubtitle.setImageResource(R.drawable.ic_subtitle_close_practise);
+                }
+            } else {
+                mIvSubtitle.setImageResource(R.drawable.ic_subtitle_close_practise);
+            }
+
             MediaMetadataRetriever m = new MediaMetadataRetriever();
             m.setDataSource(DOWNLOADED_VIDEO_PATH);
             mFirstFrame = m.getFrameAtTime(mHeadInfoManager.getTimeByFrame(mHeadInfoManager.getPreparedFrame()) * 1000);
@@ -816,19 +873,29 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         int frame = (mMediaPlayer.getCurrentPosition() * mHeadInfoManager.frameRate / 1000) + 1;
         mCurrentFrame = frame > mHeadInfoManager.maxFrame ? mHeadInfoManager.maxFrame : frame;
         if (mVideoDuration > 0) {
-            int pos = mCurrentFrame * WaveView.WAVE_COUNT / mHeadInfoManager.maxFrame;
-            mWaveView.setPosition(pos);
-            mWaveView.invalidate();
+
+            MainActivity.this.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    int pos = mCurrentFrame * WaveView.WAVE_COUNT / mHeadInfoManager.maxFrame;
+                    mWaveView.setPosition(pos);
+                    mWaveView.invalidate();
+
+                    float currentTime = ((float) mCurrentFrame / mHeadInfoManager.maxFrame) * mHeadInfoManager.duration;
+                    mSubtitleView.updateTime((long) currentTime + 500);
+                }
+            });
         }
     }
 
     private void gotoStageTraining() {
-        mTitle.setText(R.string.title_practise);
+        mTvTitle.setText(R.string.title_practise);
+        mCurrentStage = MixtureStage.Training;
 
         Log.v(TAG, "gotoStageTraining" + mCurrentStage);
-        mCurrentStage = MixtureStage.Training;
         mCameraPreviewTime = System.currentTimeMillis();
         mProgressBar.dismiss();
+        mIvCover.setVisibility(View.GONE);
         mPrepareTextView.setVisibility(View.INVISIBLE);
         mCloseImageView.setVisibility(View.VISIBLE);
         mSaveAndRedoLayout.setVisibility(View.INVISIBLE);
@@ -845,10 +912,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
         mCurrentFrame = 0;
         mMediaPlayer.start();
+
+
     }
 
     private void gotoStageRecordPrepare() {
-        mTitle.setText(R.string.title_preparing);
+        mTvTitle.setText("");
 
         Log.v(TAG, "gotoStageRecordPrepare");
         mPaused = false;
@@ -872,7 +941,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void gotoStageRecordStart() {
-        mTitle.setText(R.string.title_recording);
+        mTvTitle.setText(R.string.title_recording);
 
         Log.v(TAG, "gotoStageRecordStart" + mCurrentStage);
         mHeadInfoManager.videoWidth = mVideoWidth;
@@ -898,7 +967,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mCurrentStage = MixtureStage.RecordComplete;
         try {
             mProgressBar.show();
-            mProgressBar.setProgress(0);
+            mProgressBar.setProgress(0 , "");
             mProgressBar.setText("正在创建预览");
             mFrontLayout.setVisibility(View.VISIBLE);
             mFrontLayout.setBackgroundColor(Color.TRANSPARENT);
@@ -911,7 +980,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void gotoStagePreview() {
-        mTitle.setText(R.string.title_preview);
+        mTvTitle.setText(R.string.title_preview);
+
+        if (mSubtitleView.getVisibility() == View.VISIBLE) {
+            mIvSubtitle.setImageResource(R.drawable.ic_subtitle_open_review);
+        } else {
+            mIvSubtitle.setImageResource(R.drawable.ic_subtitle_close_review);
+        }
 
         Log.v(TAG, "gotoStagePreview" + mCurrentStage);
         mCurrentStage = MixtureStage.Preview;

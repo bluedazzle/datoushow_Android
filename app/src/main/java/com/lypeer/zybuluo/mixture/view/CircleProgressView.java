@@ -1,12 +1,14 @@
 package com.lypeer.zybuluo.mixture.view;
 
 import android.content.Context;
+import android.content.res.TypedArray;
+import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.view.View;
 import android.widget.LinearLayout;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.lypeer.zybuluo.App;
 import com.lypeer.zybuluo.R;
 
 import butterknife.BindView;
@@ -22,10 +24,15 @@ public class CircleProgressView extends LinearLayout {
     TextView mTvProgress;
     @BindView(R.id.tv_text)
     TextView mTvText;
-    @BindView(R.id.pb_progress)
-    ProgressBar mPbProgress;
+    @BindView(R.id.rp_progress)
+    RoundProgressBar mRpProgress;
+    @BindView(R.id.lly_container)
+    LinearLayout mLlyContainer;
 
     private int mProgress = 0;
+    private int mMax = 100;
+
+    private int mLlyContainerBg = App.getRes().getColor(R.color.colorWhite);
 
     public CircleProgressView(Context context) {
         super(context);
@@ -51,25 +58,65 @@ public class CircleProgressView extends LinearLayout {
         return mProgress;
     }
 
-    private long mLastTime = 0;
-
     public void setText(String text) {
-        mTvText.setVisibility(VISIBLE);
-        mTvText.setText(text);
+        if (TextUtils.isEmpty(text)) {
+            mTvText.setVisibility(GONE);
+        } else {
+            mTvText.setVisibility(VISIBLE);
+            mTvText.setText(text);
+        }
     }
 
-    public void setProgress(int progress) {
-        mProgress = progress;
-        mTvProgress.setText("当前进度为：" + progress + "%");
+    public void setProgress(int progress, String progressText) {
+        if (progress < 0) {
+            return;
+        }
+
+        if (!TextUtils.isEmpty(progressText)) {
+            mProgress = progress;
+            mRpProgress.setProgress(progress);
+            mTvProgress.setText(progressText);
+        } else {
+            mRpProgress.setProgress(progress);
+            mTvProgress.setVisibility(GONE);
+        }
     }
 
     public void show() {
         this.setVisibility(VISIBLE);
-        mTvText.setVisibility(GONE);
+        mTvText.setVisibility(VISIBLE);
+        mLlyContainer.setBackgroundColor(mLlyContainerBg);
     }
 
     public void dismiss() {
         this.setVisibility(GONE);
         mTvText.setVisibility(GONE);
+    }
+
+    public void setLlyContainerBg(int color) {
+        mLlyContainer.setBackgroundColor(App.getRes().getColor(color));
+        mLlyContainerBg = App.getRes().getColor(color);
+    }
+
+    public void setTextColor(int color) {
+        mTvProgress.setTextColor(App.getRes().getColor(color));
+        mTvText.setTextColor(App.getRes().getColor(color));
+    }
+
+    public void setRoundColor(int color){
+        mRpProgress.setRoundColor(color);
+    }
+
+    public void setRoundProgressColor(int roundProgressColor) {
+        mRpProgress.setRoundProgressColor(roundProgressColor);
+    }
+
+    public int getMax() {
+        return mMax;
+    }
+
+    public void setMax(int max) {
+        mMax = max;
+        mRpProgress.setMax(max);
     }
 }
