@@ -213,6 +213,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mFrontLayout = (RelativeLayout) findViewById(R.id.rl_mixture_front);
         mSubtitleView = (SubtitleView) findViewById(R.id.sv_subtitle);
 
+        mIvCover.bringToFront();
         mWaveView.bringToFront();
         mSubtitleView.bringToFront();
         mProgressBar.bringToFront();
@@ -524,7 +525,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         intent.putExtra(ShareActivity.SHARE_KEY_PATH, path);
         intent.putExtra(ShareActivity.SHARE_KEY_ID, id);
         startActivity(intent);
-
+        finish();
         /*mMediaPlayer.pause();
         mProgressDialog.show();
         mProgressDialog.setMessage(App.getAppContext().getString(R.string.prompt_saving));

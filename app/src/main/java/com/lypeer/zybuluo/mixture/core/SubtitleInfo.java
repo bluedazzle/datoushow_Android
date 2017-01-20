@@ -15,7 +15,7 @@ public class SubtitleInfo {
      */
 
     private String content;
-    private int index;
+    //private int index;
     private String start_time;
     private String end_time;
 
@@ -27,13 +27,13 @@ public class SubtitleInfo {
         this.content = content;
     }
 
-    public int getIndex() {
-        return index;
-    }
+    //public int getIndex() {
+    //   return index;
+    //}
 
-    public void setIndex(int index) {
-        this.index = index;
-    }
+    //public void setIndex(int index) {
+    //     this.index = index;
+    //}
 
     public String getStart_time() {
         return start_time;

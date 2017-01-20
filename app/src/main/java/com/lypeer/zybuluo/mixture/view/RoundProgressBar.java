@@ -91,13 +91,13 @@ public class RoundProgressBar extends View {
         switch (style) {
             case STROKE: {
                 paintProgress.setStyle(Paint.Style.STROKE);
-                canvas.drawArc(oval, -90, 360 * progress / max - 90, false, paintProgress);
+                canvas.drawArc(oval, -90, 360 * progress / max, false, paintProgress);
                 break;
             }
             case FILL: {
                 paintProgress.setStyle(Paint.Style.FILL_AND_STROKE);
                 if (progress != 0)
-                    canvas.drawArc(oval, -90, 360 * progress / max - 90, true, paintProgress);
+                    canvas.drawArc(oval, -90, 360 * progress / max, true, paintProgress);
                 break;
             }
         }
