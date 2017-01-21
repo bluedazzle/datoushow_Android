@@ -10,6 +10,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.lypeer.zybuluo.App;
 import com.lypeer.zybuluo.R;
 import com.lypeer.zybuluo.event.BannerEvent;
 import com.lypeer.zybuluo.event.EmptyEvent;
@@ -18,6 +19,7 @@ import com.lypeer.zybuluo.presenter.main.AddPresenter;
 import com.lypeer.zybuluo.ui.adapter.ViewPagerAdapter;
 import com.lypeer.zybuluo.ui.base.BaseBusFragment;
 import com.lypeer.zybuluo.utils.DataFormatter;
+import com.squareup.picasso.Picasso;
 
 import org.greenrobot.eventbus.Subscribe;
 
@@ -80,10 +82,22 @@ public class AddFragment extends BaseBusFragment<AddPresenter> {
 
         if (targetStatus == STATUS_NORMAL) {
             textView.setTextSize(DataFormatter.dipToPixels(4));
-            imageView.setImageDrawable(getActivity().getResources().getDrawable(ViewPagerDb.getIconsNormal().get(tab.getPosition())));
+
+            Object iconNormal = ViewPagerDb.getIconsNormal().get(tab.getPosition());
+            if (iconNormal instanceof Integer) {
+                Picasso.with(App.getAppContext()).load((Integer) iconNormal).fit().centerInside().into(imageView);
+            } else if (iconNormal instanceof String) {
+                Picasso.with(App.getAppContext()).load((String) iconNormal).fit().centerInside().into(imageView);
+            }
         } else if (targetStatus == STATUS_SELECTED) {
             textView.setTextSize(DataFormatter.dipToPixels(5));
-            imageView.setImageDrawable(getActivity().getResources().getDrawable(ViewPagerDb.getIconsSelected().get(tab.getPosition())));
+
+            Object iconSelected = ViewPagerDb.getIconsSelected().get(tab.getPosition());
+            if (iconSelected instanceof Integer) {
+                Picasso.with(App.getAppContext()).load((Integer) iconSelected).fit().centerInside().into(imageView);
+            } else if (iconSelected instanceof String) {
+                Picasso.with(App.getAppContext()).load((String) iconSelected).fit().centerInside().into(imageView);
+            }
         }
     }
 
@@ -111,10 +125,22 @@ public class AddFragment extends BaseBusFragment<AddPresenter> {
 
         if (index == 0) {
             textView.setTextSize(DataFormatter.dipToPixels(5));
-            imageView.setImageDrawable(getActivity().getResources().getDrawable(ViewPagerDb.getIconsSelected().get(index)));
+
+            Object iconSelected = ViewPagerDb.getIconsSelected().get(index);
+            if (iconSelected instanceof Integer) {
+                Picasso.with(App.getAppContext()).load((Integer) iconSelected).fit().centerInside().into(imageView);
+            } else if (iconSelected instanceof String) {
+                Picasso.with(App.getAppContext()).load((String) iconSelected).fit().centerInside().into(imageView);
+            }
         } else {
             textView.setTextSize(DataFormatter.dipToPixels(4));
-            imageView.setImageDrawable(getActivity().getResources().getDrawable(ViewPagerDb.getIconsNormal().get(index)));
+
+            Object iconNormal = ViewPagerDb.getIconsNormal().get(index);
+            if (iconNormal instanceof Integer) {
+                Picasso.with(App.getAppContext()).load((Integer) iconNormal).fit().centerInside().into(imageView);
+            } else if (iconNormal instanceof String) {
+                Picasso.with(App.getAppContext()).load((String) iconNormal).fit().centerInside().into(imageView);
+            }
         }
 
         return view;
