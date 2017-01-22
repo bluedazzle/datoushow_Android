@@ -29,6 +29,7 @@ import com.lypeer.zybuluo.utils.Constants;
 import com.lypeer.zybuluo.utils.FileUtil;
 import com.lypeer.zybuluo.utils.SharePreferencesUtil;
 import com.lypeer.zybuluo.utils.UpdateUtil;
+import com.zhuge.analysis.stat.ZhugeSDK;
 
 import org.w3c.dom.Text;
 
@@ -234,5 +235,11 @@ public class MainActivity extends BaseCustomActivity {
     protected void onPause() {
         super.onPause();
         JCVideoPlayer.releaseAllVideos();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        ZhugeSDK.getInstance().flush(getApplicationContext());
     }
 }

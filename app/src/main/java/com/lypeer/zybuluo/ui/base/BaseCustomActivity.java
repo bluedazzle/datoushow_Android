@@ -12,6 +12,7 @@ import android.widget.Toast;
 import com.bugtags.library.Bugtags;
 import com.lypeer.zybuluo.R;
 import com.lypeer.zybuluo.utils.ActivityController;
+import com.zhuge.analysis.stat.ZhugeSDK;
 
 import butterknife.ButterKnife;
 
@@ -111,6 +112,7 @@ public abstract class BaseCustomActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         Bugtags.onResume(this);
+        ZhugeSDK.getInstance().init(getApplicationContext());
     }
 
     @Override

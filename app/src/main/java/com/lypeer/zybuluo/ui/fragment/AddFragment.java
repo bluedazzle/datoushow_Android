@@ -85,18 +85,19 @@ public class AddFragment extends BaseBusFragment<AddPresenter> {
 
             Object iconNormal = ViewPagerDb.getIconsNormal().get(tab.getPosition());
             if (iconNormal instanceof Integer) {
-                Picasso.with(App.getAppContext()).load((Integer) iconNormal).fit().centerInside().into(imageView);
+                imageView.setImageDrawable(App.getRes().getDrawable((Integer) iconNormal));
             } else if (iconNormal instanceof String) {
-                Picasso.with(App.getAppContext()).load((String) iconNormal).fit().centerInside().into(imageView);
+                Picasso.with(App.getAppContext()).load((String) iconNormal).placeholder(imageView.getDrawable()).fit().centerInside().into(imageView);
             }
         } else if (targetStatus == STATUS_SELECTED) {
             textView.setTextSize(DataFormatter.dipToPixels(5));
 
             Object iconSelected = ViewPagerDb.getIconsSelected().get(tab.getPosition());
             if (iconSelected instanceof Integer) {
-                Picasso.with(App.getAppContext()).load((Integer) iconSelected).fit().centerInside().into(imageView);
+                imageView.setImageDrawable(App.getRes().getDrawable((Integer) iconSelected));
             } else if (iconSelected instanceof String) {
-                Picasso.with(App.getAppContext()).load((String) iconSelected).fit().centerInside().into(imageView);
+
+                Picasso.with(App.getAppContext()).load((String) iconSelected).placeholder(imageView.getDrawable()).fit().centerInside().into(imageView);
             }
         }
     }
@@ -128,18 +129,18 @@ public class AddFragment extends BaseBusFragment<AddPresenter> {
 
             Object iconSelected = ViewPagerDb.getIconsSelected().get(index);
             if (iconSelected instanceof Integer) {
-                Picasso.with(App.getAppContext()).load((Integer) iconSelected).fit().centerInside().into(imageView);
+                imageView.setImageDrawable(App.getRes().getDrawable((Integer) iconSelected));
             } else if (iconSelected instanceof String) {
-                Picasso.with(App.getAppContext()).load((String) iconSelected).fit().centerInside().into(imageView);
+                Picasso.with(App.getAppContext()).load((String) iconSelected).placeholder(imageView.getDrawable()).fit().centerInside().into(imageView);
             }
         } else {
             textView.setTextSize(DataFormatter.dipToPixels(4));
 
             Object iconNormal = ViewPagerDb.getIconsNormal().get(index);
             if (iconNormal instanceof Integer) {
-                Picasso.with(App.getAppContext()).load((Integer) iconNormal).fit().centerInside().into(imageView);
+                imageView.setImageDrawable(App.getRes().getDrawable((Integer) iconNormal));
             } else if (iconNormal instanceof String) {
-                Picasso.with(App.getAppContext()).load((String) iconNormal).fit().centerInside().into(imageView);
+                Picasso.with(App.getAppContext()).load((String) iconNormal).placeholder(imageView.getDrawable()).fit().centerInside().into(imageView);
             }
         }
 
