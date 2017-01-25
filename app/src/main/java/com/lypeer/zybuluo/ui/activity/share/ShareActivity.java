@@ -17,7 +17,9 @@ import com.lypeer.zybuluo.model.bean.CreateShareLinkResponse;
 import com.lypeer.zybuluo.presenter.share.SharePresenter;
 import com.lypeer.zybuluo.ui.base.BaseActivity;
 import com.lypeer.zybuluo.ui.custom.RatioLayout;
+import com.lypeer.zybuluo.utils.ZhugeUtil;
 import com.lypeer.zybuluo.utils.meipai.MeiPai;
+import com.zhuge.analysis.stat.ZhugeSDK;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -118,6 +120,12 @@ public class ShareActivity extends BaseActivity<SharePresenter> {
                 mShareType = QQ.NAME;
                 break;
         }
+
+        ZhugeUtil.upload("不同渠道总分享量");
+        ZhugeUtil.upload("我的主页总分享总量");
+        ZhugeUtil.upload("我的主页单个享渠道分享总量", "渠道名", mShareType);
+        ZhugeUtil.upload("单个素材分享总量", "id", mId + "");
+        ZhugeUtil.upload("单个渠道分享总量", "渠道名", mShareType);
 
         share();
     }

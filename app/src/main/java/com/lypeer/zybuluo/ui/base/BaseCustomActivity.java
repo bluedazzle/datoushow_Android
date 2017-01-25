@@ -12,6 +12,12 @@ import android.widget.Toast;
 import com.bugtags.library.Bugtags;
 import com.lypeer.zybuluo.R;
 import com.lypeer.zybuluo.utils.ActivityController;
+import com.lypeer.zybuluo.utils.ApiSignUtil;
+import com.lypeer.zybuluo.utils.DeviceUuidFactory;
+import com.zhuge.analysis.stat.ZhugeSDK;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import butterknife.ButterKnife;
 
@@ -111,6 +117,13 @@ public abstract class BaseCustomActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         Bugtags.onResume(this);
+        ZhugeSDK.getInstance().init(getApplicationContext());
+
+        DeviceUuidFactory factory = new DeviceUuidFactory(this);
+
+        JSONObject personObject = new JSONObject();
+        ZhugeSDK.getInstance().identify(getApplicationContext(), factory.getDeviceUuid().toString(),
+                personObject);
     }
 
     @Override

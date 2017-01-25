@@ -64,6 +64,7 @@ import com.lypeer.zybuluo.utils.DeviceUuidFactory;
 import com.lypeer.zybuluo.utils.FileUtil;
 import com.lypeer.zybuluo.utils.RetrofitClient;
 import com.lypeer.zybuluo.utils.SharePreferencesUtil;
+import com.lypeer.zybuluo.utils.ZhugeUtil;
 import com.lypeer.zybuluo.utils.meipai.MeiPai;
 import com.qiniu.android.common.Zone;
 import com.qiniu.android.http.ResponseInfo;
@@ -73,6 +74,7 @@ import com.qiniu.android.storage.UpProgressHandler;
 import com.qiniu.android.storage.UploadManager;
 import com.qiniu.android.storage.UploadOptions;
 import com.squareup.picasso.Picasso;
+import com.zhuge.analysis.stat.ZhugeSDK;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -206,7 +208,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mPrepareTextView = (TextView) findViewById(R.id.tv_mixture_prepare);
         mCloseImageView = (ImageView) findViewById(R.id.iv_mixture_close);
         mIvSubtitle = (ImageView) findViewById(R.id.iv_subtitle);
-        mIvCover = (ImageView)findViewById(R.id.iv_cover);
+        mIvCover = (ImageView) findViewById(R.id.iv_cover);
         mTvTitle = (TextView) findViewById(R.id.tv_title);
         mWaveView = (WaveView) findViewById(R.id.wv_mixture_wave);
         mProgressBar = (CircleProgressView) findViewById(R.id.lv_mixture_progress);
@@ -280,6 +282,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     protected void onResume() {
         super.onResume();
+        ZhugeSDK.getInstance().init(getApplicationContext());
         Log.v(TAG, "onResume" + mCurrentStage);
         Camera.CameraInfo cameraInfo = new Camera.CameraInfo();
         int cameraCount = Camera.getNumberOfCameras(); // get cameras number
@@ -345,7 +348,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 mStartButton.setVisibility(View.INVISIBLE);
                 mSaveAndRedoLayout.setVisibility(View.INVISIBLE);
                 mCloseImageView.setVisibility(View.INVISIBLE);
-                mProgressBar.setProgress(0 , "");
+                mProgressBar.setProgress(0, "");
                 mProgressBar.show();
                 mProgressBar.setText("");
                 mFrontLayout.setVisibility(View.VISIBLE);
@@ -414,8 +417,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         synchronized (this) {
             if (v == mStartButton) {
                 if (mCurrentStage == MixtureStage.Training) {
+                    ZhugeUtil.upload("练习模式点击录制总量");
+                    ZhugeUtil.upload("单个视频练习模式点击录制量", "标题", mVideoBean.getTitle(), "id", mVideoBean.getId() + "");
                     gotoStageRecordPrepare();
                 } else {
+                    ZhugeUtil.upload("开始录制后点击取消总量");
+                    ZhugeUtil.upload("单个视频开始录制后点击取消量", "标题", mVideoBean.getTitle(), "id", mVideoBean.getId() + "");
                     if (mCurrentStage == MixtureStage.RecordPrepare) {
                         mRecordStartCountDownTimer.cancelRecordStart();
                         mRecordStartCountDownTimer = null;
@@ -427,9 +434,20 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 }
             } else if (v == mCloseImageView) {
                 mMixtureResult.state = MixtureResult.MixtureState.CANCEL;
+
+                if (mCurrentStage == MixtureStage.Training) {
+                    ZhugeUtil.upload("练习模式点击退出总量");
+                    ZhugeUtil.upload("单个视频练习模式点击退出量", "标题", mVideoBean.getTitle(), "id", mVideoBean.getId() + "");
+                } else if (mCurrentStage == MixtureStage.Preview) {
+                    ZhugeUtil.upload("预览模式点击退出总量");
+                    ZhugeUtil.upload("单个视频预览模式点击退出量", "标题", mVideoBean.getTitle(), "id", mVideoBean.getId() + "");
+                }
+
                 backToNavActivity();
                 return;
             } else if (v == mRedoButton) {
+                ZhugeUtil.upload("录制完成后点击重录总量");
+                ZhugeUtil.upload("单个视频录制完成后点击重录量", "标题", mVideoBean.getTitle(), "id", mVideoBean.getId() + "");
                 File file = new File(TEMP_VIDEO_PATH);
                 if (file.exists()) {
                     file.delete();
@@ -437,6 +455,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 gotoStageTraining();
                 mFinalPath = null;
             } else if (v == mSaveButton) {
+                ZhugeUtil.upload("录制完成后点击保存总量");
+                ZhugeUtil.upload("单个视频录制完成后点击保存量", "标题", mVideoBean.getTitle(), "id", mVideoBean.getId() + "");
+
                 String timeStamp = String.valueOf(System.currentTimeMillis()).substring(0, 10);
                 File file = new File(TEMP_VIDEO_PATH);
                 String newFilePath = FileUtil.getStorageDir() + "/" +
@@ -467,6 +488,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     }
                 }
             } else if (v == mIvSubtitle) {
+                ZhugeUtil.upload("单个视频字幕开关总点击量量", "标题", mVideoBean.getTitle(), "id", mVideoBean.getId() + "");
+
                 if (!mSubtitleView.mEnable) {
                     Toast.makeText(MainActivity.this, R.string.error_no_subtitle, Toast.LENGTH_SHORT).show();
                     return;
@@ -477,20 +500,28 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         mSubtitleView.setVisibility(View.INVISIBLE);
                         mIvSubtitle.setImageResource(R.drawable.ic_subtitle_close_practise);
                         SharePreferencesUtil.setIsUserLikeSubtitle(false);
+                        ZhugeUtil.upload("练习模式字幕关闭状态总量");
+                        ZhugeUtil.upload("练习模式单个视频字幕关闭状态量", "标题", mVideoBean.getTitle(), "id", mVideoBean.getId() + "");
                     } else {
                         mSubtitleView.setVisibility(View.VISIBLE);
                         mIvSubtitle.setImageResource(R.drawable.ic_subtitle_open_practise);
                         SharePreferencesUtil.setIsUserLikeSubtitle(true);
+                        ZhugeUtil.upload("练习模式字幕打开状态总量");
+                        ZhugeUtil.upload("练习模式单个视频字幕打开状态量", "标题", mVideoBean.getTitle(), "id", mVideoBean.getId() + "");
                     }
                 } else if (mCurrentStage == MixtureStage.Preview) {
                     if (mSubtitleView.getVisibility() == View.VISIBLE) {
                         mSubtitleView.setVisibility(View.INVISIBLE);
                         mIvSubtitle.setImageResource(R.drawable.ic_subtitle_close_review);
                         SharePreferencesUtil.setIsUserLikeSubtitle(false);
+                        ZhugeUtil.upload("录制模式字幕关闭状态总量");
+                        ZhugeUtil.upload("录制模式单个视频字幕关闭状态量", "标题", mVideoBean.getTitle(), "id", mVideoBean.getId() + "");
                     } else {
                         mSubtitleView.setVisibility(View.VISIBLE);
                         mIvSubtitle.setImageResource(R.drawable.ic_subtitle_open_review);
                         SharePreferencesUtil.setIsUserLikeSubtitle(true);
+                        ZhugeUtil.upload("录制模式字幕打开状态总量");
+                        ZhugeUtil.upload("录制模式单个视频字幕打开状态量", "标题", mVideoBean.getTitle(), "id", mVideoBean.getId() + "");
                     }
                 }
             }
@@ -739,6 +770,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 if (!SharePreferencesUtil.isUserLikeSubtitle()) {
                     mSubtitleView.setVisibility(View.INVISIBLE);
                     mIvSubtitle.setImageResource(R.drawable.ic_subtitle_close_practise);
+                    ZhugeUtil.upload("练习模式字幕关闭状态总量");
+                    ZhugeUtil.upload("练习模式单个视频字幕关闭状态量", "标题", mVideoBean.getTitle(), "id", mVideoBean.getId() + "");
+                } else {
+                    ZhugeUtil.upload("练习模式字幕打开状态总量");
+                    ZhugeUtil.upload("练习模式单个视频字幕打开状态量", "标题", mVideoBean.getTitle(), "id", mVideoBean.getId() + "");
                 }
             } else {
                 mIvSubtitle.setImageResource(R.drawable.ic_subtitle_close_practise);
@@ -919,7 +955,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mCurrentFrame = 0;
         mMediaPlayer.start();
 
-
+        ZhugeUtil.upload("练习模式素材播放总量");
+        ZhugeUtil.upload("练习模式单个素材播放量", "标题", mVideoBean.getTitle(), "id", mVideoBean.getId() + "");
     }
 
     private void gotoStageRecordPrepare() {
@@ -973,7 +1010,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mCurrentStage = MixtureStage.RecordComplete;
         try {
             mProgressBar.show();
-            mProgressBar.setProgress(0 , "");
+            mProgressBar.setProgress(0, "");
             mProgressBar.setText("正在创建预览");
             mFrontLayout.setVisibility(View.VISIBLE);
             mFrontLayout.setBackgroundColor(Color.TRANSPARENT);

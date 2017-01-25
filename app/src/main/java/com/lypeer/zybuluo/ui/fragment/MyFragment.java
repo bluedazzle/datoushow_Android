@@ -36,7 +36,12 @@ import com.lypeer.zybuluo.ui.adapter.MyAdapter;
 import com.lypeer.zybuluo.ui.base.BaseFragment;
 import com.lypeer.zybuluo.ui.custom.google.GoogleCircleProgressView;
 import com.lypeer.zybuluo.utils.FileUtil;
+import com.lypeer.zybuluo.utils.ZhugeUtil;
 import com.lypeer.zybuluo.utils.meipai.MeiPai;
+import com.zhuge.analysis.stat.ZhugeSDK;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.Collections;
 import java.util.List;
@@ -190,9 +195,12 @@ public class MyFragment extends BaseFragment<MyPresenter> implements OnRefreshLi
     }
 
     private void handlerClick(int id, Video video) {
+
         if (id == R.id.lly_meipai) {
             MeiPai meiPai = new MeiPai(getActivity());
             meiPai.share(video.getPath());
+
+            mShareType = App.getAppContext().getString(R.string.meipai);
         } else {
             switch (id) {
                 case R.id.lly_weibo:
@@ -208,9 +216,14 @@ public class MyFragment extends BaseFragment<MyPresenter> implements OnRefreshLi
                     mShareType = QQ.NAME;
                     break;
             }
-
             share(video);
         }
+
+        ZhugeUtil.upload("不同渠道总分享量");
+        ZhugeUtil.upload("分享页总分享总量");
+        ZhugeUtil.upload("分享页单个享渠道分享总量", "渠道名", mShareType);
+        ZhugeUtil.upload("单个素材分享总量", "id", id + "");
+        ZhugeUtil.upload("单个渠道分享总量", "渠道名", mShareType);
     }
 
     private void delete(Video itemValue, int position) {
@@ -276,6 +289,8 @@ public class MyFragment extends BaseFragment<MyPresenter> implements OnRefreshLi
 
     @OnClick(R.id.iv_setting)
     public void onClick() {
+        ZhugeSDK.getInstance().track(App.getAppContext(), "设置点击");
+
         Intent intent = new Intent(getActivity(), SettingActivity.class);
         startActivity(intent);
     }

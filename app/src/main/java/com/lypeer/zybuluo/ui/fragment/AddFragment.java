@@ -10,6 +10,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.lypeer.zybuluo.App;
 import com.lypeer.zybuluo.R;
 import com.lypeer.zybuluo.event.BannerEvent;
 import com.lypeer.zybuluo.event.EmptyEvent;
@@ -18,6 +19,9 @@ import com.lypeer.zybuluo.presenter.main.AddPresenter;
 import com.lypeer.zybuluo.ui.adapter.ViewPagerAdapter;
 import com.lypeer.zybuluo.ui.base.BaseBusFragment;
 import com.lypeer.zybuluo.utils.DataFormatter;
+import com.lypeer.zybuluo.utils.ZhugeUtil;
+import com.squareup.picasso.Picasso;
+import com.zhuge.analysis.stat.ZhugeSDK;
 
 import org.greenrobot.eventbus.Subscribe;
 
@@ -80,10 +84,23 @@ public class AddFragment extends BaseBusFragment<AddPresenter> {
 
         if (targetStatus == STATUS_NORMAL) {
             textView.setTextSize(DataFormatter.dipToPixels(4));
-            imageView.setImageDrawable(getActivity().getResources().getDrawable(ViewPagerDb.getIconsNormal().get(tab.getPosition())));
+
+            Object iconNormal = ViewPagerDb.getIconsNormal().get(tab.getPosition());
+            if (iconNormal instanceof Integer) {
+                imageView.setImageDrawable(App.getRes().getDrawable((Integer) iconNormal));
+            } else if (iconNormal instanceof String) {
+                Picasso.with(App.getAppContext()).load((String) iconNormal).placeholder(imageView.getDrawable()).fit().centerInside().into(imageView);
+            }
         } else if (targetStatus == STATUS_SELECTED) {
             textView.setTextSize(DataFormatter.dipToPixels(5));
-            imageView.setImageDrawable(getActivity().getResources().getDrawable(ViewPagerDb.getIconsSelected().get(tab.getPosition())));
+
+            Object iconSelected = ViewPagerDb.getIconsSelected().get(tab.getPosition());
+            if (iconSelected instanceof Integer) {
+                imageView.setImageDrawable(App.getRes().getDrawable((Integer) iconSelected));
+            } else if (iconSelected instanceof String) {
+
+                Picasso.with(App.getAppContext()).load((String) iconSelected).placeholder(imageView.getDrawable()).fit().centerInside().into(imageView);
+            }
         }
     }
 
@@ -92,6 +109,29 @@ public class AddFragment extends BaseBusFragment<AddPresenter> {
         mTlMain.setupWithViewPager(mVpMain);
         mTlMain.setTabMode(TabLayout.MODE_SCROLLABLE);
         setupTabIcons();
+
+        mVpMain.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                if (position == 0) {
+                    ZhugeUtil.upload("单个素材分类被点击量", "分类名", "热门");
+                } else if (position == ViewPagerDb.getTitles().size() + 1) {
+                    ZhugeUtil.upload("单个素材分类被点击量", "分类名", "搜索");
+                } else {
+                    ZhugeUtil.upload("单个素材分类被点击量", "button名", ViewPagerDb.getTitles().get(position - 1));
+                }
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
     }
 
     private void setupTabIcons() {
@@ -111,10 +151,22 @@ public class AddFragment extends BaseBusFragment<AddPresenter> {
 
         if (index == 0) {
             textView.setTextSize(DataFormatter.dipToPixels(5));
-            imageView.setImageDrawable(getActivity().getResources().getDrawable(ViewPagerDb.getIconsSelected().get(index)));
+
+            Object iconSelected = ViewPagerDb.getIconsSelected().get(index);
+            if (iconSelected instanceof Integer) {
+                imageView.setImageDrawable(App.getRes().getDrawable((Integer) iconSelected));
+            } else if (iconSelected instanceof String) {
+                Picasso.with(App.getAppContext()).load((String) iconSelected).placeholder(imageView.getDrawable()).fit().centerInside().into(imageView);
+            }
         } else {
             textView.setTextSize(DataFormatter.dipToPixels(4));
-            imageView.setImageDrawable(getActivity().getResources().getDrawable(ViewPagerDb.getIconsNormal().get(index)));
+
+            Object iconNormal = ViewPagerDb.getIconsNormal().get(index);
+            if (iconNormal instanceof Integer) {
+                imageView.setImageDrawable(App.getRes().getDrawable((Integer) iconNormal));
+            } else if (iconNormal instanceof String) {
+                Picasso.with(App.getAppContext()).load((String) iconNormal).placeholder(imageView.getDrawable()).fit().centerInside().into(imageView);
+            }
         }
 
         return view;

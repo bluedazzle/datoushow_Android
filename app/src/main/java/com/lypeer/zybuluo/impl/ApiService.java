@@ -2,6 +2,7 @@ package com.lypeer.zybuluo.impl;
 
 
 import com.lypeer.zybuluo.model.bean.BannerResponse;
+import com.lypeer.zybuluo.model.bean.ClassificationsBean;
 import com.lypeer.zybuluo.model.bean.CreateShareLinkResponse;
 import com.lypeer.zybuluo.model.bean.UpdateInfoBean;
 import com.lypeer.zybuluo.model.bean.UploadResponse;
@@ -51,6 +52,8 @@ public interface ApiService {
     @GET("upload")
     Call<UploadResponse> upload();
 
+    @GET("classifications")
+    Call<ClassificationsBean> getClassifications();
 
     @GET("banners")
     Call<BannerResponse> getBanner();

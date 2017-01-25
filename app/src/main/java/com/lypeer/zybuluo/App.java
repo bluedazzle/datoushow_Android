@@ -12,6 +12,7 @@ import com.growingio.android.sdk.collection.GrowingIO;
 import com.lypeer.zybuluo.utils.Constants;
 import com.lypeer.zybuluo.utils.SharePreferencesUtil;
 import com.lypeer.zybuluo.utils.meipai.MeiPaiFactory;
+import com.zhuge.analysis.stat.ZhugeSDK;
 
 import cn.sharesdk.framework.ShareSDK;
 import io.realm.Realm;
@@ -50,6 +51,9 @@ public class App extends Application {
                 build();
 
         Bugtags.start("a7899237a27d3215dbdd5f90d4d43e86", this, Bugtags.BTGInvocationEventNone);
+
+        //ZhugeSDK.getInstance().disablePhoneNumber();
+        //ZhugeSDK.getInstance().disableAccounts();
     }
 
     public static Context getAppContext() {

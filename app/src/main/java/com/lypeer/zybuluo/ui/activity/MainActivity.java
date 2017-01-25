@@ -18,6 +18,7 @@ import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 
+import com.lypeer.zybuluo.App;
 import com.lypeer.zybuluo.R;
 import com.lypeer.zybuluo.impl.OnCheckUpdateInfoListener;
 import com.lypeer.zybuluo.model.bean.UpdateInfoBean;
@@ -29,6 +30,8 @@ import com.lypeer.zybuluo.utils.Constants;
 import com.lypeer.zybuluo.utils.FileUtil;
 import com.lypeer.zybuluo.utils.SharePreferencesUtil;
 import com.lypeer.zybuluo.utils.UpdateUtil;
+import com.lypeer.zybuluo.utils.ZhugeUtil;
+import com.zhuge.analysis.stat.ZhugeSDK;
 
 import org.w3c.dom.Text;
 
@@ -162,9 +165,11 @@ public class MainActivity extends BaseCustomActivity {
         switch (view.getId()) {
             case R.id.lly_add:
                 setCurrentSelection(Constants.FragmentId.ADD);
+                ZhugeUtil.upload("底部button总点击量" , "button名" , "制作");
                 break;
             case R.id.lly_my:
                 setCurrentSelection(Constants.FragmentId.MY);
+                ZhugeUtil.upload("底部button总点击量" , "button名" , "我的");
                 break;
         }
     }
@@ -234,5 +239,11 @@ public class MainActivity extends BaseCustomActivity {
     protected void onPause() {
         super.onPause();
         JCVideoPlayer.releaseAllVideos();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        ZhugeSDK.getInstance().flush(getApplicationContext());
     }
 }

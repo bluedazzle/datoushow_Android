@@ -14,6 +14,11 @@ import com.lypeer.zybuluo.App;
 import com.lypeer.zybuluo.R;
 import com.lypeer.zybuluo.ui.base.BaseCustomActivity;
 import com.lypeer.zybuluo.utils.Constants;
+import com.lypeer.zybuluo.utils.ZhugeUtil;
+import com.zhuge.analysis.stat.ZhugeSDK;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -65,6 +70,8 @@ public class InviteFriendsActivity extends BaseCustomActivity {
 
     @OnClick({R.id.rl_wechat, R.id.rl_wechat_comment, R.id.rl_qq})
     public void onInviteClick(View view) {
+        ZhugeSDK.getInstance().track(App.getAppContext(), "各邀请渠道点击总量");
+
         Platform.ShareParams sp = new Platform.ShareParams();
 
         sp.setUrl(Constants.InviteData.URL);
@@ -99,10 +106,14 @@ public class InviteFriendsActivity extends BaseCustomActivity {
 
         Platform platform = ShareSDK.getPlatform(shareType);
         platform.share(sp);
+
+        ZhugeUtil.upload("单个渠道邀请量" , "渠道名" , shareType);
     }
 
     @OnClick(R.id.rl_copy_link)
     public void onCopyLinkClick() {
+        ZhugeUtil.upload("单个渠道邀请量" , "渠道名" , "复制链接");
+
         ClipboardManager cmb = (ClipboardManager) this.getSystemService(Context.CLIPBOARD_SERVICE);
         cmb.setText(Constants.InviteData.COPY_LINK);
         showMessage(R.string.prompt_copy_success);
