@@ -745,7 +745,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             }
 
             MediaMetadataRetriever m = new MediaMetadataRetriever();
-            m.setDataSource(DOWNLOADED_VIDEO_PATH);
+            try {
+                m.setDataSource(DOWNLOADED_VIDEO_PATH);
+            } catch (Exception e) {
+                mMixtureResult.state = MixtureResult.MixtureState.DOWNLOADERROR;
+                backToNavActivity();
+                return;
+            }
             mFirstFrame = m.getFrameAtTime(mHeadInfoManager.getTimeByFrame(mHeadInfoManager.getPreparedFrame()) * 1000);
             mVideoWidth = Integer.parseInt(m.extractMetadata(MediaMetadataRetriever.METADATA_KEY_VIDEO_WIDTH));
             mVideoHeight = Integer.parseInt(m.extractMetadata(MediaMetadataRetriever.METADATA_KEY_VIDEO_HEIGHT));
@@ -773,7 +779,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         synchronized (this) {
             if (result == false) {
                 gotoStageTraining();
-            } else {
+            } else if (mPaused != true){
                 gotoStagePreview();
             }
         }
@@ -1117,8 +1123,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                                     }
                                     FilePipelineHelper.writeBytes(mPipeLineOutput, mBigheadBuffer.array(), mBigheadBuffer.array().length);
                                 } catch (Exception e) {
-                                    Log.v(TAG, e.getMessage());
-                                    throw new RuntimeException("write pipeline failed");
+                                    Log.e(TAG, e.getMessage());
+                                    //throw new RuntimeException("write pipeline failed");
                                 }
                             }
                         }
