@@ -42,9 +42,6 @@
                 <action android:name="android.intent.action.MAIN"/>
 
                 <category android:name="android.intent.category.LAUNCHER"/>
-                <data
-                    android:host="star"
-                    android:scheme="Star" />
             </intent-filter>
             <intent-filter>
                 <data android:scheme="growing.423cc1c3feca305e"/>
