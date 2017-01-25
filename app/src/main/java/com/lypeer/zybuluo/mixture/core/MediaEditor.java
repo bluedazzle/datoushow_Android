@@ -704,13 +704,11 @@ public class MediaEditor {
             Log.v(TAG, "changeProgress " + System.currentTimeMillis());
         }
         Log.v(TAG, "changeProgress 90 " + System.currentTimeMillis());
-        assertEquals("encoded and decoded video frame counts should match",
-                videoDecodedFrameCount, videoEncodedFrameCount);
+        //assertEquals("encoded and decoded video frame counts should match", videoDecodedFrameCount, videoEncodedFrameCount);
 
-        assertTrue("decoded frame count should be less than extracted frame count",
-                videoDecodedFrameCount <= videoExtractedFrameCount);
+        //assertTrue("decoded frame count should be less than extracted frame count", videoDecodedFrameCount <= videoExtractedFrameCount);
 
-        assertEquals("no frame should be pending", -1, pendingAudioDecoderOutputBufferIndex);
+        //assertEquals("no frame should be pending", -1, pendingAudioDecoderOutputBufferIndex);
 
     }
 
