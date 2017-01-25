@@ -22,6 +22,11 @@ import com.lypeer.zybuluo.ui.adapter.BuriedAdapter;
 import com.lypeer.zybuluo.ui.base.BaseFragment;
 import com.lypeer.zybuluo.ui.custom.google.GoogleCircleProgressView;
 import com.lypeer.zybuluo.utils.ApiSignUtil;
+import com.lypeer.zybuluo.utils.ZhugeUtil;
+import com.zhuge.analysis.stat.ZhugeSDK;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.List;
 
@@ -99,6 +104,7 @@ public class BuriedFragment extends BaseFragment<BuriedPresenter> implements OnR
             public void onItemClick(VideoResponse.BodyBean.VideoListBean itemValue, int viewID, int position) {
                 switch (viewID) {
                     case R.id.lly_container:
+                        ZhugeUtil.upload("列表中素材被点击", "素材名称", itemValue.getTitle(), "素材ID", itemValue.getId() + "");
                         gotoMakeVideo(itemValue);
                         break;
                 }
@@ -122,6 +128,7 @@ public class BuriedFragment extends BaseFragment<BuriedPresenter> implements OnR
     @Override
     public void onLoadMore() {
         getPresenter().loadMoreVideos(mCurrentPage , mType);
+        ZhugeSDK.getInstance().track(App.getAppContext(), "上滑刷新总量");
     }
 
     @Override

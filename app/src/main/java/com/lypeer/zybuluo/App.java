@@ -52,8 +52,8 @@ public class App extends Application {
 
         Bugtags.start("a7899237a27d3215dbdd5f90d4d43e86", this, Bugtags.BTGInvocationEventNone);
 
-        ZhugeSDK.getInstance().disablePhoneNumber();
-        ZhugeSDK.getInstance().disableAccounts();
+        //ZhugeSDK.getInstance().disablePhoneNumber();
+        //ZhugeSDK.getInstance().disableAccounts();
     }
 
     public static Context getAppContext() {

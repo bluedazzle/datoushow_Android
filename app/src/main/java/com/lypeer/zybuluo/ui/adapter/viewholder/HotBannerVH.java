@@ -8,12 +8,15 @@ import android.widget.ImageView;
 import com.bigkoo.convenientbanner.ConvenientBanner;
 import com.bigkoo.convenientbanner.holder.CBViewHolderCreator;
 import com.bigkoo.convenientbanner.holder.Holder;
+import com.lypeer.zybuluo.App;
 import com.lypeer.zybuluo.R;
 import com.lypeer.zybuluo.event.BannerEvent;
 import com.lypeer.zybuluo.impl.OnItemClickListener;
 import com.lypeer.zybuluo.model.bean.BannerResponse;
 import com.lypeer.zybuluo.ui.base.BaseViewHolder;
+import com.lypeer.zybuluo.utils.ZhugeUtil;
 import com.squareup.picasso.Picasso;
+import com.zhuge.analysis.stat.ZhugeSDK;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -67,7 +70,10 @@ public class HotBannerVH extends BaseViewHolder<BannerResponse> {
         mCbBanner.setOnItemClickListener(new com.bigkoo.convenientbanner.listener.OnItemClickListener() {
             @Override
             public void onItemClick(int position) {
-                EventBus.getDefault().post(new BannerEvent(itemValue.getBody().getBanner_list().get(position).getNav()));
+                int nav = itemValue.getBody().getBanner_list().get(position).getNav();
+
+                ZhugeUtil.upload("Banner点击量", "nav", nav + "");
+                EventBus.getDefault().post(new BannerEvent(nav));
             }
         });
     }

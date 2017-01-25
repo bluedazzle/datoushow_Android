@@ -38,8 +38,12 @@ import com.lypeer.zybuluo.ui.base.BaseBusFragment;
 import com.lypeer.zybuluo.ui.custom.google.GoogleCircleProgressView;
 import com.lypeer.zybuluo.utils.ApiSignUtil;
 import com.lypeer.zybuluo.utils.Constants;
+import com.lypeer.zybuluo.utils.ZhugeUtil;
+import com.zhuge.analysis.stat.ZhugeSDK;
 
 import org.greenrobot.eventbus.Subscribe;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.List;
 
@@ -115,6 +119,7 @@ public class HotFragment extends BaseBusFragment<HotPresenter> implements OnRefr
             public void onItemClick(VideoResponse.BodyBean.VideoListBean itemValue, int viewID, int position) {
                 switch (viewID) {
                     case R.id.lly_container:
+                        ZhugeUtil.upload("列表中素材被点击", "素材名称", itemValue.getTitle(), "素材ID", itemValue.getId() + "");
                         gotoMakeVideo(itemValue);
                         break;
                 }
@@ -138,6 +143,8 @@ public class HotFragment extends BaseBusFragment<HotPresenter> implements OnRefr
     @Override
     public void onLoadMore() {
         getPresenter().loadMoreVideos(mCurrentPage);
+        ZhugeSDK.getInstance().track(App.getAppContext(), "上滑刷新总量");
+
     }
 
     @Override
@@ -231,6 +238,7 @@ public class HotFragment extends BaseBusFragment<HotPresenter> implements OnRefr
         tvCancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                ZhugeSDK.getInstance().track(App.getAppContext(), "邀请好友弹窗关闭");
                 mPopupWindow.dismiss();
                 mPopupWindow = null;
             }
@@ -246,6 +254,7 @@ public class HotFragment extends BaseBusFragment<HotPresenter> implements OnRefr
     }
 
     private void onInviteClick(int id) {
+
         Platform.ShareParams sp = new Platform.ShareParams();
 
         sp.setUrl(Constants.InviteData.URL);
@@ -280,9 +289,14 @@ public class HotFragment extends BaseBusFragment<HotPresenter> implements OnRefr
 
         Platform platform = ShareSDK.getPlatform(shareType);
         platform.share(sp);
+
+        ZhugeUtil.upload("各邀请渠道点击总量");
+        ZhugeUtil.upload("邀请好友弹框中单个渠道点击量" , "渠道名" , shareType);
     }
 
     public void onCopyLinkClick() {
+        ZhugeUtil.upload("邀请好友弹框中单个渠道点击量" , "渠道名" , "复制链接");
+
         ClipboardManager cmb = (ClipboardManager) getActivity().getSystemService(Context.CLIPBOARD_SERVICE);
         cmb.setText(Constants.InviteData.COPY_LINK);
         showMessage(R.string.prompt_copy_success);

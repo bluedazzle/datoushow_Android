@@ -128,7 +128,7 @@
             android:theme="@android:style/Theme.Translucent.NoTitleBar"/>
 
         <meta-data
-            android:value="f3beb4ad8e5048299c95ac9d9ccfc4ae" android:name = "ZHUGE_APPKEY"/>
+            android:value="4d7569e1c64d47c888e18e7bd5207d38" android:name = "ZHUGE_APPKEY"/>
         <meta-data
             android:value="不管" android:name = "ZHUGE_CHANNEL"/>
     </application>

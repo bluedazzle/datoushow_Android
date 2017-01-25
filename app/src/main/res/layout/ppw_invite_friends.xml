@@ -30,7 +30,7 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:background="@drawable/bg_rc_red_half"
-                android:paddingTop="3dp"
+                android:paddingTop="6dp"
                 android:layout_height="wrap_content">
 
                 <LinearLayout

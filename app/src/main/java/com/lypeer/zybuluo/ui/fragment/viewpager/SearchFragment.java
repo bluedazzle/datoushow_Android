@@ -9,6 +9,7 @@ import android.support.v7.widget.RecyclerView;
 
 import com.arlib.floatingsearchview.FloatingSearchView;
 import com.arlib.floatingsearchview.suggestions.model.SearchSuggestion;
+import com.lypeer.zybuluo.App;
 import com.lypeer.zybuluo.R;
 import com.lypeer.zybuluo.impl.OnItemClickListener;
 import com.lypeer.zybuluo.mixture.activity.MainActivity;
@@ -18,6 +19,7 @@ import com.lypeer.zybuluo.presenter.viewpager.SearchPresenter;
 import com.lypeer.zybuluo.ui.adapter.SearchAdapter;
 import com.lypeer.zybuluo.ui.base.BaseFragment;
 import com.lypeer.zybuluo.utils.ApiSignUtil;
+import com.zhuge.analysis.stat.ZhugeSDK;
 
 import butterknife.BindView;
 
@@ -60,6 +62,7 @@ public class SearchFragment extends BaseFragment<SearchPresenter> {
             public void onItemClick(VideoResponse.BodyBean.VideoListBean itemValue, int viewID, int position) {
                 switch (viewID) {
                     case R.id.lly_container:
+                        ZhugeSDK.getInstance().track(App.getAppContext(), "素材被点击");
                         gotoMakeVideo(itemValue);
                         break;
                 }
