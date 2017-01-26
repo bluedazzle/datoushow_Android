@@ -3,6 +3,7 @@ package com.lypeer.zybuluo.mixture.core;
 import android.os.AsyncTask;
 import android.util.Log;
 
+import com.bugtags.library.Bugtags;
 import com.lypeer.zybuluo.mixture.view.CircleProgressView;
 
 
@@ -39,7 +40,7 @@ public class MediaEditorTask extends AsyncTask<Void, Integer, Boolean> {
             return true;
         } catch (Exception e) {
             e.printStackTrace();
-            //Log.v(TAG, e.getMessage());
+            Bugtags.sendException(e);
             return false;
         } finally {
             try {
@@ -47,7 +48,7 @@ public class MediaEditorTask extends AsyncTask<Void, Integer, Boolean> {
                 Log.v(TAG, "MediaEditorTask 2 :" + System.currentTimeMillis());
             } catch (Exception e) {
                 e.printStackTrace();
-                //Log.v(TAG, e.getMessage());
+                Bugtags.sendException(e);
             }
         }
     }

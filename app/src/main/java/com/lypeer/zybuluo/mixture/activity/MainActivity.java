@@ -38,6 +38,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bugtags.library.Bugtags;
 import com.lypeer.zybuluo.App;
 import com.lypeer.zybuluo.R;
 import com.lypeer.zybuluo.impl.ApiService;
@@ -333,7 +334,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         } catch (IOException e) {
             Toast.makeText(this, "camera open failed!", Toast.LENGTH_SHORT).show();
             mMixtureResult.state = MixtureResult.MixtureState.EXCEPTION;
-            mMixtureResult.message = e.getMessage();
+            Bugtags.sendException(e);
+            mMixtureResult.message = "camera preview error";
             backToNavActivity();
             return;
         }
@@ -376,7 +378,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 mCaptureThread.join();
                 mCaptureThread = null;
             } catch (InterruptedException e) {
-                Log.e(TAG, e.getMessage());
+                //Log.e(TAG, e.getMessage());
+                Bugtags.sendException(e);
             }
         }
         synchronized (this) {
@@ -611,7 +614,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                             Toast.makeText(MainActivity.this, App.getAppContext().getString(R.string.prompt_save_success), Toast.LENGTH_SHORT).show();
                             createLink(path, id, "static.fibar.cn/".concat(response.getString("key")));
                         } catch (JSONException e) {
-                            e.printStackTrace();
+                            //e.printStackTrace();
+                            Bugtags.sendException(e);
                         }
                     } else {
                         mProgressDialog.dismiss();
@@ -627,6 +631,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     }, null));
         } catch (Exception e) {
             e.printStackTrace();
+            Bugtags.sendException(e);
             mProgressDialog.dismiss();
             Toast.makeText(MainActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
         }
@@ -950,6 +955,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             mMediaPlayer.setDataSource(DOWNLOADED_VIDEO_PATH);
             mMediaPlayer.prepare();
         } catch (IOException e) {
+            Bugtags.sendException(e);
             e.printStackTrace();
         }
         mCurrentFrame = 0;
@@ -973,6 +979,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             Log.v(TAG, "gotoStageRecordPrepare " + mCurrentFrame);
         } catch (IOException e) {
             e.printStackTrace();
+            Bugtags.sendException(e);
         }
         mCurrentStage = MixtureStage.RecordPrepare;
         //mMediaPlayer.seekTo(HeadInfoManager.getPreparedTime());
@@ -1042,6 +1049,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             mMediaPlayer.start();
         } catch (IOException e) {
             e.printStackTrace();
+            Bugtags.sendException(e);
         }
         mFrontLayout.setVisibility(View.GONE);
         mStartButton.setVisibility(View.INVISIBLE);
@@ -1061,6 +1069,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             mPipeLineInput = new FileInputStream(file);
         } catch (Exception e) {
             e.printStackTrace();
+            Bugtags.sendException(e);
             throw new RuntimeException("open pipeline failed!");
         }
     }
@@ -1081,6 +1090,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             }
         } catch (IOException e) {
             Log.v(TAG, e.getMessage());
+            Bugtags.sendException(e);
             throw new RuntimeException("close pipe line failed");
         }
     }
@@ -1161,6 +1171,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                                     FilePipelineHelper.writeBytes(mPipeLineOutput, mBigheadBuffer.array(), mBigheadBuffer.array().length);
                                 } catch (Exception e) {
                                     Log.e(TAG, e.getMessage());
+                                    Bugtags.sendException(e);
                                     //throw new RuntimeException("write pipeline failed");
                                 }
                             }
@@ -1175,6 +1186,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     try {
                         sleep(INTERVAL + startTime - endTime);
                     } catch (InterruptedException e) {
+                        Bugtags.sendException(e);
                         break;
                     }
                 } else {
