@@ -20,6 +20,7 @@ import android.media.MediaPlayer;
 import android.opengl.GLSurfaceView;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.os.Handler;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
@@ -819,7 +820,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         Log.v(TAG, "onMediaEditCompleted" + result);
         synchronized (this) {
             if (result == false) {
-                gotoStageTraining();
+                if (mCurrentStage == MixtureStage.RecordStart || mCurrentStage == MixtureStage.RecordComplete) {
+                    mMixtureResult.message = "大头秀可能与您的手机不兼容，我们已收到反馈，工程师正在尽快修复，请关注新版本发布";
+                    mMixtureResult.state = MixtureResult.MixtureState.EXCEPTION;
+                    backToNavActivity();
+                }
             } else if (mPaused != true){
                 gotoStagePreview();
             }
@@ -1096,7 +1101,30 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void backToNavActivity() {
-        finish();
+        if (mMixtureResult.state == MixtureResult.MixtureState.EXCEPTION ||
+                mMixtureResult.state == MixtureResult.MixtureState.DOWNLOADERROR ||
+                mMixtureResult.state == MixtureResult.MixtureState.NOCAMERA) {
+            String msg = "";
+            if (mMixtureResult.state == MixtureResult.MixtureState.DOWNLOADERROR) {
+                msg = "下载视频错误，请稍后重试";
+            } else if (mMixtureResult.state == MixtureResult.MixtureState.NOCAMERA) {
+                msg = "没有前置摄像头";
+            } else if (mMixtureResult.state == MixtureResult.MixtureState.EXCEPTION) {
+                msg = mMixtureResult.message;
+            }
+            if (msg == null || msg.isEmpty()) {
+                msg = "未知错误";
+            }
+            Toast.makeText(MainActivity.this, msg, Toast.LENGTH_SHORT).show();
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    MainActivity.this.finish();
+                }
+            }, 2000);
+        } else {
+            finish();
+        }
     }
 
     protected class RecordStartCountDownTimer extends CountDownTimer {
