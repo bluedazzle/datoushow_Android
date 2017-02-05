@@ -39,8 +39,10 @@ public class MediaEditorTask extends AsyncTask<Void, Integer, Boolean> {
             Log.v(TAG, "MediaEditorTask 1 :" + System.currentTimeMillis());
             return true;
         } catch (Exception e) {
-            e.printStackTrace();
-            Bugtags.sendException(e);
+            if (!isCancelled()) {
+                e.printStackTrace();
+                Bugtags.sendException(e);
+            }
             return false;
         } finally {
             try {

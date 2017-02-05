@@ -183,7 +183,7 @@ public class MediaEditor {
         MediaFormat outputAudioFormat = MediaFormat.createAudioFormat(mAudioMimeType,
                 mInputAudioFormat.getInteger(MediaFormat.KEY_SAMPLE_RATE), mInputAudioFormat.getInteger(MediaFormat.KEY_CHANNEL_COUNT));
         outputAudioFormat.setInteger(MediaFormat.KEY_BIT_RATE, mAudioBitRate);
-        outputAudioFormat.setInteger(MediaFormat.KEY_AAC_PROFILE, mInputAudioFormat.getInteger(MediaFormat.KEY_AAC_PROFILE));
+        outputAudioFormat.setInteger(MediaFormat.KEY_AAC_PROFILE, MediaCodecInfo.CodecProfileLevel.AACObjectLC);
 
         // Create a MediaCodec for the desired codec, then configure it as an encoder with
         // our desired properties. Request a Surface to use for input.
