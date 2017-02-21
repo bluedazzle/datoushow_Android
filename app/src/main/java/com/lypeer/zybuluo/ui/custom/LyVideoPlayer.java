@@ -2,12 +2,19 @@ package com.lypeer.zybuluo.ui.custom;
 
 import android.content.Context;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.Toast;
 
 import com.lypeer.zybuluo.R;
+import com.lypeer.zybuluo.event.EmptyEvent;
+import com.lypeer.zybuluo.event.PageChangeEvent;
+import com.lypeer.zybuluo.utils.Constants;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
 
 import java.util.Map;
 
@@ -38,11 +45,14 @@ public class LyVideoPlayer extends JCVideoPlayer {
     @Override
     public void init(Context context) {
         super.init(context);
+        EventBus.getDefault().register(this);
         thumbImageView = (ImageView) findViewById(fm.jiecao.jcvideoplayer_lib.R.id.thumb);
         thumbImageView.setOnClickListener(this);
-        if(mHasStartButton){
+        if (mHasStartButton) {
             startButton.setVisibility(VISIBLE);
-        }else {
+            thumbImageView.setVisibility(VISIBLE);
+        } else {
+            startButton.setVisibility(INVISIBLE);
             startButton.setVisibility(GONE);
         }
     }
@@ -136,5 +146,19 @@ public class LyVideoPlayer extends JCVideoPlayer {
     @Override
     public boolean backToOtherListener() {
         return false;
+    }
+
+    @Subscribe
+    public void onEvent(EmptyEvent event) {
+        if (null == event) {
+            return;
+        }
+
+        if (event instanceof PageChangeEvent) {
+            PageChangeEvent pageChangeEvent = (PageChangeEvent) event;
+            if (pageChangeEvent.getCurrentFragment() == Constants.FragmentId.ADD && null != startButton) {
+                setUiWitStateAndScreen(CURRENT_STATE_NORMAL);
+            }
+        }
     }
 }

@@ -43,7 +43,8 @@ public interface ApiService {
 
     @GET("videos/")
     Call<VideoResponse> search(
-            @Query(Constants.RequestParam.K_SEARCH) String searchContent
+            @Query(Constants.RequestParam.K_SEARCH) String searchContent,
+            @Query("all") int searchRange
     );
 
     @GET("update")
