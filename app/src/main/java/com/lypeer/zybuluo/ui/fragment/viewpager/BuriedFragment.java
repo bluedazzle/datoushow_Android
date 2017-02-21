@@ -127,14 +127,14 @@ public class BuriedFragment extends BaseFragment<BuriedPresenter> implements OnR
 
     @Override
     public void onLoadMore() {
-        getPresenter().loadMoreVideos(mCurrentPage , mType);
+        getPresenter().loadMoreVideos(mCurrentPage, mType);
         ZhugeSDK.getInstance().track(App.getAppContext(), "上滑刷新总量");
     }
 
     @Override
     public void onRefresh() {
         mCurrentPage = 1;
-        getPresenter().refreshVideos(mCurrentPage , mType);
+        getPresenter().refreshVideos(mCurrentPage, mType);
     }
 
     public void refreshVideosSuccess(VideoResponse body) {
@@ -149,7 +149,12 @@ public class BuriedFragment extends BaseFragment<BuriedPresenter> implements OnR
     }
 
     public void loadMoreVideosSuccess(VideoResponse videoResponse) {
-        mSwipeToLoadLayout.setLoadingMore(false);
+        mSwipeToLoadLayout.post(new Runnable() {
+            @Override
+            public void run() {
+                mSwipeToLoadLayout.setLoadingMore(false);
+            }
+        });
 
         List<VideoResponse.BodyBean.VideoListBean> videoList = videoResponse.getBody().getVideo_list();
         if (videoList == null || videoList.size() == 0) {
@@ -161,7 +166,12 @@ public class BuriedFragment extends BaseFragment<BuriedPresenter> implements OnR
     }
 
     public void loadMoreVideosFail(String errorMessage) {
-        mSwipeToLoadLayout.setLoadingMore(false);
+        mSwipeToLoadLayout.post(new Runnable() {
+            @Override
+            public void run() {
+                mSwipeToLoadLayout.setLoadingMore(false);
+            }
+        });
         showMessage(errorMessage);
     }
 }

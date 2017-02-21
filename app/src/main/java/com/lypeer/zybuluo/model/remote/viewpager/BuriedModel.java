@@ -62,7 +62,7 @@ public class BuriedModel extends BaseModel<BuriedPresenter> {
                     public void onResponse(Call<VideoResponse> call, Response<VideoResponse> response) {
 
                         if (response == null || response.body() == null) {
-                            getPresenter().refreshVideosFail(App.getAppContext().getString(R.string.prompt_no_more));
+                            getPresenter().loadMoreVideosFail(App.getAppContext().getString(R.string.prompt_no_more));
                             return;
                         }
                         VideoResponse videoResponse = response.body();

@@ -90,6 +90,10 @@ public class ViewPagerDb {
     }
 
     public static void init(ClassificationsBean classificationsBean) {
+        if(!titles.isEmpty()){
+            return;
+        }
+
         if (classificationsBean == null) {
             return;
         }

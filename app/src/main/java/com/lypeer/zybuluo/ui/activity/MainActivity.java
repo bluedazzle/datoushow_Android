@@ -20,6 +20,7 @@ import android.widget.TextView;
 
 import com.lypeer.zybuluo.App;
 import com.lypeer.zybuluo.R;
+import com.lypeer.zybuluo.event.PageChangeEvent;
 import com.lypeer.zybuluo.impl.OnCheckUpdateInfoListener;
 import com.lypeer.zybuluo.model.bean.UpdateInfoBean;
 import com.lypeer.zybuluo.ui.base.BaseCustomActivity;
@@ -33,6 +34,7 @@ import com.lypeer.zybuluo.utils.UpdateUtil;
 import com.lypeer.zybuluo.utils.ZhugeUtil;
 import com.zhuge.analysis.stat.ZhugeSDK;
 
+import org.greenrobot.eventbus.EventBus;
 import org.w3c.dom.Text;
 
 import java.io.IOException;
@@ -110,6 +112,8 @@ public class MainActivity extends BaseCustomActivity {
         mTextViewMap.get(fragmentId).setTextColor(getResources().getColor(R.color.colorRed));
 
         transaction.commit();
+
+        EventBus.getDefault().post(new PageChangeEvent(fragmentId));
     }
 
     private void hideAllFragment(FragmentTransaction transaction) {

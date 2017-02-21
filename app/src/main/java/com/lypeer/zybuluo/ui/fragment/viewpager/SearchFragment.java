@@ -93,7 +93,7 @@ public class SearchFragment extends BaseFragment<SearchPresenter> {
             @Override
             public void onSearchAction(String currentQuery) {
                 showProgressBar();
-                getPresenter().search(currentQuery);
+                getPresenter().search(currentQuery.trim());
             }
         });
     }

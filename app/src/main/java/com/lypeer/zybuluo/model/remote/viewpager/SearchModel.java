@@ -29,7 +29,7 @@ public class SearchModel extends BaseModel<SearchPresenter> {
 
     public void search(String searchContent) {
         RetrofitClient.buildService(ApiService.class)
-                .search(searchContent)
+                .search(searchContent , 1)
                 .enqueue(new Callback<VideoResponse>() {
                     @Override
                     public void onResponse(Call<VideoResponse> call, Response<VideoResponse> response) {
