@@ -11,8 +11,8 @@ android {
         applicationId "com.lypeer.zybuluo"
         minSdkVersion 18
         targetSdkVersion 21
-        versionCode 6
-        versionName "1.1.5"
+        versionCode 7
+        versionName "1.1.6"
         resValue("string", "growingio_project_id", "8bac030e5dd1152a")
         resValue("string", "growingio_url_scheme", "growing.423cc1c3feca305e")
     }
