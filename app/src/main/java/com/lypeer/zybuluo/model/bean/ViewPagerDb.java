@@ -27,6 +27,7 @@ public class ViewPagerDb {
     private static final ArrayList<Object> iconsNormal = new ArrayList<>();
     private static final ArrayList<Object> iconsSelected = new ArrayList<>();
     private static final ArrayList<Fragment> fragments = new ArrayList<>();
+    private static ClassificationsBean mBean = null;
 
 
     public static ArrayList<String> getTitles() {
@@ -89,16 +90,20 @@ public class ViewPagerDb {
         return fragments;
     }
 
-    public static void init(ClassificationsBean classificationsBean) {
-        if(!titles.isEmpty()){
+    public static void setBean(ClassificationsBean classificationsBean){
+        mBean = classificationsBean;
+    }
+
+    public static void init() {
+        if (mBean == null) {
             return;
         }
+        titles.clear();
+        iconsNormal.clear();
+        iconsSelected.clear();
+        fragments.clear();
 
-        if (classificationsBean == null) {
-            return;
-        }
-
-        List<ClassificationsBean.BodyBean.ClassificationListBean> listBean = classificationsBean.getBody().getClassification_list();
+        List<ClassificationsBean.BodyBean.ClassificationListBean> listBean = mBean.getBody().getClassification_list();
 
         Collections.sort(listBean, new Comparator<ClassificationsBean.BodyBean.ClassificationListBean>() {
             @Override

@@ -15,6 +15,7 @@ import com.lypeer.zybuluo.event.PageChangeEvent;
 import com.lypeer.zybuluo.ui.activity.MainActivity;
 import com.lypeer.zybuluo.ui.base.BaseCustomFragment;
 import com.lypeer.zybuluo.ui.custom.LyVideoPlayer;
+import com.lypeer.zybuluo.utils.ActivityController;
 import com.lypeer.zybuluo.utils.Constants;
 import com.lypeer.zybuluo.utils.FileUtil;
 
@@ -123,10 +124,17 @@ public class Guide4Fragment extends BaseCustomFragment {
         JCVideoPlayer.releaseAllVideos();
     }
 
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        JCVideoPlayer.releaseAllVideos();
+    }
+
     @OnClick(R.id.btn_enter)
     public void onClick() {
-        Intent intent = new Intent(getActivity() , MainActivity.class);
-        startActivity(intent);
         getActivity().finish();
+        Intent intent = new Intent(getActivity() , MainActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(intent);
     }
 }

@@ -18,5 +18,5 @@ public class PageChangeEvent extends EmptyEvent{
         mCurrentFragment = currentFragment;
     }
 
-    private int mCurrentFragment;
+    private int mCurrentFragment = -1;
 }

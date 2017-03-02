@@ -21,6 +21,8 @@ import butterknife.BindView;
 
 public class UseGuideActivity extends BaseCustomActivity implements ViewPager.OnPageChangeListener {
 
+    private int mPrePosition = 1;
+
     @BindView(R.id.vp_guide)
     ViewPager mVpGuide;
 
@@ -40,7 +42,6 @@ public class UseGuideActivity extends BaseCustomActivity implements ViewPager.On
         }, 1000);
     }
 
-
     @Override
     protected int getLayoutResId() {
         return R.layout.activity_use_guide;
@@ -48,7 +49,7 @@ public class UseGuideActivity extends BaseCustomActivity implements ViewPager.On
 
     @Override
     protected void onDestroy() {
-        mVpGuide.removeOnPageChangeListener(this);
+        //mVpGuide.removeOnPageChangeListener(this);
         super.onDestroy();
     }
 
@@ -59,6 +60,10 @@ public class UseGuideActivity extends BaseCustomActivity implements ViewPager.On
 
     @Override
     public void onPageSelected(int position) {
+        if (mPrePosition != 1 && position == 0) {
+            return;
+        }
+        mPrePosition = position;
         EventBus.getDefault().post(new PageChangeEvent(position));
     }
 

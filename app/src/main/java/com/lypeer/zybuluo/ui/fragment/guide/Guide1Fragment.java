@@ -98,4 +98,10 @@ public class Guide1Fragment extends BaseCustomFragment {
         super.onPause();
         JCVideoPlayer.releaseAllVideos();
     }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        JCVideoPlayer.releaseAllVideos();
+    }
 }

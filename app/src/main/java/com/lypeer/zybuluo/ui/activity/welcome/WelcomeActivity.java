@@ -63,7 +63,7 @@ public class WelcomeActivity extends BaseActivity<WelcomePresenter> {
     }
 
     public void requestSuccess(ClassificationsBean classificationsBean) {
-        ViewPagerDb.init(classificationsBean);
+        ViewPagerDb.setBean(classificationsBean);
         judge();
     }
 

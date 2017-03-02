@@ -52,6 +52,7 @@ public class AddFragment extends BaseBusFragment<AddPresenter> {
 
     @Override
     protected void initView(@Nullable Bundle savedInstanceState) {
+        ViewPagerDb.init();
         initViewPager();
         initToolbar();
     }

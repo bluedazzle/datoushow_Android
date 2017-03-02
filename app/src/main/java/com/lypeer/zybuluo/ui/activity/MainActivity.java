@@ -23,6 +23,7 @@ import com.lypeer.zybuluo.R;
 import com.lypeer.zybuluo.event.PageChangeEvent;
 import com.lypeer.zybuluo.impl.OnCheckUpdateInfoListener;
 import com.lypeer.zybuluo.model.bean.UpdateInfoBean;
+import com.lypeer.zybuluo.model.bean.ViewPagerDb;
 import com.lypeer.zybuluo.ui.base.BaseCustomActivity;
 import com.lypeer.zybuluo.ui.fragment.AddFragment;
 import com.lypeer.zybuluo.ui.fragment.MyFragment;
