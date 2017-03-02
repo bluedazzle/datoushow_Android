@@ -49,7 +49,7 @@ public class UseGuideActivity extends BaseCustomActivity implements ViewPager.On
 
     @Override
     protected void onDestroy() {
-        //mVpGuide.removeOnPageChangeListener(this);
+        mVpGuide.removeOnPageChangeListener(this);
         super.onDestroy();
     }
 

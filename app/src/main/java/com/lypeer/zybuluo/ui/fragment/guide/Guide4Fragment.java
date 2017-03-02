@@ -134,7 +134,6 @@ public class Guide4Fragment extends BaseCustomFragment {
     public void onClick() {
         getActivity().finish();
         Intent intent = new Intent(getActivity() , MainActivity.class);
-        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(intent);
     }
 }

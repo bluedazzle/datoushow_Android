@@ -24,6 +24,7 @@ import com.lypeer.zybuluo.event.PageChangeEvent;
 import com.lypeer.zybuluo.impl.OnCheckUpdateInfoListener;
 import com.lypeer.zybuluo.model.bean.UpdateInfoBean;
 import com.lypeer.zybuluo.model.bean.ViewPagerDb;
+import com.lypeer.zybuluo.ui.activity.setting.UseGuideActivity;
 import com.lypeer.zybuluo.ui.base.BaseCustomActivity;
 import com.lypeer.zybuluo.ui.fragment.AddFragment;
 import com.lypeer.zybuluo.ui.fragment.MyFragment;
@@ -250,5 +251,14 @@ public class MainActivity extends BaseCustomActivity {
     protected void onDestroy() {
         super.onDestroy();
         ZhugeSDK.getInstance().flush(getApplicationContext());
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if(ActivityController.isTargetActivityAlive(UseGuideActivity.class.getSimpleName())){
+            ActivityController.finishAllExceptNow(this);
+            setCurrentSelection(Constants.FragmentId.ADD);
+        }
     }
 }
