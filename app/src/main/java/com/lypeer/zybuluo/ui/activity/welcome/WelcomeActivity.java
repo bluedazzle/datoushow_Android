@@ -32,7 +32,7 @@ public class WelcomeActivity extends BaseActivity<WelcomePresenter> {
         mIvWelcome.postDelayed(new Runnable() {
             @Override
             public void run() {
-                judge();
+                getPresenter().requestClassifications();
             }
         }, 2000);
     }
@@ -44,7 +44,7 @@ public class WelcomeActivity extends BaseActivity<WelcomePresenter> {
             startActivity(intent);
             finish();
         } else {
-            getPresenter().requestClassifications();
+            gotoMainActivity();
         }
     }
 
@@ -59,12 +59,12 @@ public class WelcomeActivity extends BaseActivity<WelcomePresenter> {
     }
 
     public void requestFail(String errorMessage) {
-        gotoMainActivity();
+        judge();
     }
 
     public void requestSuccess(ClassificationsBean classificationsBean) {
         ViewPagerDb.init(classificationsBean);
-        gotoMainActivity();
+        judge();
     }
 
     private void gotoMainActivity() {
