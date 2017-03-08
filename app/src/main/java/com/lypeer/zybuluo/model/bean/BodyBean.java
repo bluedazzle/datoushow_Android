@@ -96,6 +96,7 @@ public class BodyBean extends RealmObject {
         bodyBean.setWechat_sub_title(this.getWechat_sub_title());
         bodyBean.setWeibo_title(this.getWeibo_title());
 
+
         response.setBody(bodyBean);
         return response;
     }

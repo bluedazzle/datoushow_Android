@@ -40,14 +40,10 @@ import com.lypeer.zybuluo.utils.ZhugeUtil;
 import com.lypeer.zybuluo.utils.meipai.MeiPai;
 import com.zhuge.analysis.stat.ZhugeSDK;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import java.util.Collections;
 import java.util.List;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
 import butterknife.OnClick;
 import cn.sharesdk.framework.Platform;
 import cn.sharesdk.framework.ShareSDK;
@@ -317,8 +313,16 @@ public class MyFragment extends BaseFragment<MyPresenter> implements OnRefreshLi
             sp.setTitle(bodyBean.getWeibo_title() + "\t\t" + "大头秀－分享-" + shareLinkResponse.getBody().getUrl());
             sp.setText(bodyBean.getWeibo_title() + "\t\t" + "大头秀－分享-" + shareLinkResponse.getBody().getUrl());
         } else {
-            sp.setTitle(bodyBean.getWeibo_title());
-            sp.setText(bodyBean.getWeibo_title());
+//            sp.setTitle(bodyBean.getWeibo_title());
+//            sp.setText(bodyBean.getWeibo_title());
+            if(bodyBean.getWechat_title().equals("")){
+                sp.setTitle(bodyBean.getWechat_sub_title());
+                sp.setText(bodyBean.getWechat_sub_title());
+            }
+            else {
+                sp.setTitle(bodyBean.getWechat_title());
+                sp.setText(bodyBean.getWechat_sub_title());
+            }
         }
 
         if (mShareType.equals(Wechat.NAME) || mShareType.equals(WechatMoments.NAME)) {
